@@ -521,7 +521,7 @@ def get_steps_var(ip, hostname):
 
     if os.path.isfile("/media/usb/ConfigByHostname.txt"):
         with open("/media/usb/ConfigByHostname.txt") as name:
-            hostname = name.readline()
+            hostname = name.readline().split("\n")[0]
             name.close()
 
         with open("/etc/hostname", "w") as hostnameFile:
