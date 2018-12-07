@@ -1,0 +1,105 @@
+# SPIxCONV.proto
+
+# Protocol for SPIxCONV boards. Developed for SPIxCONV version 1.1 and newer
+# Protocol doesn't have any terminator character
+Terminator = "";
+
+# An outcoming message should wait at most 10 s to be sent
+LockTimeout = 10000;
+
+# The timeout involved in reading operations is 25 ms
+ReadTimeout = 25;
+
+# The application should wait at most 100 ms for a board to answer
+ReplyTimeout = 100;
+
+#==============================================================================
+config{
+    # output parameters: board
+    out 0x01, $1;
+}
+#==============================================================================
+set_portA_direction_bit{
+    # output parameters: board, bit, value
+    out 0x01, $1, "A", $2, "%(RVAL)i";
+}
+set_portB_direction_bit{
+    # output parameters: board, bit, value
+    out 0x01, $1, "B", $2, "%(RVAL)i";
+}
+set_portC_direction_bit{
+    # output parameters: board, bit, value
+    out 0x01, $1, "C", $2, "%(RVAL)i";
+}
+set_portD_direction_bit{
+    # output parameters: board, bit, value
+    out 0x01, $1, "D", $2, "%(RVAL)i";
+}
+#==============================================================================
+set_analog_output{
+    # output parameters: board, voltage
+    out 0x02, $1, "%(RVAL)i";
+}
+#==============================================================================
+read_analog_output{
+    # output parameters: board
+    out 0x03, $1;
+    # input parameters:  code set
+    in "%u";
+}
+#==============================================================================
+read_analog_input{
+    # output parameters: board
+    out 0x04, $1;
+    # input parameters:  raw voltage
+    in "%u";
+}
+#==============================================================================
+set_digital_output_byte{
+    # output parameters: board, value
+    out 0x05, $1, $2;
+}
+#==============================================================================
+read_digital_input_byte{
+    # output parameters: board
+    out 0x07, $1;
+    # input parameters:  byte read
+    in "%d";
+}
+#==============================================================================
+reset{
+    # output parameters: board
+    out 0x09, $1, "%(RVAL)i";
+}
+#==============================================================================
+read_interlock_labels{
+    Separator = ",";
+    out 0x0A;
+    in "%#s";
+}
+#==============================================================================
+read_portB_digital_output_bit{
+    # output parameters: board, bit
+    out 0x0B, $1, $2;
+    # input parameters:  bit read
+    in "%u";
+}
+#==============================================================================
+set_portB_digital_output_bit{
+    # output parameters: board, bit, value
+    out 0x0C, $1, $2, "%(RVAL)i";
+}
+#==============================================================================
+read_portA_digital_input_bit{
+    # output parameters: board, bit_pos
+    out 0x0D, $1, $2;
+    # input parameters:  bit read
+    in "%u";
+}
+#==============================================================================
+read_portB_digital_input_bit{
+    # output parameters: board, bit_pos
+    out 0x0E, $1, $2;
+    # input parameters:  bit read
+    in "%u";
+}

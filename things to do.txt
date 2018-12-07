@@ -1,0 +1,9 @@
+===========================================================================
+	To do list
+===========================================================================
+
+-change file names to English
+-add documentation
+-add previous versions of the board (v0.0, v0.1, ...)
+-tests reports (stability, linearity, repetibility)
+

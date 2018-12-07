@@ -1,0 +1,380 @@
+===========================================================================
+Configurations for BBB
+===========================================================================
+
+sources:
+- https://wiki-sirius.lnls.br/mediawiki/index.php/CON:Setting_up_a_Linux_workstation
+- Robert C Nelson's comments in github
+- "interesting links" at the end of this document
+
+======================================
+initial steps
+======================================
+wget debian.beagleboard.org/images/bone-debian-9.3-iot-armhf-2018-03-05-4gb.img.xz
+Extract the ".img" file, open "Disk Image Writer" and flash it in a SD card.
+
+======================================
+flashing eMMC
+======================================
+SSH in BBB:
+	debian@<IP-ADDRESS>
+	password: temppwd
+
+sudo nano /boot/uEnv.txt
+uncomment the following line:
+--------------------------------------
+##enable BBB: eMMC Flasher:
+cmdline=init=/opt/scripts/tools/eMMC/init-eMMC-flasher-v3.sh
+--------------------------------------
+insert SD card
+sudo reboot
+
+LEDs will start blinking in order
+After BBB turns off, take off the SD card and power on
+
+======================================
+updating Flasher Scripts
+======================================
+sudo -i
+cd /opt/scripts/
+git pull
+--------------------------------------
+updating kernel
+--------------------------------------
+cd /opt/scripts/tools
+./update_kernel.sh --bone-kernel --lts-4_14
+--------------------------------------
+updating U-Boot
+--------------------------------------
+cd /opt/scripts/tools/developers
+./update_bootloader.sh
+--------------------------------------
+reboot
+
+======================================
+configure Locales framework
+======================================
+apt-get update
+apt-get install locales
+dpkg-reconfigure locales
+select at least the two following options:
+	-en_US.UTF-8 UTF-8
+	-pt_BR.UTF-8 UTF-8.
+Then define english as default locale for the system environment.
+
+======================================
+upgrading all installed software
+======================================
+sudo -i
+apt-get update
+apt-get -y upgrade
+apt-get -y dist-upgrade
+apt-get -y autoremove
+apt-get clean
+reboot
+
+======================================
+enable root user and set its password
+======================================
+
+sudo nano /etc/ssh/sshd_config
+--------------------------------------
+Change from:
+	#PermitRootLogin prohibit-password
+To:
+	PermitRootLogin yes
+--------------------------------------
+sudo /etc/init.d/ssh restart
+
+======================================
+some basic tools
+======================================
+apt-get -y install acpid acpi-support-base build-essential device-tree-compiler git man-db ntp perl picocom procserv python python-dev python-numpy swig telnet usbutils
+dpkg-reconfigure tzdata
+Set the system time zone to "America" --> "São Paulo"
+
+======================================
+NTP client
+======================================
+apt-get -y install ntp
+sed -i -e '18,21s/^/#/' -e '24s/^/#/' -e '$a\\nserver 10.128.1.252' /etc/ntp.conf
+systemctl restart ntp
+
+======================================
+EPICS
+======================================
+apt-get -y install libreadline-gplv2-dev
+cd
+wget --no-check-certificate https://epics.anl.gov/download/base/base-3.15.5.tar.gz
+tar -xvzf base-3.15.5.tar.gz
+rm base-3.15.5.tar.gz
+cd base-3.15.5
+make
+
+nano /root/.bashrc
+--------------------------------------
+export PATH=/root/base-3.15.5/bin/linux-arm:$PATH
+export EPICS_BASE="/root/base-3.15.5"
+export EPICS_HOST_ARCH="linux-arm"
+export EPICS_CA_MAX_ARRAY_BYTES=1048576
+export EPICS_CA_ADDR_LIST=10.0.4.57
+--------------------------------------
+
+source /root/.bashrc
+
+======================================
+asynDriver
+======================================
+cd
+wget --no-check-certificate https://epics.anl.gov/download/modules/asyn4-33.tar.gz
+tar -xvzf asyn4-33.tar.gz
+rm asyn4-33.tar.gz
+sed -i -e '3,4s/^/#/' -e '8s/^/#/' -e '11s/^/#/' -e '14cEPICS_BASE=/opt/base-3.15.5' asyn4-33/configure/RELEASE
+cd asyn4-33
+make
+
+======================================
+stream-ioc
+======================================
+cd 
+git clone --recursive https://github.com/lnls-sirius/stream-ioc.git
+cd stream-ioc
+sed -i -e '3cEPICS_BASE=/root/base-3.15.5' -e '5cASYN=/root/asyn4-33' configure/RELEASE
+rm StreamDevice/GNUmakefile
+make
+
+======================================
+pip packages
+======================================
+--------------------------------------
+updating pip
+--------------------------------------
+pip install --upgrade pip
+--------------------------------------
+installing pip packages
+--------------------------------------
+pip install pip-tools
+
+pip install numpy ipython jupyter pandas sympy nose
+
+python -m pip install --user numpy ipython jupyter pandas sympy nose
+
+===========================================================
+Atempt to install scipy through pip
+	--> didn't work because of its dependencies
+		--> try again later
+===========================================================
+sudo apt-get install liblapack-dev
+pip install scipy
+
+???
+pip install git+https://github.com/scipy/scipy.git
+???
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+libraries mkl_rt not found
+libraries openblas not found
+libraries openblas,lapack not found
+libraries   blis not found
+
+ atlas_3_10_threads_info:
+    Setting PTATLAS=ATLAS
+    customize UnixCCompiler
+      libraries tatlas,tatlas not found in /usr/local/lib
+
+
+    atlas_blas_threads_info:
+    Setting PTATLAS=ATLAS
+    customize UnixCCompiler
+      libraries ptf77blas,ptcblas,atlas not found 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+sudo apt-get install libblas-dev
+sudo apt-get install liblapack-dev
+sudo apt-get install gfortran
+
+sudo apt-get install libatlas-base-dev
+sudo apt-get install libopenblas-dev
+apt-get install mklibs
+
+pip install blis
+
+sudo apt-get install bliss
+
+===========================================================
+ Temporary solution: use apt-get
+===========================================================
+apt-get install python-scipy
+===========================================================
+
+pip install cython
+pip install pandas
+
+apt-get install libfreetype6-dev pkg-config libpng12-dev
+pip --no-cache-dir install matplotlib
+
+pip install pyserial
+pip install pcaspy
+pip install pyepics
+
+nano /root/.bashrc
+--------------------------------------
+export PYEPICS_LIBCA=/root/base-3.15.5/lib/linux-arm/libca.so
+--------------------------------------
+
+apt-get install libffi-dev
+apt-get install libssl-dev
+pip install pipenv
+pipenv install requests
+
+--------------------------------------
+updating pip packages
+--------------------------------------
+
+
+#pip-compile
+
+
+======================================
+Adafruit BBIO library
+======================================
+sudo ntpd pool.ntp.org
+sudo apt-get install build-essential python-dev python-setuptools python-pip python-smbus -y
+sudo pip install Adafruit_BBIO
+
+======================================
+installing AM335x PRU package
+======================================
+source: http://mythopoeic.org/bbb-pru-minimal/
+
+cd /root
+git clone https://github.com/beagleboard/am335x_pru_package.git
+cp am335x_pru_package/pru_sw/app_loader/include/prussdrv.h /usr/include
+cp am335x_pru_package/pru_sw/app_loader/include/pruss_intc_mapping.h /usr/include
+cd /root/am335x_pru_package/pru_sw/app_loader/interface
+make clean
+CROSS_COMPILE="" make
+cd /root/am335x_pru_package/pru_sw/app_loader/lib
+cp libprussdrv.a libprussdrvd.a libprussdrvd.so libprussdrv.so /usr/lib
+ldconfig
+cd /root/am335x_pru_package/pru_sw/utils/pasm_source
+source linuxbuild
+cd ..
+cp pasm /usr/bin
+
+======================================
+installing PRUserial485
+======================================
+cd
+git clone http://git.cnpem.br/patricia.nallin/PRUserial485.git
+cd PRUserial485/src
+./library_build.sh
+
+======================================
+getting SPIxCONV
+======================================
+cd 
+git clone https://github.com/ito-rafael/SPIxCONV.git
+
+======================================
+adding rc.local
+======================================
+source: http://www.itechlounge.net/2017/10/linux-how-to-add-rc-local-in-debian-9/
+
+nano /etc/systemd/system/rc-local.service
+add the following content:
+--------------------------------------
+[Unit]
+Description=/etc/rc.local
+ConditionPathExists=/etc/rc.local
+
+[Service]
+Type=forking
+ExecStart=/etc/rc.local start
+TimeoutSec=0
+StandardOutput=tty
+RemainAfterExit=yes
+SysVStartPriority=99
+
+[Install]
+WantedBy=multi-user.target
+--------------------------------------
+nano /etc/rc.local
+append the generic content below:
+--------------------------------------
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+exit 0
+--------------------------------------
+chmod +x /etc/rc.local
+systemctl enable rc-local
+systemctl start rc-local.service
+systemctl status rc-local.service
+
+===========================================================================
+interesting links with useful informations
+===========================================================================
+
+P8 header (from Derek Molloy):
+https://itbrainpower.net/a-gsm/images/BeagleboneBlackP8HeaderTable.pdf
+P9 header (from Derek Molloy):
+https://itbrainpower.net/a-gsm/images/BeagleboneBlackP9HeaderTable.pdf
+
+BeagleBone DTBs
+https://elinux.org/BeagleBone_DTBs
+
+BeagleBone Debian Image Migration
+https://elinux.org/Beagleboard:BeagleBone_Debian_Image_Migration#U-Boot_Disable_onboard_devices
+
+beaglebone-universal-io ("cape-unversal" overlay)
+https://github.com/cdsteinkuehler/beaglebone-universal-io
+
+bb.org-overlays
+https://github.com/beagleboard/bb.org-overlays/
+
+dtb-rebuilder
+https://github.com/RobertCNelson/dtb-rebuilder
+
+U-Boot Overlays
+https://elinux.org/Beagleboard:BeagleBoneBlack_Debian#U-Boot_Overlays
+	--> section 3.11: U-Boot Overlays
+information also here: https://eewiki.net/display/linuxonarm/BeagleBone+Black#BeagleBoneBlack-Bootloader:U-Boot
+
+Kernel Options
+https://elinux.org/Beagleboard:BeagleBoneBlack_Debian#Kernel_Options
+	--> section 7: Kernel Options
+
+Robert C Nelson --> U-Boot, v4.4.x/v4.9.x/v4.14.x: and v4.15.x+ support
+https://github.com/beagleboard/linux/issues/154
+https://github.com/julianduque/beaglebone-io/issues/44#issue-287592899
+
+======================================
+ testing PRU with MBtemp
+======================================
+
+/root/PRUserial485/src/overlays.sh
+modprobe uio_pruss extram_pool_sz=0x200000
+
+from PRUserial485 import *
+PRUserial485_open(115200, "M")
+PRUserial485_write(["\x04","\x10","\x00","\x01","\x00","\xEB"], 1000)
+PRUserial485_read()
+
+======================================
+ testing Adafruit library
+======================================
+
+import Adafruit_BBIO.GPIO as GPIO
+GPIO.setup("P9_14", GPIO.OUT)
+GPIO.setup("P9_14", GPIO.IN)
+

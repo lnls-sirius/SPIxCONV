@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="auto_complete_history">
+		<list key="PV">
+			<item value="SI-01SA:PU-InjNLKckr:OpMode-Sts"/>
+			<item value="SI-19C4:PU-PingV:on_off"/>
+			<item value="SI-01SA:PU-InjDpKckr:on_off"/>
+			<item value="BO-48D:PU-EjeKckr:on_off"/>
+			<item value="BO-01D:PU-InjKckr:on_off"/>
+			<item value="TS-04:PU-InjSeptF:on_off"/>
+			<item value="TS-04:PU-InjSeptG-2:on_off"/>
+			<item value="TS-04:PU-InjSeptG-1:on_off"/>
+			<item value="TS-01:PU-EjeSeptF:on_off"/>
+			<item value="TS-01:PU-EjeSeptG:on_off"/>
+			<item value="TB-04:PU-InjSept:on_off"/>
+		</list>
+	</section>
+</section>

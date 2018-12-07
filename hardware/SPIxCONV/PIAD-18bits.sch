@@ -1,0 +1,984 @@
+EESchema Schematic File Version 2
+LIBS:PIAD-18bits-rescue
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:PIAD-18bits-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 5
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Sheet
+S 3550 3375 1675 1400
+U 58D18D5E
+F0 "CPLD_SPIxxCON" 60
+F1 "CPLD_SPIxxCON.sch" 60
+F2 "+5V" O L 3550 3700 60 
+F3 "+3.3V" O L 3550 3850 60 
+F4 "GND" O L 3550 4000 60 
+F5 "PowerGood_DAC" O L 3550 3550 60 
+F6 "DB6" O L 3550 4550 60 
+F7 "DB7" O L 3550 4450 60 
+$EndSheet
+$Sheet
+S 6200 4225 1350 1450
+U 58D18D5F
+F0 "DAC" 60
+F1 "DAC.sch" 60
+F2 "Output" O R 7550 4425 60 
+F3 "DAC_AGND" O R 7550 4725 60 
+F4 "+5V_DAC" I L 6200 4375 60 
+F5 "+3.3V" I L 6200 4525 60 
+F6 "GND" I L 6200 4675 60 
+F7 "RESET" I L 6200 4975 60 
+F8 "CLEAR" I L 6200 5075 60 
+F9 "LDAC" I L 6200 5175 60 
+F10 "CS" I L 6200 5275 60 
+F11 "CLK" I L 6200 5375 60 
+F12 "MISO" I L 6200 5475 60 
+F13 "MOSI" I L 6200 5575 60 
+$EndSheet
+$Comp
+L CONN_02X13 P101
+U 1 1 58D18D60
+P 9250 5225
+F 0 "P101" H 9250 5925 50  0000 C CNN
+F 1 "CONN_02X13" V 9250 5225 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_2x13_Pitch2.54mm" H 9250 4075 60  0001 C CNN
+F 3 "" H 9250 4075 60  0000 C CNN
+	1    9250 5225
+	1    0    0    -1  
+$EndComp
+Text Label 8650 4625 0    60   ~ 0
+AO
+Text Label 7950 4425 2    60   ~ 0
+AO
+Text Label 8650 4725 0    60   ~ 0
+AO_GND
+Text Label 7925 4725 2    60   ~ 0
+AO_GND
+Text Label 5750 4975 0    60   ~ 0
+RESET
+Text Label 5750 5075 0    60   ~ 0
+CLEAR
+Text Label 5750 5175 0    60   ~ 0
+LDAC
+Text Label 5750 5275 0    60   ~ 0
+DAC_CS
+Text Label 5750 5375 0    60   ~ 0
+DAC_CLK
+Text Label 5750 5475 0    60   ~ 0
+DAC_MISO
+Text Label 5750 5575 0    60   ~ 0
+DAC_MOSI
+Text Label 1125 4600 0    60   ~ 0
+RESET
+Text Label 1125 4700 0    60   ~ 0
+CLEAR
+Text Label 1125 4800 0    60   ~ 0
+LDAC
+Text Label 1125 4200 0    60   ~ 0
+DAC_CS
+Text Label 1125 4300 0    60   ~ 0
+DAC_CLK
+Text Label 1125 4500 0    60   ~ 0
+DAC_MOSI
+Text Label 1125 4400 0    60   ~ 0
+DAC_MISO
+$Comp
+L GND #PWR01
+U 1 1 58D18D6B
+P 8525 3900
+F 0 "#PWR01" H 8525 3650 50  0001 C CNN
+F 1 "GND" H 8525 3750 50  0000 C CNN
+F 2 "" H 8525 3900 50  0000 C CNN
+F 3 "" H 8525 3900 50  0000 C CNN
+	1    8525 3900
+	1    0    0    -1  
+$EndComp
+Text Label 10175 2350 2    60   ~ 0
+PA0
+Text Label 10175 2250 2    60   ~ 0
+PA1
+Text Label 10175 2150 2    60   ~ 0
+PA2
+Text Label 10175 2050 2    60   ~ 0
+PA3
+Text Label 10175 1950 2    60   ~ 0
+PA4
+Text Label 10175 1850 2    60   ~ 0
+PA5
+Text Label 10175 1750 2    60   ~ 0
+PA6
+Text Label 10175 1650 2    60   ~ 0
+PA7
+Text Label 8325 2500 0    60   ~ 0
+DIR_A
+Text Label 10175 3500 2    60   ~ 0
+PB0
+Text Label 10175 3400 2    60   ~ 0
+PB1
+Text Label 10175 3300 2    60   ~ 0
+PB2
+Text Label 10175 3200 2    60   ~ 0
+PB3
+Text Label 10175 3100 2    60   ~ 0
+PB4
+Text Label 10175 3000 2    60   ~ 0
+PB5
+Text Label 10175 2900 2    60   ~ 0
+PB6
+Text Label 10175 2800 2    60   ~ 0
+PB7
+Text Label 8325 3650 0    60   ~ 0
+DIR_B
+Text Label 8325 2350 0    60   ~ 0
+DA0
+Text Label 8325 2250 0    60   ~ 0
+DA1
+Text Label 8325 2150 0    60   ~ 0
+DA2
+Text Label 8325 2050 0    60   ~ 0
+DA3
+Text Label 8325 1950 0    60   ~ 0
+DA4
+Text Label 8325 1850 0    60   ~ 0
+DA5
+Text Label 8325 1750 0    60   ~ 0
+DA6
+Text Label 8325 1650 0    60   ~ 0
+DA7
+Text Label 8325 3500 0    60   ~ 0
+DB0
+Text Label 8325 3400 0    60   ~ 0
+DB1
+Text Label 8325 3300 0    60   ~ 0
+DB2
+Text Label 8325 3200 0    60   ~ 0
+DB3
+Text Label 8325 3100 0    60   ~ 0
+DB4
+Text Label 8325 3000 0    60   ~ 0
+DB5
+Text Label 8325 2900 0    60   ~ 0
+DB6
+Text Label 8325 2800 0    60   ~ 0
+DB7
+Text Label 7875 2525 2    60   ~ 0
+AI_GND
+Text Label 9825 4725 2    60   ~ 0
+AI_GND
+NoConn ~ 9000 4825
+NoConn ~ 9500 4825
+$Comp
+L GND #PWR02
+U 1 1 58D18D6D
+P 8625 4975
+F 0 "#PWR02" H 8625 4725 50  0001 C CNN
+F 1 "GND" H 8625 4825 50  0000 C CNN
+F 2 "" H 8625 4975 50  0000 C CNN
+F 3 "" H 8625 4975 50  0000 C CNN
+	1    8625 4975
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR03
+U 1 1 58D18D6E
+P 9900 4975
+F 0 "#PWR03" H 9900 4725 50  0001 C CNN
+F 1 "GND" H 9900 4825 50  0000 C CNN
+F 2 "" H 9900 4975 50  0000 C CNN
+F 3 "" H 9900 4975 50  0000 C CNN
+	1    9900 4975
+	1    0    0    -1  
+$EndComp
+Text Label 8800 5025 0    60   ~ 0
+PA0
+Text Label 8800 5125 0    60   ~ 0
+PA1
+Text Label 8800 5225 0    60   ~ 0
+PA2
+Text Label 8800 5325 0    60   ~ 0
+PA3
+Text Label 8800 5425 0    60   ~ 0
+PA4
+Text Label 8800 5525 0    60   ~ 0
+PA5
+Text Label 8800 5625 0    60   ~ 0
+PA6
+Text Label 8800 5725 0    60   ~ 0
+PA7
+NoConn ~ 9000 5825
+NoConn ~ 9500 5825
+Text Label 9750 5025 2    60   ~ 0
+PB0
+Text Label 9750 5125 2    60   ~ 0
+PB1
+Text Label 9750 5225 2    60   ~ 0
+PB2
+Text Label 9750 5325 2    60   ~ 0
+PB3
+Text Label 9750 5425 2    60   ~ 0
+PB4
+Text Label 9750 5525 2    60   ~ 0
+PB5
+Text Label 9750 5625 2    60   ~ 0
+PB6
+Text Label 9750 5725 2    60   ~ 0
+PB7
+Text Label 2525 4200 2    60   ~ 0
+DA0
+Text Label 2525 4300 2    60   ~ 0
+DA1
+Text Label 2525 4400 2    60   ~ 0
+DA2
+Text Label 2525 4500 2    60   ~ 0
+DA3
+Text Label 2525 4600 2    60   ~ 0
+DA4
+Text Label 2525 4700 2    60   ~ 0
+DA5
+Text Label 2525 4800 2    60   ~ 0
+DA6
+Text Label 2525 4900 2    60   ~ 0
+DA7
+Text Label 2525 4100 2    60   ~ 0
+DIR_A
+Text Label 1225 3600 0    60   ~ 0
+DB0
+Text Label 1225 3500 0    60   ~ 0
+DB1
+Text Label 1225 3400 0    60   ~ 0
+DB2
+Text Label 1225 3300 0    60   ~ 0
+DB3
+Text Label 1225 3200 0    60   ~ 0
+DB4
+Text Label 1225 3100 0    60   ~ 0
+DB5
+Text Label 1225 3700 0    60   ~ 0
+DIR_B
+Text Label 5750 2975 0    60   ~ 0
+ADC_CS
+Text Label 5750 3125 0    60   ~ 0
+ADC_SCK
+Text Label 5750 3275 0    60   ~ 0
+ADC_MISO
+Text Label 5750 3575 0    60   ~ 0
+ADC_BUSY
+Text Label 1125 5000 0    60   ~ 0
+ADC_CS
+Text Label 2625 5100 2    60   ~ 0
+ADC_SCK
+Text Label 2625 5000 2    60   ~ 0
+ADC_MISO
+Text Label 1125 5100 0    60   ~ 0
+ADC_BUSY
+Text Notes 6875 5575 0    197  ~ 39
+DAC
+Text Notes 6875 3575 0    197  ~ 39
+ADC
+Text Notes 9400 3025 1    197  ~ 39
+DIGITAL
+Text Notes 3925 4625 0    157  ~ 31
+CPLD\nSPIxxCON
+$Sheet
+S 6200 2225 1350 1450
+U 58D18D68
+F0 "ADC" 60
+F1 "ADC.sch" 60
+F2 "ADC_IN" I R 7550 2375 60 
+F3 "+5V_ADC" I L 6200 2325 60 
+F4 "GND" I L 6200 2625 60 
+F5 "ADC_AGND" O R 7550 2525 60 
+F6 "CS" I L 6200 2975 60 
+F7 "CLK" I L 6200 3125 60 
+F8 "MISO" I L 6200 3275 60 
+F9 "CNVST" I L 6200 3425 60 
+F10 "BUSY" I L 6200 3575 60 
+F11 "+3.3V" I L 6200 2475 60 
+F12 "+5V" I L 6200 2775 60 
+$EndSheet
+$Sheet
+S 8675 1150 1150 2800
+U 58D18D6A
+F0 "GPIO" 60
+F1 "DIGITAL.sch" 60
+F2 "+3.3V" I L 8675 1350 60 
+F3 "GND" I L 8675 1450 60 
+F4 "AI7" I L 8675 1650 60 
+F5 "AI6" I L 8675 1750 60 
+F6 "AI5" I L 8675 1850 60 
+F7 "AI4" I L 8675 1950 60 
+F8 "AI3" I L 8675 2050 60 
+F9 "AI2" I L 8675 2150 60 
+F10 "AI1" I L 8675 2250 60 
+F11 "AI0" I L 8675 2350 60 
+F12 "DIR_A" I L 8675 2500 60 
+F13 "A_OE" I L 8675 2600 60 
+F14 "AO7" I R 9825 1650 60 
+F15 "AO5" I R 9825 1850 60 
+F16 "AO6" I R 9825 1750 60 
+F17 "AO4" I R 9825 1950 60 
+F18 "AO3" I R 9825 2050 60 
+F19 "AO2" I R 9825 2150 60 
+F20 "AO1" I R 9825 2250 60 
+F21 "AO0" I R 9825 2350 60 
+F22 "BI7" I L 8675 2800 60 
+F23 "BI6" I L 8675 2900 60 
+F24 "BI5" I L 8675 3000 60 
+F25 "BI4" I L 8675 3100 60 
+F26 "BI3" I L 8675 3200 60 
+F27 "BI2" I L 8675 3300 60 
+F28 "BI1" I L 8675 3400 60 
+F29 "BI0" I L 8675 3500 60 
+F30 "DIR_B" I L 8675 3650 60 
+F31 "BO7" I R 9825 2800 60 
+F32 "BO6" I R 9825 2900 60 
+F33 "BO5" I R 9825 3000 60 
+F34 "BO4" I R 9825 3100 60 
+F35 "BO3" I R 9825 3200 60 
+F36 "BO2" I R 9825 3300 60 
+F37 "BO1" I R 9825 3400 60 
+F38 "BO0" I R 9825 3500 60 
+F39 "B_OE" I L 8675 3750 60 
+$EndSheet
+NoConn ~ 1575 3800
+NoConn ~ 1575 3900
+NoConn ~ 1575 4000
+NoConn ~ 1575 4100
+Text Label 9825 4625 2    60   ~ 0
+AI
+Text Label 7875 2375 2    60   ~ 0
+AI
+Text Label 1125 4900 0    60   ~ 0
+ADC_CNV
+Text Label 5750 3425 0    60   ~ 0
+ADC_CNV
+Text Label 5750 2325 0    60   ~ 0
++5V_ADC
+Text Label 5875 2475 0    60   ~ 0
++3.3V
+Text Label 5775 4375 0    60   ~ 0
++5V_DAC
+Text Label 5900 4525 0    60   ~ 0
++3.3V
+Text Label 8350 1350 0    60   ~ 0
++3.3V
+Text Label 3200 3700 0    60   ~ 0
++5V
+Text Label 3200 3850 0    60   ~ 0
++3.3V
+Text Label 3225 4000 0    60   ~ 0
+GND
+Text Label 5875 2625 0    60   ~ 0
+GND
+Text Label 5900 4675 0    60   ~ 0
+GND
+$Comp
+L R_Small R103
+U 1 1 58DDD112
+P 3575 1775
+F 0 "R103" H 3605 1795 50  0000 L CNN
+F 1 "220R" H 3605 1735 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805" H 3575 1775 50  0001 C CNN
+F 3 "" H 3575 1775 50  0000 C CNN
+	1    3575 1775
+	-1   0    0    1   
+$EndComp
+$Comp
+L R_Small R102
+U 1 1 58DDD113
+P 3250 2225
+F 0 "R102" H 3280 2245 50  0000 L CNN
+F 1 "10k" H 3280 2185 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805" H 3250 2225 50  0001 C CNN
+F 3 "" H 3250 2225 50  0000 C CNN
+	1    3250 2225
+	-1   0    0    1   
+$EndComp
+$Comp
+L R_Small R101
+U 1 1 58DDD114
+P 3100 2075
+F 0 "R101" H 3130 2095 50  0000 L CNN
+F 1 "1k" H 3130 2035 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805" H 3100 2075 50  0001 C CNN
+F 3 "" H 3100 2075 50  0000 C CNN
+	1    3100 2075
+	0    -1   -1   0   
+$EndComp
+$Comp
+L BC237-RESCUE-Alimentacao_PlacasInterface Q101
+U 1 1 58DDD115
+P 3475 2075
+F 0 "Q101" H 3675 2150 50  0000 L CNN
+F 1 "BC817" H 3675 2075 50  0000 L CNN
+F 2 "TO_SOT_Packages_SMD:SOT-23" H 3675 2000 50  0001 L CIN
+F 3 "" H 3475 2075 50  0000 L CNN
+	1    3475 2075
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR04
+U 1 1 58DDD116
+P 3575 2450
+F 0 "#PWR04" H 3575 2200 50  0001 C CNN
+F 1 "GND" H 3575 2300 50  0000 C CNN
+F 2 "" H 3575 2450 50  0000 C CNN
+F 3 "" H 3575 2450 50  0000 C CNN
+	1    3575 2450
+	1    0    0    -1  
+$EndComp
+$Comp
+L BC307-RESCUE-Alimentacao_PlacasInterface Q102
+U 1 1 58DDD117
+P 3575 1475
+F 0 "Q102" H 3775 1550 50  0000 L CNN
+F 1 "BC807" H 3775 1475 50  0000 L CNN
+F 2 "TO_SOT_Packages_SMD:SOT-23" H 3775 1400 50  0001 L CIN
+F 3 "" H 3575 1475 50  0000 L CNN
+	1    3575 1475
+	0    1    -1   0   
+$EndComp
+Text Label 2525 1375 0    60   ~ 0
++5V
+Text Label 4975 1375 2    60   ~ 0
++5V_ADC
+Text Label 2500 2075 0    60   ~ 0
+PWR_ADC
+$Comp
+L GND #PWR05
+U 1 1 58D18D63
+P 3225 4050
+F 0 "#PWR05" H 3225 3800 50  0001 C CNN
+F 1 "GND" H 3225 3900 50  0000 C CNN
+F 2 "" H 3225 4050 60  0000 C CNN
+F 3 "" H 3225 4050 60  0000 C CNN
+	1    3225 4050
+	1    0    0    -1  
+$EndComp
+Text Label 3050 3550 0    60   ~ 0
+PWR_DAC
+Wire Wire Line
+	1125 5000 1575 5000
+Wire Wire Line
+	2625 5100 2175 5100
+Wire Wire Line
+	2625 5000 2175 5000
+Wire Wire Line
+	1125 5100 1575 5100
+Wire Wire Line
+	5750 2325 6200 2325
+Wire Wire Line
+	5750 2975 6200 2975
+Wire Wire Line
+	5750 3125 6200 3125
+Wire Wire Line
+	5750 3275 6200 3275
+Wire Wire Line
+	5750 3575 6200 3575
+Wire Wire Line
+	1225 3700 1575 3700
+Wire Wire Line
+	1225 3600 1575 3600
+Wire Wire Line
+	1225 3500 1575 3500
+Wire Wire Line
+	1225 3400 1575 3400
+Wire Wire Line
+	1225 3300 1575 3300
+Wire Wire Line
+	1225 3200 1575 3200
+Wire Wire Line
+	1225 3100 1575 3100
+Wire Wire Line
+	2525 4100 2175 4100
+Wire Wire Line
+	2175 4900 2525 4900
+Wire Wire Line
+	2525 4800 2175 4800
+Wire Wire Line
+	2525 4700 2175 4700
+Wire Wire Line
+	2525 4600 2175 4600
+Wire Wire Line
+	2525 4500 2175 4500
+Wire Wire Line
+	2525 4400 2175 4400
+Wire Wire Line
+	2525 4300 2175 4300
+Wire Wire Line
+	2525 4200 2175 4200
+Wire Wire Line
+	9500 5725 9750 5725
+Wire Wire Line
+	9750 5625 9500 5625
+Wire Wire Line
+	9500 5525 9750 5525
+Wire Wire Line
+	9750 5425 9500 5425
+Wire Wire Line
+	9500 5325 9750 5325
+Wire Wire Line
+	9750 5225 9500 5225
+Wire Wire Line
+	9500 5125 9750 5125
+Wire Wire Line
+	9750 5025 9500 5025
+Wire Wire Line
+	9000 5725 8800 5725
+Wire Wire Line
+	8800 5625 9000 5625
+Wire Wire Line
+	9000 5525 8800 5525
+Wire Wire Line
+	8800 5425 9000 5425
+Wire Wire Line
+	9000 5325 8800 5325
+Wire Wire Line
+	8800 5225 9000 5225
+Wire Wire Line
+	9000 5125 8800 5125
+Wire Wire Line
+	8800 5025 9000 5025
+Wire Wire Line
+	9900 4925 9500 4925
+Wire Wire Line
+	9900 4975 9900 4925
+Wire Wire Line
+	8625 4925 9000 4925
+Wire Wire Line
+	8625 4975 8625 4925
+Wire Wire Line
+	9825 4725 9500 4725
+Wire Wire Line
+	8675 1650 8325 1650
+Wire Wire Line
+	8325 1750 8675 1750
+Wire Wire Line
+	8325 1850 8675 1850
+Wire Wire Line
+	8325 1950 8675 1950
+Wire Wire Line
+	8325 2050 8675 2050
+Wire Wire Line
+	8325 2150 8675 2150
+Wire Wire Line
+	8325 2250 8675 2250
+Wire Wire Line
+	8325 2350 8675 2350
+Wire Wire Line
+	8325 3500 8675 3500
+Wire Wire Line
+	8325 3400 8675 3400
+Wire Wire Line
+	8325 3300 8675 3300
+Wire Wire Line
+	8325 3200 8675 3200
+Wire Wire Line
+	8325 3100 8675 3100
+Wire Wire Line
+	8325 3000 8675 3000
+Wire Wire Line
+	8675 2900 8325 2900
+Wire Wire Line
+	8325 2800 8675 2800
+Wire Wire Line
+	8325 3650 8675 3650
+Wire Wire Line
+	9825 2800 10175 2800
+Wire Wire Line
+	10175 2900 9825 2900
+Wire Wire Line
+	9825 3000 10175 3000
+Wire Wire Line
+	10175 3100 9825 3100
+Wire Wire Line
+	9825 3200 10175 3200
+Wire Wire Line
+	10175 3300 9825 3300
+Wire Wire Line
+	9825 3400 10175 3400
+Wire Wire Line
+	10175 3500 9825 3500
+Wire Wire Line
+	8325 2500 8675 2500
+Wire Wire Line
+	9825 1650 10175 1650
+Wire Wire Line
+	10175 1750 9825 1750
+Wire Wire Line
+	9825 1850 10175 1850
+Wire Wire Line
+	10175 1950 9825 1950
+Wire Wire Line
+	9825 2050 10175 2050
+Wire Wire Line
+	10175 2150 9825 2150
+Wire Wire Line
+	9825 2250 10175 2250
+Wire Wire Line
+	10175 2350 9825 2350
+Wire Wire Line
+	8350 1350 8675 1350
+Connection ~ 8525 3750
+Wire Wire Line
+	8525 3750 8675 3750
+Connection ~ 8525 2600
+Wire Wire Line
+	8675 2600 8525 2600
+Wire Wire Line
+	8525 1450 8675 1450
+Wire Wire Line
+	8525 1450 8525 3900
+Wire Wire Line
+	7550 2525 7875 2525
+Wire Wire Line
+	1125 4700 1575 4700
+Wire Wire Line
+	1125 4800 1575 4800
+Wire Wire Line
+	1575 4200 1125 4200
+Wire Wire Line
+	1125 4300 1575 4300
+Wire Wire Line
+	1575 4500 1125 4500
+Wire Wire Line
+	1125 4400 1575 4400
+Wire Wire Line
+	1125 4600 1575 4600
+Wire Wire Line
+	5750 5075 6200 5075
+Wire Wire Line
+	5750 5175 6200 5175
+Wire Wire Line
+	6200 5275 5750 5275
+Wire Wire Line
+	5750 5375 6200 5375
+Wire Wire Line
+	6200 5475 5750 5475
+Wire Wire Line
+	5750 5575 6200 5575
+Wire Wire Line
+	5750 4975 6200 4975
+Wire Wire Line
+	5900 4675 6200 4675
+Wire Wire Line
+	5900 4525 6200 4525
+Wire Wire Line
+	5775 4375 6200 4375
+Wire Wire Line
+	3225 4000 3550 4000
+Wire Wire Line
+	3225 4050 3225 4000
+Wire Wire Line
+	3200 3850 3550 3850
+Wire Wire Line
+	3200 3700 3550 3700
+Wire Wire Line
+	8650 4725 9000 4725
+Wire Wire Line
+	5875 2475 6200 2475
+Wire Wire Line
+	7550 4725 7950 4725
+Wire Wire Line
+	9000 4625 8650 4625
+Wire Wire Line
+	7550 4425 7950 4425
+Wire Wire Line
+	9500 4625 9825 4625
+Wire Wire Line
+	7550 2375 7875 2375
+Wire Wire Line
+	1575 4900 1125 4900
+Wire Wire Line
+	6200 3425 5750 3425
+Wire Wire Line
+	6200 2625 5875 2625
+Wire Wire Line
+	3200 2075 3275 2075
+Connection ~ 3250 2075
+Wire Wire Line
+	3575 2275 3575 2450
+Wire Wire Line
+	3250 2375 4525 2375
+Connection ~ 3575 2375
+Wire Wire Line
+	3000 2075 2500 2075
+Wire Wire Line
+	3375 1375 2500 1375
+Wire Wire Line
+	3775 1375 4975 1375
+Wire Wire Line
+	3550 3550 3050 3550
+Wire Wire Line
+	3250 2125 3250 2075
+Wire Wire Line
+	3250 2325 3250 2375
+$Comp
+L R_Small R106
+U 1 1 58E43E0F
+P 3750 6025
+F 0 "R106" H 3780 6045 50  0000 L CNN
+F 1 "220R" H 3780 5985 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805" H 3750 6025 50  0001 C CNN
+F 3 "" H 3750 6025 50  0000 C CNN
+	1    3750 6025
+	-1   0    0    1   
+$EndComp
+$Comp
+L R_Small R105
+U 1 1 58E43E15
+P 3425 6475
+F 0 "R105" H 3455 6495 50  0000 L CNN
+F 1 "10k" H 3455 6435 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805" H 3425 6475 50  0001 C CNN
+F 3 "" H 3425 6475 50  0000 C CNN
+	1    3425 6475
+	-1   0    0    1   
+$EndComp
+$Comp
+L R_Small R104
+U 1 1 58E43E1B
+P 3275 6325
+F 0 "R104" H 3305 6345 50  0000 L CNN
+F 1 "1k" H 3305 6285 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805" H 3275 6325 50  0001 C CNN
+F 3 "" H 3275 6325 50  0000 C CNN
+	1    3275 6325
+	0    -1   -1   0   
+$EndComp
+$Comp
+L BC237-RESCUE-Alimentacao_PlacasInterface Q103
+U 1 1 58E43E21
+P 3650 6325
+F 0 "Q103" H 3850 6400 50  0000 L CNN
+F 1 "BC817" H 3850 6325 50  0000 L CNN
+F 2 "TO_SOT_Packages_SMD:SOT-23" H 3850 6250 50  0001 L CIN
+F 3 "" H 3650 6325 50  0000 L CNN
+	1    3650 6325
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR06
+U 1 1 58E43E27
+P 3750 6700
+F 0 "#PWR06" H 3750 6450 50  0001 C CNN
+F 1 "GND" H 3750 6550 50  0000 C CNN
+F 2 "" H 3750 6700 50  0000 C CNN
+F 3 "" H 3750 6700 50  0000 C CNN
+	1    3750 6700
+	1    0    0    -1  
+$EndComp
+$Comp
+L BC307-RESCUE-Alimentacao_PlacasInterface Q104
+U 1 1 58E43E2D
+P 3750 5725
+F 0 "Q104" H 3950 5800 50  0000 L CNN
+F 1 "BC807" H 3950 5725 50  0000 L CNN
+F 2 "TO_SOT_Packages_SMD:SOT-23" H 3950 5650 50  0001 L CIN
+F 3 "" H 3750 5725 50  0000 L CNN
+	1    3750 5725
+	0    1    -1   0   
+$EndComp
+Text Label 2700 5625 0    60   ~ 0
++5V
+Text Label 5075 5625 2    60   ~ 0
++5V_DAC
+Text Label 2675 6325 0    60   ~ 0
+PWR_DAC
+Wire Wire Line
+	3375 6325 3450 6325
+Connection ~ 3425 6325
+Wire Wire Line
+	3750 6525 3750 6700
+Wire Wire Line
+	3425 6625 4625 6625
+Connection ~ 3750 6625
+Wire Wire Line
+	3175 6325 2675 6325
+Wire Wire Line
+	3550 5625 2675 5625
+Wire Wire Line
+	3950 5625 5075 5625
+Wire Wire Line
+	3425 6375 3425 6325
+Wire Wire Line
+	3425 6575 3425 6625
+$Comp
+L CP1 C101
+U 1 1 58EBCCD9
+P 4000 2025
+F 0 "C101" H 4115 2071 50  0000 L CNN
+F 1 "100uF" H 4115 1980 50  0000 L CNN
+F 2 "Capacitors_SMD:CP_Elec_6.3x5.3" H 4000 2025 50  0001 C CNN
+F 3 "" H 4000 2025 50  0000 C CNN
+	1    4000 2025
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4000 1875 4000 1375
+Connection ~ 4000 1375
+Wire Wire Line
+	4000 2375 4000 2175
+$Comp
+L CP1 C102
+U 1 1 58EC0816
+P 4175 6275
+F 0 "C102" H 4290 6321 50  0000 L CNN
+F 1 "100uF" H 4290 6230 50  0000 L CNN
+F 2 "Capacitors_SMD:CP_Elec_6.3x5.3" H 4175 6275 50  0001 C CNN
+F 3 "" H 4175 6275 50  0000 C CNN
+	1    4175 6275
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4175 6625 4175 6425
+Wire Wire Line
+	4175 6125 4175 5625
+Connection ~ 4175 5625
+Wire Wire Line
+	6200 2775 5875 2775
+Text Label 5875 2775 0    60   ~ 0
++5V
+Text Label 3200 4550 0    60   ~ 0
+DB6
+Text Label 3200 4450 0    60   ~ 0
+DB7
+Wire Wire Line
+	3550 4550 3200 4550
+Wire Wire Line
+	3200 4450 3550 4450
+$Comp
+L 5M80ZT100 U101
+U 2 1 58D8195A
+P 1875 4100
+F 0 "U101" H 1853 5347 60  0000 C CNN
+F 1 "5M80ZT100" H 1853 5241 60  0000 C CNN
+F 2 "Housings_QFP:TQFP-100_14x14mm_Pitch0.5mm" H 1875 4100 60  0001 C CNN
+F 3 "" H 1875 4100 60  0000 C CNN
+	2    1875 4100
+	1    0    0    -1  
+$EndComp
+NoConn ~ 2175 3300
+NoConn ~ 2175 3400
+NoConn ~ 2175 3500
+NoConn ~ 2175 3600
+NoConn ~ 2175 3700
+NoConn ~ 2175 3800
+NoConn ~ 2175 3900
+NoConn ~ 2175 4000
+$Comp
+L CONN_01X01 P102
+U 1 1 58FFB63D
+P 1550 6075
+F 0 "P102" H 1469 5850 50  0000 C CNN
+F 1 "CONN_01X01" H 1469 5941 50  0000 C CNN
+F 2 "Controle:LNLS_LOGO_Silk" H 1550 6075 50  0001 C CNN
+F 3 "" H 1550 6075 50  0000 C CNN
+	1    1550 6075
+	-1   0    0    1   
+$EndComp
+NoConn ~ 1750 6075
+$Comp
+L R R107
+U 1 1 598CF911
+P 4525 1675
+F 0 "R107" H 4455 1629 50  0000 R CNN
+F 1 "620R" H 4455 1720 50  0000 R CNN
+F 2 "Resistors_SMD:R_0805" V 4455 1675 50  0001 C CNN
+F 3 "" H 4525 1675 50  0000 C CNN
+	1    4525 1675
+	-1   0    0    1   
+$EndComp
+$Comp
+L LED D101
+U 1 1 598CFC5B
+P 4525 2100
+F 0 "D101" V 4571 1992 50  0000 R CNN
+F 1 "LED" V 4480 1992 50  0000 R CNN
+F 2 "LEDs:LED_0805" H 4525 2100 50  0001 C CNN
+F 3 "" H 4525 2100 50  0000 C CNN
+	1    4525 2100
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4525 1525 4525 1375
+Connection ~ 4525 1375
+Wire Wire Line
+	4525 1825 4525 1900
+Wire Wire Line
+	4525 2375 4525 2300
+Connection ~ 4000 2375
+$Comp
+L R R108
+U 1 1 598D6689
+P 4625 5925
+F 0 "R108" H 4555 5879 50  0000 R CNN
+F 1 "620R" H 4555 5970 50  0000 R CNN
+F 2 "Resistors_SMD:R_0805" V 4555 5925 50  0001 C CNN
+F 3 "" H 4625 5925 50  0000 C CNN
+	1    4625 5925
+	-1   0    0    1   
+$EndComp
+$Comp
+L LED D102
+U 1 1 598D668F
+P 4625 6350
+F 0 "D102" V 4671 6242 50  0000 R CNN
+F 1 "LED" V 4580 6242 50  0000 R CNN
+F 2 "LEDs:LED_0805" H 4625 6350 50  0001 C CNN
+F 3 "" H 4625 6350 50  0000 C CNN
+	1    4625 6350
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4625 5775 4625 5625
+Connection ~ 4625 5625
+Wire Wire Line
+	4625 6075 4625 6150
+Wire Wire Line
+	4625 6625 4625 6550
+Connection ~ 4175 6625
+Text Label 2675 3200 2    60   ~ 0
+PWR_ADC
+Wire Wire Line
+	2175 3200 2675 3200
+$EndSCHEMATC
