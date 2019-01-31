@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 #import spixconv_unix_socket as a
@@ -384,8 +384,9 @@ if __name__ == '__main__':
         except OSError:
             if os.path.exists(server_address):
                 raise
-
-    with socket.socket(socket.AF_INET if args.tcp else socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+    try:
+        # with socket.socket(socket.AF_INET if args.tcp else socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+        sock = socket.socket(socket.AF_INET if args.tcp else socket.AF_UNIX, socket.SOCK_STREAM)
         if args.tcp:
             sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
@@ -402,7 +403,8 @@ if __name__ == '__main__':
         while True:
             connection, client_address = sock.accept()
             try:
-                with connection:
+                try:
+                    # with connection:
                     logger.info('Client connected %s %s '% (connection, client_address))
                     while True:
                         data = connection.recv(512)
@@ -486,3 +488,9 @@ if __name__ == '__main__':
                             break
             except ConnectionError:
                 logger.exception('Connection Error !')
+            finally:
+                connection.close()
+
+    finally:
+        sock.close()
+
