@@ -385,17 +385,15 @@ if __name__ == '__main__':
             if os.path.exists(server_address):
                 raise
     try:
-        # with socket.socket(socket.AF_INET if args.tcp else socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+        config(args.board_address)
+
         sock = socket.socket(socket.AF_INET if args.tcp else socket.AF_UNIX, socket.SOCK_STREAM)
         if args.tcp:
             sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
         sock.bind(server_address)
-        logger.info('Created socket at %s ' % server_address)
+        logger.info('Created socket at {} '.format(server_address))
         sock.listen(1)
-
-        # configure board #
-        config(args.board_address)
 
         #interlocks = "External,High voltage power supply overvoltage,High voltage power supply overcurrent,Personnel protection,Temperature,AC power,Switch"
         logger.info("unix socket running!")
@@ -403,9 +401,7 @@ if __name__ == '__main__':
         while True:
             connection, client_address = sock.accept()
             try:
-                # try:
-                # with connection:
-                logger.info('Client connected %s %s '% (connection, client_address))
+                logger.info('Client connected {} '.format(client_address))
                 while True:
                     data = connection.recv(512)
                     if data:
@@ -489,6 +485,7 @@ if __name__ == '__main__':
             except ConnectionError:
                 logger.exception('Connection Error !')
             finally:
+                logger.info('Closing connection {}'.format(client_address))
                 connection.close()
     finally:
         sock.close()
