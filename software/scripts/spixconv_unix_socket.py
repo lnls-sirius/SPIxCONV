@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 #import spixconv_unix_socket as a
@@ -403,94 +403,93 @@ if __name__ == '__main__':
         while True:
             connection, client_address = sock.accept()
             try:
-                try:
-                    # with connection:
-                    logger.info('Client connected %s %s '% (connection, client_address))
-                    while True:
-                        data = connection.recv(512)
-                        if data:
-                            #==============================================================
-                            # set GPIO pin direction
-                            if (data[0] == "\x01"):
-                                set_direction_bit(int(ord(data[1])), data[2], int(ord(data[3])), int(data[4]))
-                            #==============================================================
-                            # adjust DAC output value
-                            elif (data[0] == "\x02"):
-                                # convert voltage parameter from string to float
-                                value = float(data[2:len(data)])
-                                set_analog_output(int(ord(data[1])), value)
-                            #==============================================================
-                            # read DAC setpoint value
-                            elif (data[0] == "\x03"):
-                                selection.dac(ord(data[1]))
-                                dac_setpoint = dac.read()
-                                connection.sendall(str(dac_setpoint))
-                            #==============================================================
-                            # read ADC input value
-                            elif (data[0] == "\x04"):
-                                voltage = read_analog_input(ord(data[1]))
-                                connection.sendall(str(voltage))
-                                #print str(voltage)
-                            #==============================================================
-                            # write a whole byte in digital Port B
-                            elif (data[0] == "\x05"):
-                                set_digital_output_byte(ord(data[1]), ord(data[2]))
-                            #==============================================================
-                            # write a bit in Port B GPIO
-                            elif (data[0] == "\x06"):
-                                set_digital_output_bit(int(ord(data[1])), int(ord(data[2])), int(data[3]))
-                            #==============================================================
-                            # read the whole byte in digital Port A
-                            elif (data[0] == "\x07"):
-                                byte = read_digital_input_byte(ord(data[1]))
-                                connection.sendall(str(byte))
-                                print byte
-                            #==============================================================
-                            # read a bit in Port B GPIO
-                            elif (data[0] == "\x08"):
-                                bit = read_digital_input_bit(ord(data[1]), ord(data[2]))
-                                connection.sendall(str(bit))
-                                #print bit
-                            #==============================================================
-                            # generate a pulse in RESET bit (Port B, bit 3)
-                            elif (data[0] == "\x09"):
-                                reset(ord(data[1]), int(data[2]))
-                            #==============================================================
-                            # read interlock labels
-                            elif (data[0] == "\x0A"):
-                                #connection.sendall(interlocks)
-                                pass
-                            #==============================================================
-                            # read a Port B bit setpoint
-                            elif (data[0] == "\x0B"):
-                                bit = read_portB_digital_output_bit(ord(data[1]), ord(data[2]))
-                                connection.sendall(str(bit))
-                            #==============================================================
-                            #
-                            elif (data[0] == "\x0C"):
-                                set_portB_digital_output_bit(int(ord(data[1])), int(ord(data[2])), int(data[3]))
-                            #==============================================================
-                            #
-                            elif (data[0] == "\x0D"):
-                                bit = read_portA_digital_input_bit(ord(data[1]), ord(data[2]))
-                                connection.sendall(str(bit))
-                            #==============================================================
-                            #
-                            elif (data[0] == "\x0E"):
-                                bit = read_portB_digital_input_bit(ord(data[1]), ord(data[2]))
-                                connection.sendall(str(bit))
-                            #==============================================================
-                            # available command
-                            elif (data[0] == "\x0F"):
-                                pass
-                            #==============================================================
-                        else:
-                            break
+                # try:
+                # with connection:
+                logger.info('Client connected %s %s '% (connection, client_address))
+                while True:
+                    data = connection.recv(512)
+                    if data:
+                        #==============================================================
+                        # set GPIO pin direction
+                        if (data[0] == "\x01"):
+                            set_direction_bit(int(ord(data[1])), data[2], int(ord(data[3])), int(data[4]))
+                        #==============================================================
+                        # adjust DAC output value
+                        elif (data[0] == "\x02"):
+                            # convert voltage parameter from string to float
+                            value = float(data[2:len(data)])
+                            set_analog_output(int(ord(data[1])), value)
+                        #==============================================================
+                        # read DAC setpoint value
+                        elif (data[0] == "\x03"):
+                            selection.dac(ord(data[1]))
+                            dac_setpoint = dac.read()
+                            connection.sendall(str(dac_setpoint))
+                        #==============================================================
+                        # read ADC input value
+                        elif (data[0] == "\x04"):
+                            voltage = read_analog_input(ord(data[1]))
+                            connection.sendall(str(voltage))
+                            #print str(voltage)
+                        #==============================================================
+                        # write a whole byte in digital Port B
+                        elif (data[0] == "\x05"):
+                            set_digital_output_byte(ord(data[1]), ord(data[2]))
+                        #==============================================================
+                        # write a bit in Port B GPIO
+                        elif (data[0] == "\x06"):
+                            set_digital_output_bit(int(ord(data[1])), int(ord(data[2])), int(data[3]))
+                        #==============================================================
+                        # read the whole byte in digital Port A
+                        elif (data[0] == "\x07"):
+                            byte = read_digital_input_byte(ord(data[1]))
+                            connection.sendall(str(byte))
+                            print byte
+                        #==============================================================
+                        # read a bit in Port B GPIO
+                        elif (data[0] == "\x08"):
+                            bit = read_digital_input_bit(ord(data[1]), ord(data[2]))
+                            connection.sendall(str(bit))
+                            #print bit
+                        #==============================================================
+                        # generate a pulse in RESET bit (Port B, bit 3)
+                        elif (data[0] == "\x09"):
+                            reset(ord(data[1]), int(data[2]))
+                        #==============================================================
+                        # read interlock labels
+                        elif (data[0] == "\x0A"):
+                            #connection.sendall(interlocks)
+                            pass
+                        #==============================================================
+                        # read a Port B bit setpoint
+                        elif (data[0] == "\x0B"):
+                            bit = read_portB_digital_output_bit(ord(data[1]), ord(data[2]))
+                            connection.sendall(str(bit))
+                        #==============================================================
+                        #
+                        elif (data[0] == "\x0C"):
+                            set_portB_digital_output_bit(int(ord(data[1])), int(ord(data[2])), int(data[3]))
+                        #==============================================================
+                        #
+                        elif (data[0] == "\x0D"):
+                            bit = read_portA_digital_input_bit(ord(data[1]), ord(data[2]))
+                            connection.sendall(str(bit))
+                        #==============================================================
+                        #
+                        elif (data[0] == "\x0E"):
+                            bit = read_portB_digital_input_bit(ord(data[1]), ord(data[2]))
+                            connection.sendall(str(bit))
+                        #==============================================================
+                        # available command
+                        elif (data[0] == "\x0F"):
+                            pass
+                        #==============================================================
+                    else:
+                        break
             except ConnectionError:
                 logger.exception('Connection Error !')
             finally:
                 connection.close()
-
     finally:
         sock.close()
 
