@@ -21,8 +21,6 @@ global GAIN
 global OFFSET
 GAIN = 1
 OFFSET = 0
-import logging
-logger = logging.getLogger()
 
 #=======================================================
 #    Power on DAC circuit
@@ -40,7 +38,6 @@ def on(board):
     if (GAIN == 0):
         GAIN = 1
     OFFSET = flash.dac_offset_read(board)
-    logger.info('Power on DAC:\tGain {}\tOffset {}\tSpi Mode {}'.format(GAIN, OFFSET, spi.mode))
 #=======================================================
 #    Power off DAC circuit
 #=======================================================
