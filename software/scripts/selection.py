@@ -68,21 +68,21 @@ def address(value):
 # in practical aspects (with CPLD correction): SPI modes 1, 2 and 3 supported
 def dac(board):
 	#spi.mode = 1
-	if(board == 0):
+	if(board%8 == 0):
 		address(int("00", 16))
-	elif(board == 1):
+	elif(board%8 == 1):
 		address(int("90", 16))
-	elif(board == 2):
+	elif(board%8 == 2):
 		address(int("A0", 16))
-	elif(board == 3):
+	elif(board%8 == 3):
 		address(int("30", 16))
-	elif(board == 4):
+	elif(board%8 == 4):
 		address(int("C0", 16))
-	elif(board == 5):
+	elif(board%8 == 5):
 		address(int("50", 16))
-	elif(board == 6):
+	elif(board%8 == 6):
 		address(int("60", 16))
-	elif(board == 7):
+	elif(board%8 == 7):
 		address(int("F0", 16))
 # =======================================================
 #	select ADC address
@@ -91,42 +91,42 @@ def dac(board):
 # in practical aspects (with CPLD correction): SPI mode 1 supported
 def adc(board):
 	#spi.mode = 1
-	if(board == 0):
+	if(board%8 == 0):
 		address(int("09", 16))
-	elif(board == 1):
+	elif(board%8 == 1):
 		address(int("99", 16))
-	elif(board == 2):
+	elif(board%8 == 2):
 		address(int("A9", 16))
-	elif(board == 3):
+	elif(board%8 == 3):
 		address(int("39", 16))
-	elif(board == 4):
+	elif(board%8 == 4):
 		address(int("C9", 16))
-	elif(board == 5):
+	elif(board%8 == 5):
 		address(int("59", 16))
-	elif(board == 6):
+	elif(board%8 == 6):
 		address(int("69", 16))
-	elif(board == 7):
+	elif(board%8 == 7):
 		address(int("F9", 16))
 # =======================================================
 #	select FF (for powering DAC and ADC)
 # =======================================================
 def clk_ff(board):
 	#spi.mode = 1
-	if(board == 0):
+	if(board%8 == 0):
 		address(int("0A", 16))
-	elif(board == 1):
+	elif(board%8 == 1):
 		address(int("9A", 16))
-	elif(board == 2):
+	elif(board%8 == 2):
 		address(int("AA", 16))
-	elif(board == 3):
+	elif(board%8 == 3):
 		address(int("3A", 16))
-	elif(board == 4):
+	elif(board%8 == 4):
 		address(int("CA", 16))
-	elif(board == 5):
+	elif(board%8 == 5):
 		address(int("5A", 16))
-	elif(board == 6):
+	elif(board%8 == 6):
 		address(int("6A", 16))
-	elif(board == 7):
+	elif(board%8 == 7):
 		address(int("FA", 16))
 	# generate CLK pulse
 	spi.writebytes([0x00])
@@ -136,21 +136,21 @@ def clk_ff(board):
 #def PA(board):
 def gpioAB(board):
 	#spi.mode = 1
-	if(board == 0):
+	if(board%8 == 0):
 		address(int("03", 16))
-	elif(board == 1):
+	elif(board%8 == 1):
 		address(int("93", 16))
-	elif(board == 2):
+	elif(board%8 == 2):
 		address(int("A3", 16))
-	elif(board == 3):
+	elif(board%8 == 3):
 		address(int("33", 16))
-	elif(board == 4):
+	elif(board%8 == 4):
 		address(int("C3", 16))
-	elif(board == 5):
+	elif(board%8 == 5):
 		address(int("53", 16))
-	elif(board == 6):
+	elif(board%8 == 6):
 		address(int("63", 16))
-	elif(board == 7):
+	elif(board%8 == 7):
 		address(int("F3", 16))
 	#spi.mode = 0
 # =======================================================
@@ -159,21 +159,21 @@ def gpioAB(board):
 #def PB(board):
 def gpioCD(board):
 	#spi.mode = 1
-	if(board == 0):
+	if(board%8 == 0):
 		address(int("0C", 16))
-	elif(board == 1):
+	elif(board%8 == 1):
 		address(int("9C", 16))
-	elif(board == 2):
+	elif(board%8 == 2):
 		address(int("AC", 16))
-	elif(board == 3):
+	elif(board%8 == 3):
 		address(int("3C", 16))
-	elif(board == 4):
+	elif(board%8 == 4):
 		address(int("CC", 16))
-	elif(board == 5):
+	elif(board%8 == 5):
 		address(int("5C", 16))
-	elif(board == 6):
+	elif(board%8 == 6):
 		address(int("6C", 16))
-	elif(board == 7):
+	elif(board%8 == 7):
 		address(int("FC", 16))
 	#spi.mode = 0
 # =======================================================
@@ -190,21 +190,21 @@ def gpioCD(board):
 # device 7: --not used--
 def decoder(board):
 	#spi.mode = 1
-	if(board == 0):
+	if(board%8 == 0):
 		address(int("05", 16))
-	elif(board == 1):
+	elif(board%8 == 1):
 		address(int("95", 16))
-	elif(board == 2):
+	elif(board%8 == 2):
 		address(int("A5", 16))
-	elif(board == 3):
+	elif(board%8 == 3):
 		address(int("35", 16))
-	elif(board == 4):
+	elif(board%8 == 4):
 		address(int("C5", 16))
-	elif(board == 5):
+	elif(board%8 == 5):
 		address(int("55", 16))
-	elif(board == 6):
+	elif(board%8 == 6):
 		address(int("65", 16))
-	elif(board == 7):
+	elif(board%8 == 7):
 		address(int("F5", 16))
 # =======================================================
 #	select FLASH address
@@ -212,42 +212,42 @@ def decoder(board):
 # SPI mode 0 and 3 supported natively
 def flash(board):
 	#spi.mode = 1
-	if(board == 0):
+	if(board%8 == 0):
 		address(int("06", 16))
-	elif(board == 1):
+	elif(board%8 == 1):
 		address(int("96", 16))
-	elif(board == 2):
+	elif(board%8 == 2):
 		address(int("A6", 16))
-	elif(board == 3):
+	elif(board%8 == 3):
 		address(int("36", 16))
-	elif(board == 4):
+	elif(board%8 == 4):
 		address(int("C6", 16))
-	elif(board == 5):
+	elif(board%8 == 5):
 		address(int("56", 16))
-	elif(board == 6):
+	elif(board%8 == 6):
 		address(int("66", 16))
-	elif(board == 7):
+	elif(board%8 == 7):
 		address(int("F6", 16))
 # =======================================================
 #	select BOARD TYPE register
 # =======================================================
 def board_ID(board):
 	#spi.mode = 1
-	if(board == 0):
+	if(board%8 == 0):
 		address(int("0F", 16))
-	elif(board == 1):
+	elif(board%8 == 1):
 		address(int("9F", 16))
-	elif(board == 2):
+	elif(board%8 == 2):
 		address(int("AF", 16))
-	elif(board == 3):
+	elif(board%8 == 3):
 		address(int("3F", 16))
-	elif(board == 4):
+	elif(board%8 == 4):
 		address(int("CF", 16))
-	elif(board == 5):
+	elif(board%8 == 5):
 		address(int("5F", 16))
-	elif(board == 6):
+	elif(board%8 == 6):
 		address(int("6F", 16))
-	elif(board == 7):
+	elif(board%8 == 7):
 		address(int("FF", 16))
 
 	data = spi.readbytes(1)
