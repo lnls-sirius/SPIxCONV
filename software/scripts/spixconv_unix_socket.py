@@ -368,7 +368,7 @@ if __name__ == '__main__':
         datefmt='%d/%m/%Y %H:%M:%S')
     logger = logging.getLogger()
 
-    parser = argparse.ArgumentParser(description='SPIxCONV Socket Binding')
+    parser = argparse.ArgumentParser(description='SPIxCONV Socket Binding', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('board_address', type=int, help='Board address.')
     parser.add_argument('--tcp', help='Use a TCP socket instead of an UNIX.', action='store_true')
     parser.add_argument('--port', '-p', dest='port', type=int, help='TCP server port.', default=5005)
