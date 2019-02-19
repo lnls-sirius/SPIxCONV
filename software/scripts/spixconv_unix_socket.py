@@ -482,7 +482,7 @@ if __name__ == '__main__':
                         #==============================================================
                     else:
                         break
-            except ConnectionError:
+            except:
                 logger.exception('Connection Error !')
             finally:
                 logger.info('Closing connection {}'.format(client_address))
