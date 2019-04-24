@@ -14,7 +14,7 @@ class DeviceMenu(Display):
         #self.***object_name***.macros = json.dumps({"pv_prefix":"BO-01D:PU-InjKckr"})
 
     def ui_filename(self):
-        return '../ui/main_window.ui'
+        return '../displays/main_window.ui'
 
     def ui_filepath(self):
         return path.join(path.dirname(path.realpath(__file__)), self.ui_filename())
