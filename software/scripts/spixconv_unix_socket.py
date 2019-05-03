@@ -420,12 +420,12 @@ if __name__ == '__main__':
                         elif (data[0] == "\x03"):
                             selection.dac(ord(data[1]))
                             dac_setpoint = dac.read()
-                            connection.sendall(str(dac_setpoint))
+                            connection.sendall(str(dac_setpoint) + "\r\n")
                         #==============================================================
                         # read ADC input value
                         elif (data[0] == "\x04"):
                             voltage = read_analog_input(ord(data[1]))
-                            connection.sendall(str(voltage))
+                            connection.sendall(str(voltage) + "\r\n")
                             #print str(voltage)
                         #==============================================================
                         # write a whole byte in digital Port B
