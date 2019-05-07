@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>585</width>
-    <height>851</height>
+    <width>547</width>
+    <height>865</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,10 +16,10 @@
   <widget class="QWidget" name="gridLayoutWidget_5">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>30</y>
-     <width>520</width>
-     <height>799</height>
+     <x>10</x>
+     <y>20</y>
+     <width>524</width>
+     <height>827</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout_5">
@@ -44,13 +44,13 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>30</height>
+        <height>40</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>30</height>
+        <height>50</height>
        </size>
       </property>
       <property name="palette">
@@ -471,7 +471,7 @@
       <property name="font">
        <font>
         <family>Cantarell</family>
-        <pointsize>14</pointsize>
+        <pointsize>20</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -493,7 +493,7 @@
     <item row="4" column="3" rowspan="3">
      <layout class="QGridLayout" name="gridLayout_8">
       <item row="2" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_15" native="true">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_15">
         <property name="minimumSize">
          <size>
           <width>24</width>
@@ -538,7 +538,7 @@
        </spacer>
       </item>
       <item row="7" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_16" native="true">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_16">
         <property name="toolTip">
          <string/>
         </property>
@@ -564,7 +564,7 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_17" native="true">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_17">
         <property name="toolTip">
          <string/>
         </property>
@@ -635,7 +635,7 @@
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_19" native="true">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_19">
         <property name="toolTip">
          <string/>
         </property>
@@ -1139,7 +1139,7 @@
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_13" native="true">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_13">
         <property name="toolTip">
          <string/>
         </property>
@@ -1165,7 +1165,7 @@
        </widget>
       </item>
       <item row="8" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_14" native="true">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_14">
         <property name="toolTip">
          <string/>
         </property>
@@ -1284,7 +1284,7 @@
        </widget>
       </item>
       <item row="6" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_12" native="true">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_12">
         <property name="toolTip">
          <string/>
         </property>
@@ -1310,7 +1310,7 @@
        </widget>
       </item>
       <item row="9" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_18" native="true">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_18">
         <property name="toolTip">
          <string/>
         </property>
@@ -1336,7 +1336,7 @@
        </widget>
       </item>
       <item row="10" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_20" native="true">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_20">
         <property name="toolTip">
          <string/>
         </property>
@@ -2369,7 +2369,7 @@
        </spacer>
       </item>
       <item row="3" column="1" colspan="3">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_11" native="true">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_11">
         <property name="toolTip">
          <string/>
         </property>
@@ -2597,6 +2597,12 @@
       </item>
       <item row="6" column="1" colspan="3">
        <widget class="PyDMPushButton" name="PyDMPushButton_2">
+        <property name="maximumSize">
+         <size>
+          <width>37</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string/>
         </property>
@@ -3705,13 +3711,13 @@ Power Supply</string>
       <property name="toolTip">
        <string/>
       </property>
-      <property name="showXGrid" stdset="0">
+      <property name="showXGrid">
        <bool>true</bool>
       </property>
-      <property name="showYGrid" stdset="0">
+      <property name="showYGrid">
        <bool>true</bool>
       </property>
-      <property name="showLegend" stdset="0">
+      <property name="showLegend">
        <bool>false</bool>
       </property>
       <property name="mouseEnabledX" stdset="0">
@@ -3723,30 +3729,30 @@ Power Supply</string>
       <property name="maxRedrawRate" stdset="0">
        <number>30</number>
       </property>
-      <property name="curves" stdset="0">
+      <property name="curves">
        <stringlist>
         <string>{&quot;channel&quot;: &quot;ca://${pv_prefix}:Voltage-Mon&quot;, &quot;name&quot;: &quot;${pv_prefix}:Voltage-Mon&quot;, &quot;color&quot;: &quot;white&quot;, &quot;lineStyle&quot;: 1, &quot;lineWidth&quot;: 1, &quot;symbol&quot;: null, &quot;symbolSize&quot;: 10}</string>
        </stringlist>
       </property>
-      <property name="bufferSize" stdset="0">
+      <property name="bufferSize">
        <number>5000</number>
       </property>
-      <property name="updatesAsynchronously" stdset="0">
+      <property name="updatesAsynchronously">
        <bool>true</bool>
       </property>
-      <property name="timeSpan" stdset="0">
+      <property name="timeSpan">
        <double>5.000000000000000</double>
       </property>
-      <property name="updateInterval" stdset="0">
+      <property name="updateInterval">
        <double>0.001000000000000</double>
       </property>
-      <property name="autoRangeY" stdset="0">
+      <property name="autoRangeY">
        <bool>true</bool>
       </property>
-      <property name="minYRange" stdset="0">
+      <property name="minYRange">
        <double>0.000000000000000</double>
       </property>
-      <property name="maxYRange" stdset="0">
+      <property name="maxYRange">
        <double>1.000000000000000</double>
       </property>
      </widget>
@@ -3795,14 +3801,14 @@ Power Supply</string>
  </widget>
  <customwidgets>
   <customwidget>
+   <class>PyDMTimePlot</class>
+   <extends>QGraphicsView</extends>
+   <header>pydm.widgets.timeplot</header>
+  </customwidget>
+  <customwidget>
    <class>PyDMLabel</class>
    <extends>QLabel</extends>
    <header>pydm.widgets.label</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMPushButton</class>
-   <extends>QPushButton</extends>
-   <header>pydm.widgets.pushbutton</header>
   </customwidget>
   <customwidget>
    <class>PyDMLineEdit</class>
@@ -3815,14 +3821,14 @@ Power Supply</string>
    <header>pydm.widgets.byte</header>
   </customwidget>
   <customwidget>
+   <class>PyDMPushButton</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.pushbutton</header>
+  </customwidget>
+  <customwidget>
    <class>PyDMCheckbox</class>
    <extends>QCheckBox</extends>
    <header>pydm.widgets.checkbox</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMTimePlot</class>
-   <extends>QGraphicsView</extends>
-   <header>pydm.widgets.timeplot</header>
   </customwidget>
  </customwidgets>
  <resources>

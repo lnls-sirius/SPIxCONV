@@ -6,15 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
-    <height>867</height>
+    <width>610</width>
+    <height>887</height>
    </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -22,16 +16,13 @@
   <widget class="QWidget" name="gridLayoutWidget_5">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>20</x>
      <y>20</y>
-     <width>524</width>
-     <height>827</height>
+     <width>571</width>
+     <height>842</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout_5">
-    <property name="sizeConstraint">
-     <enum>QLayout::SetDefaultConstraint</enum>
-    </property>
     <item row="6" column="2">
      <spacer name="horizontalSpacer_2">
       <property name="orientation">
@@ -492,7 +483,7 @@
        <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="text">
-       <string>Booster Injection Septum</string>
+       <string>Booster Injection Kicker</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -501,19 +492,184 @@
     </item>
     <item row="4" column="3" rowspan="3">
      <layout class="QGridLayout" name="gridLayout_8">
-      <item row="8" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_15">
+      <item row="2" column="1">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_15">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${pv_prefix}:CtrlMode-Mon.RVAL</string>
+        </property>
+        <property name="offColor" stdset="0">
+         <color>
+          <red>239</red>
+          <green>41</green>
+          <blue>41</blue>
+         </color>
+        </property>
+        <property name="showLabels" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="circles" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="labels" stdset="0">
+         <stringlist/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <spacer name="horizontalSpacer_14">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="7" column="1">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_16">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${pv_prefix}:Intlk5-Mon.RVAL</string>
+        </property>
+        <property name="offColor" stdset="0">
+         <color>
+          <red>239</red>
+          <green>41</green>
+          <blue>41</blue>
+         </color>
+        </property>
+        <property name="showLabels" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="circles" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="labels" stdset="0">
+         <stringlist/>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_17">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${pv_prefix}:Intlk1-Mon.RVAL</string>
+        </property>
+        <property name="offColor" stdset="0">
+         <color>
+          <red>239</red>
+          <green>41</green>
+          <blue>41</blue>
+         </color>
+        </property>
+        <property name="showLabels" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="circles" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="labels" stdset="0">
+         <stringlist/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="3">
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>1</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0">
+       <spacer name="horizontalSpacer_9">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>1</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="9" column="3">
+       <widget class="PyDMLabel" name="PyDMLabel_17">
         <property name="toolTip">
          <string/>
         </property>
         <property name="text">
-         <string>Intlk6Label-Cte</string>
+         <string>Intlk7Label-Cte</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${pv_prefix}:Intlk6Label-Cte</string>
+         <string>ca://${pv_prefix}:Intlk7Label-Cte</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_19">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${pv_prefix}:Intlk2-Mon.RVAL</string>
+        </property>
+        <property name="offColor" stdset="0">
+         <color>
+          <red>239</red>
+          <green>41</green>
+          <blue>41</blue>
+         </color>
+        </property>
+        <property name="showLabels" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="circles" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="labels" stdset="0">
+         <stringlist/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="PyDMLabel" name="PyDMLabel_13">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${pv_prefix}:CtrlMode-Mon.DESC</string>
         </property>
        </widget>
       </item>
@@ -966,90 +1122,6 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_14">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="channel" stdset="0">
-         <string>ca://${pv_prefix}:Intlk6-Mon.RVAL</string>
-        </property>
-        <property name="offColor" stdset="0">
-         <color>
-          <red>239</red>
-          <green>41</green>
-          <blue>41</blue>
-         </color>
-        </property>
-        <property name="showLabels" stdset="0">
-         <bool>false</bool>
-        </property>
-        <property name="circles" stdset="0">
-         <bool>true</bool>
-        </property>
-        <property name="labels" stdset="0">
-         <stringlist/>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_15">
-        <property name="minimumSize">
-         <size>
-          <width>24</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="channel" stdset="0">
-         <string>ca://${pv_prefix}:CtrlMode-Mon.RVAL</string>
-        </property>
-        <property name="offColor" stdset="0">
-         <color>
-          <red>239</red>
-          <green>41</green>
-          <blue>41</blue>
-         </color>
-        </property>
-        <property name="showLabels" stdset="0">
-         <bool>false</bool>
-        </property>
-        <property name="circles" stdset="0">
-         <bool>true</bool>
-        </property>
-        <property name="labels" stdset="0">
-         <stringlist/>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_17">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="channel" stdset="0">
-         <string>ca://${pv_prefix}:Intlk1-Mon.RVAL</string>
-        </property>
-        <property name="offColor" stdset="0">
-         <color>
-          <red>239</red>
-          <green>41</green>
-          <blue>41</blue>
-         </color>
-        </property>
-        <property name="showLabels" stdset="0">
-         <bool>false</bool>
-        </property>
-        <property name="circles" stdset="0">
-         <bool>true</bool>
-        </property>
-        <property name="labels" stdset="0">
-         <stringlist/>
-        </property>
-       </widget>
-      </item>
       <item row="5" column="3">
        <widget class="PyDMLabel" name="PyDMLabel_19">
         <property name="toolTip">
@@ -1092,42 +1164,13 @@
         </property>
        </widget>
       </item>
-      <item row="9" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_17">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="text">
-         <string>Intlk7Label-Cte</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>ca://${pv_prefix}:Intlk7Label-Cte</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <spacer name="horizontalSpacer_11">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>10</width>
-          <height>1</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="9" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_18">
+      <item row="8" column="1">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_14">
         <property name="toolTip">
          <string/>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${pv_prefix}:Intlk7-Mon.RVAL</string>
+         <string>ca://${pv_prefix}:Intlk6-Mon.RVAL</string>
         </property>
         <property name="offColor" stdset="0">
          <color>
@@ -1144,6 +1187,51 @@
         </property>
         <property name="labels" stdset="0">
          <stringlist/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <spacer name="horizontalSpacer_11">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>1</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="6" column="3">
+       <widget class="PyDMLabel" name="PyDMLabel_20">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>Intlk4Label-Cte</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${pv_prefix}:Intlk4Label-Cte</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="3">
+       <widget class="PyDMLabel" name="PyDMLabel_15">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>Intlk6Label-Cte</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${pv_prefix}:Intlk6Label-Cte</string>
         </property>
        </widget>
       </item>
@@ -1163,84 +1251,19 @@
         </property>
        </widget>
       </item>
-      <item row="7" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_16">
+      <item row="4" column="3">
+       <widget class="PyDMLabel" name="PyDMLabel_21">
         <property name="toolTip">
          <string/>
         </property>
-        <property name="channel" stdset="0">
-         <string>ca://${pv_prefix}:Intlk5-Mon.RVAL</string>
+        <property name="text">
+         <string>Intlk2Label-Cte</string>
         </property>
-        <property name="offColor" stdset="0">
-         <color>
-          <red>239</red>
-          <green>41</green>
-          <blue>41</blue>
-         </color>
-        </property>
-        <property name="showLabels" stdset="0">
-         <bool>false</bool>
-        </property>
-        <property name="circles" stdset="0">
-         <bool>true</bool>
-        </property>
-        <property name="labels" stdset="0">
-         <stringlist/>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" colspan="3">
-       <spacer name="verticalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>1</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="0">
-       <spacer name="horizontalSpacer_9">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>10</width>
-          <height>1</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="4" column="1">
-       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_19">
-        <property name="toolTip">
-         <string/>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${pv_prefix}:Intlk2-Mon.RVAL</string>
-        </property>
-        <property name="offColor" stdset="0">
-         <color>
-          <red>239</red>
-          <green>41</green>
-          <blue>41</blue>
-         </color>
-        </property>
-        <property name="showLabels" stdset="0">
-         <bool>false</bool>
-        </property>
-        <property name="circles" stdset="0">
-         <bool>true</bool>
-        </property>
-        <property name="labels" stdset="0">
-         <stringlist/>
+         <string>ca://${pv_prefix}:Intlk2Label-Cte</string>
         </property>
        </widget>
       </item>
@@ -1286,63 +1309,73 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_20">
+      <item row="9" column="1">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_18">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${pv_prefix}:Intlk7-Mon.RVAL</string>
+        </property>
+        <property name="offColor" stdset="0">
+         <color>
+          <red>239</red>
+          <green>41</green>
+          <blue>41</blue>
+         </color>
+        </property>
+        <property name="showLabels" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="circles" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="labels" stdset="0">
+         <stringlist/>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_20">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${pv_prefix}:Intlk8-Mon.RVAL</string>
+        </property>
+        <property name="offColor" stdset="0">
+         <color>
+          <red>239</red>
+          <green>41</green>
+          <blue>41</blue>
+         </color>
+        </property>
+        <property name="showLabels" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="circles" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="labels" stdset="0">
+         <stringlist/>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="3">
+       <widget class="PyDMLabel" name="PyDMLabel_22">
         <property name="toolTip">
          <string/>
         </property>
         <property name="text">
-         <string>Intlk4Label-Cte</string>
+         <string>Intlk8Label-Cte</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${pv_prefix}:Intlk4Label-Cte</string>
+         <string>ca://${pv_prefix}:Intlk8Label-Cte</string>
         </property>
        </widget>
-      </item>
-      <item row="2" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_13">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>ca://${pv_prefix}:CtrlMode-Mon.DESC</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_21">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="text">
-         <string>Intlk2Label-Cte</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>ca://${pv_prefix}:Intlk2Label-Cte</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <spacer name="horizontalSpacer_14">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>10</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </item>
@@ -3047,36 +3080,166 @@
     </item>
     <item row="4" column="1">
      <layout class="QGridLayout" name="gridLayout_6">
-      <item row="5" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_7">
+      <item row="5" column="1">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>Voltage-SP</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="6">
+       <spacer name="horizontalSpacer_15">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>1</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Voltage-Mon</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <spacer name="horizontalSpacer_12">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>1</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="6" column="2">
+       <spacer name="horizontalSpacer_10">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="3" column="4">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_22">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string/>
         </property>
+        <property name="channel" stdset="0">
+         <string>ca://${pv_prefix}:OpMode-Sts.RVAL</string>
+        </property>
+        <property name="offColor" stdset="0">
+         <color>
+          <red>239</red>
+          <green>41</green>
+          <blue>41</blue>
+         </color>
+        </property>
+        <property name="showLabels" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="circles" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="labels" stdset="0">
+         <stringlist/>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLabel" name="label_8">
         <property name="text">
          <string>Voltage-RB</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
+       </widget>
+      </item>
+      <item row="2" column="4">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_21">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
         <property name="channel" stdset="0">
-         <string>ca://${pv_prefix}:Voltage-RB</string>
+         <string>ca://${pv_prefix}:OpMode-Sts.RVAL</string>
+        </property>
+        <property name="offColor" stdset="0">
+         <color>
+          <red>239</red>
+          <green>41</green>
+          <blue>41</blue>
+         </color>
+        </property>
+        <property name="showLabels" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="circles" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="labels" stdset="0">
+         <stringlist/>
         </property>
        </widget>
       </item>
-      <item row="4" column="3">
-       <widget class="PyDMLineEdit" name="PyDMLineEdit_2">
-        <property name="toolTip">
-         <string/>
+      <item row="1" column="1">
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>1</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="3" rowspan="2">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>${ps_voltage}</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
-        <property name="channel" stdset="0">
-         <string>ca://${pv_prefix}:Voltage-SP</string>
-        </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="2" column="1" rowspan="2">
        <widget class="QLabel" name="label_9">
         <property name="minimumSize">
          <size>
@@ -3105,118 +3268,27 @@ Power Supply</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QLabel" name="label_10">
+      <item row="2" column="5">
+       <widget class="QLabel" name="label_11">
         <property name="text">
-         <string>Voltage-SP</string>
+         <string>On-Axis</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>1</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="3" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_8">
-        <property name="toolTip">
-         <string/>
-        </property>
+      <item row="3" column="5">
+       <widget class="QLabel" name="label_12">
         <property name="text">
-         <string>Voltage-Mon</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>ca://${pv_prefix}:Voltage-Mon</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>Voltage-RB</string>
+         <string>NLK</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
-      <item row="2" column="3">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>${ps_voltage}</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Voltage-Mon</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <spacer name="horizontalSpacer_12">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>1</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="5" column="2">
-       <spacer name="horizontalSpacer_10">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="5" column="4">
-       <spacer name="horizontalSpacer_13">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>1</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="0" colspan="5">
+      <item row="0" column="0" colspan="6">
        <widget class="QLabel" name="label_310">
         <property name="minimumSize">
          <size>
@@ -3662,6 +3734,51 @@ Power Supply</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3" colspan="3">
+       <widget class="PyDMLabel" name="PyDMLabel_8">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>Voltage-Mon</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${pv_prefix}:Voltage-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="3" colspan="3">
+       <widget class="PyDMLineEdit" name="PyDMLineEdit_2">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${pv_prefix}:Voltage-SP</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="3" colspan="3">
+       <widget class="PyDMLabel" name="PyDMLabel_7">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>Voltage-RB</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${pv_prefix}:Voltage-RB</string>
         </property>
        </widget>
       </item>
