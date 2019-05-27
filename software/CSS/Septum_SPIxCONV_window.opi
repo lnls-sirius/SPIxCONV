@@ -1840,7 +1840,7 @@ if(pv0==1):
 # button released
 elif(pv0==0):
 	widget.setPropertyValue("off_color", "Red")]]></scriptText>
-        <pv trig="true">$(pv_prefix):PwrState-Mon.RVAL</pv>
+        <pv trig="true">$(pv_prefix):PwrState-Sts.RVAL</pv>
       </path>
     </scripts>
     <show_boolean_label>false</show_boolean_label>
