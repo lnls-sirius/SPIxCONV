@@ -1,0 +1,37 @@
+ version: '3.3'
+ services:
+
+   spixconv:
+       hostname: spixconv
+#       deploy:
+#         mode: replicated
+#         replicas: 1
+#         placement:
+#           constraints:
+#             - node.hostname != TA-TiRack-CO-FWSrv-1
+       image: lnlscon/streamdevice-ioc:v2.0.3.5.2019
+       volumes:
+#         - /storage/misc/repository/docker-stacks/cons-streamdevice-ioc/spreadsheet:/opt/streamdevice-ioc/spreadsheet
+#         - /storage/epics-services/autosave/streamdevice-ioc/spixconv:/opt/epics-R3.15.5/modules/StreamDevice-2.8.8/autosave/sav:rw
+         - /home/rafael/RAFAEL/git/streamdevice-ioc/spreadsheet:/opt/streamdevice-ioc/spreadsheet
+         - /home/rafael/RAFAEL/git/streamdevice-ioc/spixconv:/opt/epics-R3.15.5/modules/StreamDevice-2.8.8/autosave/sav:rw
+       networks:
+         - streamdevice_ioc_network
+       environment:
+         - DEVICE_FOLDER=spixconv
+         - DEVICE_PREFIX=SPIxCONV-
+         - BASE_PROCSERV_PORT=21000
+       dns:
+         - 10.0.0.71
+         - 10.0.0.72
+       logging:
+           driver: "json-file"
+           options:
+               max-file: 10
+               max-size: 10m 
+ 
+ networks:
+   streamdevice_ioc_network:
+     external:
+       name: "host"
+
