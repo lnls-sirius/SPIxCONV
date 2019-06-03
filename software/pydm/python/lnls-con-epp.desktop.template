@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Sirius EPP
+Exec=/bin/bash start.sh
+Path=${S_DIR}
+Icon=${S_DIR}/../images/LNLS.png
+Type=Application
+Terminal=false
