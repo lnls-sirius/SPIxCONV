@@ -90,6 +90,22 @@ def config(board):
     description:
         this function turns on DAC and ADC circuit and configure DAC.
     '''
+    # ADC_array is used to store the last 10 ADC measures
+    # when an ADC measure is requested, intead the raw measure,
+    # it returns the maximum value of the array (the last 10 measures)
+    # this is to avoid change in ADC measure due to capacitor discharges
+    #
+    #            R           SW
+    #     _____/\/\/\________/ ____
+    #    |              |          |
+    # PS |            C |          |
+    #  -----          -----      MAGNET
+    #   ---           -----        |
+    #    |              |          |
+    #   GND            GND        GND
+
+    global ADC_array
+    ADC_array = 10 * [0]
     dac.on(board)
     adc.on(board)
     time.sleep(1)
@@ -132,14 +148,40 @@ def read_analog_output(board):
     selection.dac(board)
     return dac.read(board)
 #==============================================================================
-#    Read a value in analog input
+#    Read maximum of 10 last analog measures
 #==============================================================================
 def read_analog_input(board):
     '''
     input parameters:
-        - board:    board address
+        - board: board address
     output parameters:
-        - mean value of 1000 measures (in Volts, from MIN_SCALE to FULL_SCALE)
+        - code:  maximum value of last 10 measures (in Volts, from MIN_SCALE to FULL_SCALE)
+    ----------------------------
+    description:
+        this function reads an analog input (from -10V to 10V, but only used
+        monopolar range, i.e., 0 to +10V, mapped in 0 to FULL_SCALE voltage).
+    '''
+    selection.adc(board)
+    code = adc.read()
+    # remove the oldest measure of the array
+    ADC_array.pop(0)
+    # append new value to the array
+    ADC_array.append(code)
+    # complete array size to be 10 (in case of error)
+    while (len(ADC_array) != 10):
+        ADC_array.append(0)
+    #print(ADC_array)
+    #print(max(ADC_array))
+    return max(ADC_array)
+#==============================================================================
+#    Read raw value in analog input
+#==============================================================================
+def read_analog_input_raw(board):
+    '''
+    input parameters:
+        - board: board address
+    output parameters:
+        - code:  raw value of ADC measures (in Volts, from MIN_SCALE to FULL_SCALE)
     ----------------------------
     description:
         this function reads an analog input (from -10V to 10V, but only used
@@ -422,7 +464,7 @@ if __name__ == '__main__':
                             dac_setpoint = dac.read()
                             connection.sendall(str(dac_setpoint) + "\r\n")
                         #==============================================================
-                        # read ADC input value
+                        # read maximum of 10 last ADC input value
                         elif (data[0] == "\x04"):
                             voltage = read_analog_input(ord(data[1]))
                             connection.sendall(str(voltage) + "\r\n")
@@ -476,10 +518,16 @@ if __name__ == '__main__':
                             bit = read_portB_digital_input_bit(ord(data[1]), ord(data[2]))
                             connection.sendall(str(bit))
                         #==============================================================
-                        # available command
+                        # read raw ADC input value
                         elif (data[0] == "\x0F"):
-                            pass
+                            voltage = read_analog_input_raw(ord(data[1]))
+                            connection.sendall(str(voltage) + "\r\n")
+                            #print str(voltage)
                         #==============================================================
+                        # available command
+                        elif (data[0] == "\x10"):
+                            pass
+
                     else:
                         break
             except:
