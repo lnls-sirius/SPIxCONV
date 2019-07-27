@@ -481,7 +481,7 @@
       </property>
       <property name="text">
        <string>BTS
-[Ejection]</string>
+[BO Ejection]</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -1397,7 +1397,7 @@
       </property>
       <property name="text">
        <string>BTS
-[Injection]</string>
+[SR Injection]</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -2369,6 +2369,13 @@
            <property name="channel" stdset="0">
             <string>ca://SI-01SA:PU-InjDpKckr:OnOff</string>
            </property>
+           <property name="offColor" stdset="0">
+            <color>
+             <red>239</red>
+             <green>41</green>
+             <blue>41</blue>
+            </color>
+           </property>
            <property name="showLabels" stdset="0">
             <bool>false</bool>
            </property>
@@ -2409,6 +2416,13 @@
            </property>
            <property name="channel" stdset="0">
             <string>ca://SI-19C4:PU-PingV:OnOff</string>
+           </property>
+           <property name="offColor" stdset="0">
+            <color>
+             <red>239</red>
+             <green>41</green>
+             <blue>41</blue>
+            </color>
            </property>
            <property name="showLabels" stdset="0">
             <bool>false</bool>
@@ -2451,6 +2465,13 @@
            <property name="channel" stdset="0">
             <string>ca://SI-01SA:PU-InjNLKckr:OpMode-Sts</string>
            </property>
+           <property name="offColor" stdset="0">
+            <color>
+             <red>239</red>
+             <green>41</green>
+             <blue>41</blue>
+            </color>
+           </property>
            <property name="showLabels" stdset="0">
             <bool>false</bool>
            </property>
@@ -2478,6 +2499,13 @@
            </property>
            <property name="channel" stdset="0">
             <string>ca://SI-01SA:PU-InjNLKckr:OpMode-Sts</string>
+           </property>
+           <property name="offColor" stdset="0">
+            <color>
+             <red>239</red>
+             <green>41</green>
+             <blue>41</blue>
+            </color>
            </property>
            <property name="showLabels" stdset="0">
             <bool>false</bool>
@@ -2508,7 +2536,7 @@
             <string>../displays/septum.ui</string>
            </property>
            <property name="macros" stdset="0">
-            <string>{&quot;ps_voltage&quot;:&quot;30 kV&quot;, &quot;pv_prefix&quot;:&quot;SI-01SA:PU-InjDpKckr&quot;}</string>
+            <string>{&quot;ps_voltage&quot;:&quot;30 kV&quot;, &quot;pv_prefix&quot;:&quot;SI-01SA:PU-InjDpKckr&quot;, &quot;function&quot;:&quot;Horizontal Pinger&quot;}</string>
            </property>
            <property name="openInNewWindow" stdset="0">
             <bool>true</bool>
@@ -2536,7 +2564,7 @@
             <string>../displays/septum.ui</string>
            </property>
            <property name="macros" stdset="0">
-            <string>{&quot;ps_voltage&quot;:&quot;30 kV&quot;, &quot;pv_prefix&quot;:&quot;SI-19C4:PU-PingV&quot;}</string>
+            <string>{&quot;ps_voltage&quot;:&quot;30 kV&quot;, &quot;pv_prefix&quot;:&quot;SI-19C4:PU-PingV&quot;, &quot;function&quot;:&quot;Vertical Pinger&quot;}</string>
            </property>
            <property name="openInNewWindow" stdset="0">
             <bool>true</bool>
@@ -2564,7 +2592,7 @@
             <string>../displays/nlk.ui</string>
            </property>
            <property name="macros" stdset="0">
-            <string>{&quot;ps_voltage&quot;:&quot;15 kV&quot;, &quot;pv_prefix&quot;:&quot;SI-01SA:PU-InjNLKckr&quot;}</string>
+            <string>{&quot;ps_voltage&quot;:&quot;15 kV&quot;, &quot;pv_prefix&quot;:&quot;SI-01SA:PU-InjNLKckr&quot;, &quot;function&quot;:&quot;NLK / On Axis - Kicker&quot;}</string>
            </property>
            <property name="openInNewWindow" stdset="0">
             <bool>true</bool>
@@ -2641,7 +2669,7 @@
             <string>../displays/septum.ui</string>
            </property>
            <property name="macros" stdset="0">
-            <string>{&quot;ps_voltage&quot;:&quot;1 kV&quot;, &quot;pv_prefix&quot;:&quot;TS-04:PU-InjSeptG-1&quot;}</string>
+            <string>{&quot;ps_voltage&quot;:&quot;1 kV&quot;, &quot;pv_prefix&quot;:&quot;TS-04:PU-InjSeptG-1&quot;, &quot;function&quot;:&quot;SR Injection - Septum Thick-1&quot;}</string>
            </property>
            <property name="openInNewWindow" stdset="0">
             <bool>true</bool>
@@ -2667,6 +2695,13 @@
            </property>
            <property name="channel" stdset="0">
             <string>ca://TS-04:PU-InjSeptG-1:OnOff</string>
+           </property>
+           <property name="offColor" stdset="0">
+            <color>
+             <red>239</red>
+             <green>41</green>
+             <blue>41</blue>
+            </color>
            </property>
            <property name="showLabels" stdset="0">
             <bool>false</bool>
@@ -2697,7 +2732,7 @@
             <string>../displays/septum.ui</string>
            </property>
            <property name="macros" stdset="0">
-            <string>{&quot;ps_voltage&quot;:&quot;1 kV&quot;, &quot;pv_prefix&quot;:&quot;TS-04:PU-InjSeptG-2&quot;}</string>
+            <string>{&quot;ps_voltage&quot;:&quot;1 kV&quot;, &quot;pv_prefix&quot;:&quot;TS-04:PU-InjSeptG-2&quot;, &quot;function&quot;:&quot;SR Injection - Septum Thick-2&quot;}</string>
            </property>
            <property name="openInNewWindow" stdset="0">
             <bool>true</bool>
@@ -2725,7 +2760,7 @@
             <string>../displays/septum.ui</string>
            </property>
            <property name="macros" stdset="0">
-            <string>{&quot;ps_voltage&quot;:&quot;1.5 kV&quot;, &quot;pv_prefix&quot;:&quot;TS-04:PU-InjSeptF&quot;}</string>
+            <string>{&quot;ps_voltage&quot;:&quot;1.5 kV&quot;, &quot;pv_prefix&quot;:&quot;TS-04:PU-InjSeptF&quot;, &quot;function&quot;:&quot;SR Injection - Septum Thin&quot;}</string>
            </property>
            <property name="openInNewWindow" stdset="0">
             <bool>true</bool>
@@ -2751,6 +2786,13 @@
            </property>
            <property name="channel" stdset="0">
             <string>ca://TS-04:PU-InjSeptG-2:OnOff</string>
+           </property>
+           <property name="offColor" stdset="0">
+            <color>
+             <red>239</red>
+             <green>41</green>
+             <blue>41</blue>
+            </color>
            </property>
            <property name="showLabels" stdset="0">
             <bool>false</bool>
@@ -2779,6 +2821,13 @@
            </property>
            <property name="channel" stdset="0">
             <string>ca://TS-04:PU-InjSeptF:OnOff</string>
+           </property>
+           <property name="offColor" stdset="0">
+            <color>
+             <red>239</red>
+             <green>41</green>
+             <blue>41</blue>
+            </color>
            </property>
            <property name="showLabels" stdset="0">
             <bool>false</bool>
@@ -2836,6 +2885,13 @@
            <property name="channel" stdset="0">
             <string>ca://BO-48D:PU-EjeKckr:OnOff</string>
            </property>
+           <property name="offColor" stdset="0">
+            <color>
+             <red>239</red>
+             <green>41</green>
+             <blue>41</blue>
+            </color>
+           </property>
            <property name="showLabels" stdset="0">
             <bool>false</bool>
            </property>
@@ -2864,6 +2920,13 @@
            <property name="channel" stdset="0">
             <string>ca://TS-01:PU-EjeSeptF:OnOff</string>
            </property>
+           <property name="offColor" stdset="0">
+            <color>
+             <red>239</red>
+             <green>41</green>
+             <blue>41</blue>
+            </color>
+           </property>
            <property name="showLabels" stdset="0">
             <bool>false</bool>
            </property>
@@ -2891,6 +2954,13 @@
            </property>
            <property name="channel" stdset="0">
             <string>ca://TS-01:PU-EjeSeptG:OnOff</string>
+           </property>
+           <property name="offColor" stdset="0">
+            <color>
+             <red>239</red>
+             <green>41</green>
+             <blue>41</blue>
+            </color>
            </property>
            <property name="showLabels" stdset="0">
             <bool>false</bool>
@@ -2921,7 +2991,7 @@
             <string>../displays/kicker.ui</string>
            </property>
            <property name="macros" stdset="0">
-            <string>{&quot;ps_voltage&quot;:&quot;10 kV&quot;, &quot;pv_prefix&quot;:&quot;BO-48D:PU-EjeKckr&quot;}</string>
+            <string>{&quot;ps_voltage&quot;:&quot;10 kV&quot;, &quot;pv_prefix&quot;:&quot;BO-48D:PU-EjeKckr&quot;, &quot;function&quot;:&quot;Booster Ejection - Kicker&quot;}</string>
            </property>
            <property name="openInNewWindow" stdset="0">
             <bool>true</bool>
@@ -2949,7 +3019,7 @@
             <string>../displays/septum.ui</string>
            </property>
            <property name="macros" stdset="0">
-            <string>{&quot;ps_voltage&quot;:&quot;1 kV&quot;, &quot;pv_prefix&quot;:&quot;TS-01:PU-EjeSeptF&quot;}</string>
+            <string>{&quot;ps_voltage&quot;:&quot;1 kV&quot;, &quot;pv_prefix&quot;:&quot;TS-01:PU-EjeSeptF&quot;, &quot;function&quot;:&quot;Booster Ejection - Septum Thin&quot;}</string>
            </property>
            <property name="openInNewWindow" stdset="0">
             <bool>true</bool>
@@ -2977,7 +3047,7 @@
             <string>../displays/septum.ui</string>
            </property>
            <property name="macros" stdset="0">
-            <string>{&quot;ps_voltage&quot;:&quot;1 kV&quot;, &quot;pv_prefix&quot;:&quot;TS-01:PU-EjeSeptG&quot;}</string>
+            <string>{&quot;ps_voltage&quot;:&quot;1 kV&quot;, &quot;pv_prefix&quot;:&quot;TS-01:PU-EjeSeptG&quot;, &quot;function&quot;:&quot;Booster Ejection - Septum Thick&quot;}</string>
            </property>
            <property name="openInNewWindow" stdset="0">
             <bool>true</bool>
@@ -3026,6 +3096,13 @@
            <property name="channel" stdset="0">
             <string>ca://BO-01D:PU-InjKckr:OnOff</string>
            </property>
+           <property name="offColor" stdset="0">
+            <color>
+             <red>239</red>
+             <green>41</green>
+             <blue>41</blue>
+            </color>
+           </property>
            <property name="showLabels" stdset="0">
             <bool>false</bool>
            </property>
@@ -3053,6 +3130,13 @@
            </property>
            <property name="channel" stdset="0">
             <string>ca://TB-04:PU-InjSept:OnOff</string>
+           </property>
+           <property name="offColor" stdset="0">
+            <color>
+             <red>239</red>
+             <green>41</green>
+             <blue>41</blue>
+            </color>
            </property>
            <property name="showLabels" stdset="0">
             <bool>false</bool>
@@ -3083,7 +3167,7 @@
             <string>../displays/septum.ui</string>
            </property>
            <property name="macros" stdset="0">
-            <string>{&quot;ps_voltage&quot;:&quot;1 kV&quot;, &quot;pv_prefix&quot;:&quot;TB-04:PU-InjSept&quot;}</string>
+            <string>{&quot;ps_voltage&quot;:&quot;1 kV&quot;, &quot;pv_prefix&quot;:&quot;TB-04:PU-InjSept&quot;, &quot;function&quot;:&quot;Booster Injection - Septum&quot;}</string>
            </property>
            <property name="openInNewWindow" stdset="0">
             <bool>true</bool>
@@ -3111,7 +3195,7 @@
             <string>../displays/kicker.ui</string>
            </property>
            <property name="macros" stdset="0">
-            <string>{&quot;ps_voltage&quot;:&quot;10 kV&quot;, &quot;pv_prefix&quot;:&quot;BO-01D:PU-InjKckr&quot;}</string>
+            <string>{&quot;ps_voltage&quot;:&quot;10 kV&quot;, &quot;pv_prefix&quot;:&quot;BO-01D:PU-InjKckr&quot;, &quot;function&quot;:&quot;Booster Injection - Kicker&quot;}</string>
            </property>
            <property name="openInNewWindow" stdset="0">
             <bool>true</bool>
@@ -3164,24 +3248,17 @@
     </item>
    </layout>
   </widget>
-  <zorder>PyDMByteIndicator_11</zorder>
-  <zorder>PyDMByteIndicator_10</zorder>
-  <zorder>label</zorder>
-  <zorder>label_2</zorder>
-  <zorder>septum_9</zorder>
-  <zorder>gridLayoutWidget_4</zorder>
-  <zorder>verticalSpacer_4</zorder>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>PyDMByteIndicator</class>
-   <extends>QWidget</extends>
-   <header>pydm.widgets.byte</header>
-  </customwidget>
   <customwidget>
    <class>PyDMRelatedDisplayButton</class>
    <extends>QPushButton</extends>
    <header>pydm.widgets.related_display_button</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMByteIndicator</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.byte</header>
   </customwidget>
  </customwidgets>
  <resources/>

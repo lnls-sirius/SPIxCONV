@@ -492,7 +492,7 @@
        <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="text">
-       <string>Booster Injection Septum</string>
+       <string>${function}</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -3768,9 +3768,9 @@ Power Supply</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PyDMTimePlot</class>
-   <extends>QGraphicsView</extends>
-   <header>pydm.widgets.timeplot</header>
+   <class>PyDMByteIndicator</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.byte</header>
   </customwidget>
   <customwidget>
    <class>PyDMLabel</class>
@@ -3778,24 +3778,24 @@ Power Supply</string>
    <header>pydm.widgets.label</header>
   </customwidget>
   <customwidget>
+   <class>PyDMCheckbox</class>
+   <extends>QCheckBox</extends>
+   <header>pydm.widgets.checkbox</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMTimePlot</class>
+   <extends>QGraphicsView</extends>
+   <header>pydm.widgets.timeplot</header>
+  </customwidget>
+  <customwidget>
    <class>PyDMLineEdit</class>
    <extends>QLineEdit</extends>
    <header>pydm.widgets.line_edit</header>
   </customwidget>
   <customwidget>
-   <class>PyDMByteIndicator</class>
-   <extends>QWidget</extends>
-   <header>pydm.widgets.byte</header>
-  </customwidget>
-  <customwidget>
    <class>PyDMPushButton</class>
    <extends>QPushButton</extends>
    <header>pydm.widgets.pushbutton</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMCheckbox</class>
-   <extends>QCheckBox</extends>
-   <header>pydm.widgets.checkbox</header>
   </customwidget>
  </customwidgets>
  <resources>
