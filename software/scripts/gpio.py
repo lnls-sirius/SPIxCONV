@@ -7,7 +7,7 @@ import selection
 spi = SPI(0,0)
 #-------------------------------------------------------
 # port A: all INPUTS
-# port B: 4 INPUTS and 4 OUTPUTS
+# port B: 3 INPUTS and 5 OUTPUTS
 # port C: all tri-state
 # port D: all tri-state
 #-------------------------------------------------------
@@ -74,8 +74,8 @@ def config(board):
     TSCR2_write(0xFF)
     # set port A as input
     GCR1_write(0xFF)
-    # set port B (4 inputs, 4 outputs)
-    GCR2_write(0xF0)
+    # set port B (3 inputs, 5 outputs)
+    GCR2_write(0xE0)
     # set all initial outputs value low
     OCR1_write(0x00)
     OCR2_write(0x00)
