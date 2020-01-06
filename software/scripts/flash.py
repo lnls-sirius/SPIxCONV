@@ -87,17 +87,17 @@ def info_read(board):
     member1_read(board)
     member2_read(board)
     # calibration info
-    print "DAC gain       =  %s" %str(dac_gain_read(board))
-    print "DAC offset     =  %s" %str(dac_offset_read(board))
-    print "ADC gain       =  %s" %str(adc_gain_read(board))
-    print "ADC offset     =  %s" %str(adc_offset_read(board))
+    print("DAC gain       =  {}".format(dac_gain_read(board)))
+    print("DAC offset     =  {}".format(dac_offset_read(board)))
+    print("ADC gain       =  {}".format(adc_gain_read(board)))
+    print("ADC offset     =  {}".format(adc_offset_read(board)))
 #=====================================================================
 # VERSION (2 bytes --> from 0x00 to 0x01)
 #=====================================================================
 # read version
 def version_read(board):
     version = read(board, 0x00, 2)
-    print "version: %d.%d" %(version[0], version[1])
+    print("version: {}.{}".format(version[0], version[1]))
 #---------------------------------------------------------------------
 # write version
 def version_write(board, version):
@@ -113,7 +113,7 @@ def version_write(board, version):
 # read date
 def date_read(board):
     date = read(board, 0x02, 4)
-    print "date: %02d/%02d/%d%d" %(date[0], date[1], date[2], date[3])
+    print("date: {:02d}/{:02d}/{}{}".format(date[0], date[1], date[2], date[3]))
 #---------------------------------------------------------------------
 # write date
 def date_write(board, date):
@@ -130,8 +130,7 @@ def date_write(board, date):
 # read board ID
 def ID_read(board):
     ID = read(board, 0x06, 1)
-    print "board ID: 0x%02x" %ID[0]
-    return ID[0]
+    print("board ID: 0x{:X}".format(ID[0]))
 #---------------------------------------------------------------------
 # write board ID
 def ID_write(board, ID):
@@ -143,8 +142,7 @@ def ID_write(board, ID):
 # read board address
 def address_read(board):
     address = read(board, 0x07, 1)
-    print "board address: %d" %address[0]
-    return address[0]
+    print("board address: {}".format(address[0]))
 #---------------------------------------------------------------------
 # write board address
 def address_write(board, address):
@@ -171,7 +169,7 @@ def boardtype_write(board, boardtype):
         #write(board, 0x08, boardtype_int)
         sector_write(board, 0x08, boardtype_int)
     else:
-        print "error: board type should not have more than 8 characters"
+        print("error: board type should not have more than 8 characters")
 #=====================================================================
 # COPYRIGHT GROUP (24 bytes --> from 0x10 to 0x27)
 #=====================================================================
@@ -195,7 +193,7 @@ def group_write(board, group):
         #write(board, 0x10, group_int)
         sector_write(board, 0x10, group_int)
     else:
-        print "error: group should not have more than 24 characters"
+        print("error: group should not have more than 24 characters")
 #=====================================================================
 # COPYRIGHT MEMBER 1 (24 bytes --> from 0x28 to 0x3F)
 #=====================================================================
@@ -219,7 +217,7 @@ def member1_write(board, member1):
         #write(board, 0x28, member1_int)
         sector_write(board, 0x28, member1_int)
     else:
-        print "error: member field should not have more than 24 characters"
+        print("error: member field should not have more than 24 characters")
 #=====================================================================
 # COPYRIGHT MEMBER 2 (24 bytes --> from 0x40 to 0x57)
 #=====================================================================
@@ -243,7 +241,7 @@ def member2_write(board, member2):
         #write(board, 0x40, member2_int)
         sector_write(board, 0x40, member2_int)
     else:
-        print "error: member field should not have more than 24 characters"
+        print("error: member field should not have more than 24 characters")
 #=====================================================================
 # DAC CALIBRATION (8 bytes --> from 0x58 to 0x5F)
 #=====================================================================
@@ -366,9 +364,9 @@ def read_SR(board):
     # read Status Register 1 and 2
     SR1 = spi.xfer2([0x05, 0x00])
     SR2 = spi.xfer2([0x35, 0x00])
-    print "after enable"
-    print "SR1 = " + str(bin(SR1[1]))
-    print "SR2 = " + str(bin(SR2[1])) + "\n"
+    print("after enable")
+    print("SR1 = " + str(bin(SR1[1])))
+    print("SR2 = " + str(bin(SR2[1])) + "\n")
 #=====================================================================
 # READ SECTOR
 #=====================================================================
