@@ -411,7 +411,7 @@ if __name__ == '__main__':
     logger = logging.getLogger()
 
     parser = argparse.ArgumentParser(description='SPIxCONV Socket Binding', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('board_address', type=int, help='Board address.')
+    #parser.add_argument('board_address', type=int, help='Board address.')
     parser.add_argument('--tcp', help='Use a TCP socket instead of an UNIX.', action='store_true')
     parser.add_argument('--port', '-p', dest='port', type=int, help='TCP server port.', default=5005)
     parser.add_argument('--unix-address', dest='unix_socket_address', help='UNIX socket address.', default='/tmp/socket_spixconv')
@@ -426,6 +426,13 @@ if __name__ == '__main__':
         except OSError:
             if os.path.exists(server_address):
                 raise
+    #----------------------------
+    # identify board address:
+    for addr in range(255):
+        flash.ID_read(addr) == 4:
+            board_address = addr
+            break
+    #----------------------------
     try:
         config(args.board_address)
 
