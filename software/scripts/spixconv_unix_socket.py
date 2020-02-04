@@ -484,7 +484,7 @@ if __name__ == '__main__':
                         # write a whole byte in digital Port B
                         elif (data[0] == "\x05"):
                             #set_digital_output_byte(ord(data[1]), ord(data[2]))
-                            set_digital_output_byte(board_address), ord(data[2]))
+                            set_digital_output_byte(board_address, ord(data[2]))
                         #==============================================================
                         # write a bit in Port B GPIO
                         elif (data[0] == "\x06"):
