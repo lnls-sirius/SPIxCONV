@@ -434,7 +434,8 @@ if __name__ == '__main__':
             break
     #----------------------------
     try:
-        config(args.board_address)
+        #config(args.board_address)
+        config(board_address)
 
         sock = socket.socket(socket.AF_INET if args.tcp else socket.AF_UNIX, socket.SOCK_STREAM)
         if args.tcp:
