@@ -541,7 +541,7 @@ if __name__ == '__main__':
                         # read raw ADC input value
                         elif (data[0] == "\x0F"):
                             #voltage = read_analog_input_raw(ord(data[1]))
-                            voltage = read_analog_input_raw(ord(board_address)
+                            voltage = read_analog_input_raw(ord(board_address))
                             connection.sendall(str(voltage) + "\r\n")
                             #print str(voltage)
                         #==============================================================
