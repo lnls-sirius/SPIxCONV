@@ -4,6 +4,7 @@
 # Pulsed Magnets IOC
 #==========================
 python /root/SPIxCONV/software/scripts/spixconv_unix_socket.py 5 &
+#python /root/SPIxCONV/software/scripts/spixconv_unix_socket.py &
 sleep 5
 
 #====================================================================================
