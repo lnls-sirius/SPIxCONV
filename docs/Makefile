@@ -18,3 +18,9 @@ help:
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+github:
+	#@$(eval ROOTDIRA := $(shell git rev-parse --show-toplevel))
+	#@cp $(ROOTDIRA)/docs/build/html/index.html $(ROOTDIRA)/docs/
+	@make html
+	@cp -a build/html/. ./
