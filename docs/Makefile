@@ -20,7 +20,7 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 github:
-	#@$(eval ROOTDIRA := $(shell git rev-parse --show-toplevel))
-	#@cp $(ROOTDIRA)/docs/build/html/index.html $(ROOTDIRA)/docs/
+	#@$(eval ROOT_DIR := $(shell git rev-parse --show-toplevel))
+	#@cp $(ROOT_DIR)/docs/build/html/index.html $(ROOT_DIR)/docs/
 	@make html
 	@cp -a build/html/. ./
