@@ -476,7 +476,7 @@ if __name__ == '__main__':
                             #==============================================================
                             # adjust DAC output value
                             elif (data[0] == "\x02"):
-                                queue_voltage.put([data[0], "dummy_address", data[2:len(data)]])
+                                queue_voltage.put([data[0], "dummy_address", data[2], data[3], data[4], data[5:len(data)]])
                             #==============================================================
                             # read DAC setpoint value
                             elif (data[0] == "\x03"):
@@ -646,9 +646,21 @@ if __name__ == '__main__':
             # adjust DAC output value
             # command[0] = "\x0"
             # convert voltage parameter from string to float
-            value = float(command[2])
+            value = float(command[5])
             #set_analog_output(int(ord(command[1])), value)
             set_analog_output(board_address, value)
+            print(ord(command[2]), ord(command[3]), ord(command[4]))
+
+            #field(OUT, "@SPIxCONV.proto set_analog_output(
+            #    command[1] = $(SPIxCONV_ADDRESS),
+            #    command[2]: $(VOLTAGE_FACTOR),
+            #    command[3]: $(STEP_TRIGGER),
+            #    command[4]: $(STEP_DELAY)
+            #    command[5]: value
+            #
+            #set_analog_output
+            #    out 0x02, $1, "%(RVAL)i"
+            #    out 0x02, $1, $2, $3, $4, "%(RVAL)i"
 
     # define threads            
     thr_1 = Thread(target=write_to_list, args=[])
