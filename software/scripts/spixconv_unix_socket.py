@@ -441,6 +441,8 @@ if __name__ == '__main__':
     #----------------------------
     # create general queue
     queue_general = Queue()
+    # create voltage adjustment queue
+    queue_voltage = Queue()
     #----------------------------
     def write_to_list():
         global board_address
@@ -474,7 +476,7 @@ if __name__ == '__main__':
                             #==============================================================
                             # adjust DAC output value
                             elif (data[0] == "\x02"):
-                                queue_general.put([data[0], "dummy_address", data[2:len(data)]])
+                                queue_voltage.put([data[0], "dummy_address", data[2:len(data)]])
                             #==============================================================
                             # read DAC setpoint value
                             elif (data[0] == "\x03"):
@@ -578,12 +580,7 @@ if __name__ == '__main__':
                 set_direction_bit(board_address, command[2], int(ord(command[3])), int(command[4]))
             #==============================================================
             # adjust DAC output value
-            elif (command[0] == "\x02"):
-                # convert voltage parameter from string to float
-                #value = float(command[2:len(command)])
-                value = float(command[2])
-                #set_analog_output(int(ord(command[1])), value)
-                set_analog_output(board_address, value)
+            #elif (command[0] == "\x02"):
             #==============================================================
             # read DAC setpoint value
             #elif (command[0] == "\x03"):
@@ -637,11 +634,28 @@ if __name__ == '__main__':
             # available command
             elif (command[0] == "\x10"):
                 pass
-    
+
+    def voltage_adjustment():
+        global board_address
+        while(True):
+            # wait until there is a command in the list
+            while(queue_voltage.empty()):
+                pass
+            command = queue_voltage.get()
+            #==============================================================
+            # adjust DAC output value
+            # command[0] = "\x0"
+            # convert voltage parameter from string to float
+            value = float(command[2])
+            #set_analog_output(int(ord(command[1])), value)
+            set_analog_output(board_address, value)
+
     # define threads            
     thr_1 = Thread(target=write_to_list, args=[])
     thr_2 = Thread(target=read_from_list, args=[])
+    thr_3 = Thread(target=voltage_adjustment, args=[])
     # start threads
     thr_1.start()
     thr_2.start()
+    thr_3.start()
     
