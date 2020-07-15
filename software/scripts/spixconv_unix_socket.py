@@ -150,7 +150,7 @@ def read_analog_output(board):
         this function reads the code set in the analog output (from 0 to 262143)
     '''
     selection.dac(board)
-    return dac.read(board)
+    return dac.read()
 #==============================================================================
 #    Read maximum of 10 last analog measures
 #==============================================================================
@@ -480,9 +480,7 @@ if __name__ == '__main__':
                             #==============================================================
                             # read DAC setpoint value
                             elif (data[0] == "\x03"):
-                                selection.dac(board_address)
-                                dac_setpoint = dac.read()
-                                connection.sendall(str(dac_setpoint) + "\r\n")
+                                connection.sendall(str(read_analog_output(board_address)) + "\r\n")
                             #==============================================================
                             # read maximum of 10 last ADC input value
                             elif (data[0] == "\x04"):
@@ -637,6 +635,11 @@ if __name__ == '__main__':
 
     def voltage_adjustment():
         global board_address
+        global voltage_factor
+        global step_trigger
+        global step_delay
+        global trigger
+        global steps
         while(True):
             # wait until there is a command in the list
             while(queue_voltage.empty()):
@@ -647,13 +650,46 @@ if __name__ == '__main__':
             # command[0] = "\x0"
             command_list = command.split(',')
             # separate values received
-            voltage_factor = command_list[1]
-            step_trigger = command_list[2]
-            step_delay = command_list[3]
-            value = command_list[4]
-            # write output
-            set_analog_output(board_address, value)
+            voltage_factor = int(command_list[1])
+            step_trigger = int(command_list[2])
+            step_delay = int(command_list[3])
+            value = int(command_list[4])
+            # calculate trigger in DAC code
+            trigger = step_trigger/(10.0*voltage_factor) * 131072
+            steps = 4
+            #-----------------------------------------
+            voltage_steps(value)
 
+    def voltage_steps(value):
+        global board_address
+        global voltage_factor
+        global step_trigger
+        global step_delay
+        global trigger
+        #-----------------------------------------
+        # check difference between current and intended setpoint
+        current = read_analog_output(board_address)
+        diff = value - current
+        #-----------------------------------------
+        # if difference is lower than the amount to activate the steps trigger
+        # then implement new setpoint directly
+        print(diff, trigger)
+        if diff < trigger:
+            set_analog_output(board_address, value)
+        #-----------------------------------------
+        # if difference is higher than the amount to activate the steps trigger
+        # then calculate calculate graduals setpoints
+        else:
+            setpoints = [int(current+(i*diff)/steps) for i in range(1,steps+1)]
+            # loop for 4
+            for voltage in setpoints:
+                set_analog_output(board_address, voltage)
+                start = time.time()
+                while(time.time() - start < step_delay):
+                   if not queue_voltage.empty():
+                        return
+        return
+                
     # define threads            
     thr_1 = Thread(target=write_to_list, args=[])
     thr_2 = Thread(target=read_from_list, args=[])
