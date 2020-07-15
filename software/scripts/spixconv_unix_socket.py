@@ -452,6 +452,7 @@ if __name__ == '__main__':
         global step_delay
         global trigger
         global steps
+        global last_setpoint
         try:
             #config(args.board_address)
             config(board_address)
@@ -481,6 +482,10 @@ if __name__ == '__main__':
                             #==============================================================
                             # adjust DAC output value
                             elif (data[0] == "\x02"):
+                                # update last setpoint
+                                last_setpoint = int(data[2:])
+                                print('last sp: ', last_setpoint)
+                                #-----------------------------------------
                                 queue_voltage.put(data[2:])
                             #==============================================================
                             # read DAC setpoint value
@@ -553,7 +558,7 @@ if __name__ == '__main__':
                                 connection.sendall(str(voltage) + "\r\n")
                                 #print str(voltage)
                             #==============================================================
-                            # DAC steps initialization 
+                            # DAC setpoint parameters initialization 
                             elif (data[0] == "\x10"):
                                 init_values = data[2:].split(',')
                                 #------------------------------
@@ -568,7 +573,7 @@ if __name__ == '__main__':
                                 #------------------------------
                                 # return DAC RB (readback) value
                                 # dac_code = [0, 262143]
-                                dac_code = read_analog_output(board_address)
+                                last_setpoint = dac_code = read_analog_output(board_address)
                                 # voltage = [-10, 10]
                                 percentage = (dac_code - 131072.0)/131072
                                 # value = [131072, 10]
@@ -593,6 +598,7 @@ if __name__ == '__main__':
     # thread that reads from 
     def read_from_list():
         global board_address
+        global last_setpoint
         while(True):
             # wait until there is a command in the list
             while(queue_general.empty()):
@@ -642,9 +648,32 @@ if __name__ == '__main__':
             # read a Port B bit setpoint
             #elif (command[0] == "\x0B"):
             #==============================================================
-            #
+            # write to port B bit
             elif (command[0] == "\x0C"):
-                #set_portB_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
+#                print('set port B')
+#                #set_portB_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
+#                #-----------------------------------------
+#                # check if command is related to PwrState-Sel (bit 1) and
+#                #   ... if command is to power the PS on and
+#                #   ... if PS is turned off
+#                print(read_portB_digital_input_bit(board_address, 7))
+#                if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_input_bit(board_address, 7) == 0) ):
+#                    # force voltage setpoint to be zero
+#                    queue_voltage.put(131072)
+#                    # wait until voltage setpoint is zero
+#                    while (read_analog_output(board_address) != 131072):
+#                        pass
+#                    print('turning on')
+#                    set_portB_digital_output_bit(board_address, int(ord(command[2])), 1)
+#                    # wait until PwrState-Sts (bit 7) is 1
+#                    #while (read_portB_digital_input_bit(board_address, 7) != 1):
+#                    # wait until PwrState-Sel (bit 1) is 0
+#                    while (read_portB_digital_output_bit(board_address, 1) != 1):
+#                        pass
+#                    print(last_setpoint)
+#                    # restore last voltage setpoint
+#                    queue_voltage.put(last_setpoint)
+#                #-----------------------------------------
                 set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
             #==============================================================
             #
