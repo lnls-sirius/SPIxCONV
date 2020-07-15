@@ -447,6 +447,11 @@ if __name__ == '__main__':
     def write_to_list():
         global board_address
         global connection
+        global voltage_factor
+        global step_trigger
+        global step_delay
+        global trigger
+        global steps
         try:
             #config(args.board_address)
             config(board_address)
@@ -548,10 +553,33 @@ if __name__ == '__main__':
                                 connection.sendall(str(voltage) + "\r\n")
                                 #print str(voltage)
                             #==============================================================
-                            # available command
+                            # DAC steps initialization 
                             elif (data[0] == "\x10"):
+                                init_values = data[2:].split(',')
+                                #------------------------------
+                                # separate values received
+                                voltage_factor = int(init_values[1])
+                                step_trigger = int(init_values[2])
+                                step_delay = int(init_values[3])
+                                #------------------------------
+                                # calculate trigger in DAC code
+                                trigger = step_trigger/(10.0*voltage_factor) * 131072
+                                steps = 4
+                                #------------------------------
+                                # return DAC RB (readback) value
+                                # dac_code = [0, 262143]
+                                dac_code = read_analog_output(board_address)
+                                # voltage = [-10, 10]
+                                percentage = (dac_code - 131072.0)/131072
+                                # value = [131072, 10]
+                                value = int(percentage * voltage_factor * 131072 + 131072)
+                                connection.sendall(str(value) + "\r\n")
+                            #==============================================================
+                            # available command
+                            elif (data[0] == "\x11"):
                                 pass
-    
+                            #==============================================================
+
                         else:
                             break
                 except:
@@ -565,7 +593,6 @@ if __name__ == '__main__':
     # thread that reads from 
     def read_from_list():
         global board_address
-        global connection
         while(True):
             # wait until there is a command in the list
             while(queue_general.empty()):
@@ -630,35 +657,18 @@ if __name__ == '__main__':
             #elif (command[0] == "\x0F"):
             #==============================================================
             # available command
-            elif (command[0] == "\x10"):
-                pass
+            #elif (command[0] == "\x10"):
+            #==============================================================
 
     def voltage_adjustment():
-        global board_address
-        global voltage_factor
-        global step_trigger
-        global step_delay
-        global trigger
-        global steps
         while(True):
             # wait until there is a command in the list
             while(queue_voltage.empty()):
                 pass
-            command = queue_voltage.get()
             #==============================================================
             # adjust DAC output value
             # command[0] = "\x0"
-            command_list = command.split(',')
-            # separate values received
-            voltage_factor = int(command_list[1])
-            step_trigger = int(command_list[2])
-            step_delay = int(command_list[3])
-            value = int(command_list[4])
-            # calculate trigger in DAC code
-            trigger = step_trigger/(10.0*voltage_factor) * 131072
-            steps = 4
-            #-----------------------------------------
-            voltage_steps(value)
+            voltage_steps(int(queue_voltage.get()))
 
     def voltage_steps(value):
         global board_address
@@ -666,6 +676,7 @@ if __name__ == '__main__':
         global step_trigger
         global step_delay
         global trigger
+        global steps
         #-----------------------------------------
         # check difference between current and intended setpoint
         current = read_analog_output(board_address)
@@ -673,7 +684,6 @@ if __name__ == '__main__':
         #-----------------------------------------
         # if difference is lower than the amount to activate the steps trigger
         # then implement new setpoint directly
-        print(diff, trigger)
         if diff < trigger:
             set_analog_output(board_address, value)
         #-----------------------------------------
