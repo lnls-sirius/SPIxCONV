@@ -484,7 +484,6 @@ if __name__ == '__main__':
                             elif (data[0] == "\x02"):
                                 # update last setpoint
                                 last_setpoint = int(data[2:])
-                                print('last sp: ', last_setpoint)
                                 #-----------------------------------------
                                 queue_voltage.put(data[2:])
                             #==============================================================
