@@ -657,7 +657,8 @@ if __name__ == '__main__':
                 # check if command is related to PwrState-Sel (bit 1) and
                 #   ... if command is to power the PS on and
                 #   ... if PS is turned off
-                if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_input_bit(board_address, 7) == 0) ):
+                #if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_input_bit(board_address, 7) == 0) ):
+                if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_output_bit(board_address, 1) == 0) ):
                     # force voltage setpoint to be zero
                     queue_voltage.put(131072)
                     # wait until voltage setpoint is zero
