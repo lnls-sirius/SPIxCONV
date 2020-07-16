@@ -650,29 +650,31 @@ if __name__ == '__main__':
             #==============================================================
             # write to port B bit
             elif (command[0] == "\x0C"):
-#                print('set port B')
-#                #set_portB_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
-#                #-----------------------------------------
-#                # check if command is related to PwrState-Sel (bit 1) and
-#                #   ... if command is to power the PS on and
-#                #   ... if PS is turned off
-#                print(read_portB_digital_input_bit(board_address, 7))
-#                if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_input_bit(board_address, 7) == 0) ):
-#                    # force voltage setpoint to be zero
-#                    queue_voltage.put(131072)
-#                    # wait until voltage setpoint is zero
-#                    while (read_analog_output(board_address) != 131072):
-#                        pass
-#                    print('turning on')
-#                    set_portB_digital_output_bit(board_address, int(ord(command[2])), 1)
-#                    # wait until PwrState-Sts (bit 7) is 1
-#                    #while (read_portB_digital_input_bit(board_address, 7) != 1):
-#                    # wait until PwrState-Sel (bit 1) is 0
-#                    while (read_portB_digital_output_bit(board_address, 1) != 1):
-#                        pass
-#                    print(last_setpoint)
-#                    # restore last voltage setpoint
-#                    queue_voltage.put(last_setpoint)
+                #set_portB_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
+                #-----------------------------------------
+                # check if command is related to PwrState-Sel (bit 1) and
+                #   ... if command is to power the PS on and
+                #   ... if PS is turned off
+                if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_input_bit(board_address, 7) == 0) ):
+                    # force voltage setpoint to be zero
+                    queue_voltage.put(131072)
+                    # wait until voltage setpoint is zero
+                    while (read_analog_output(board_address) != 131072):
+                        pass
+                    # power the PS on 
+                    set_portB_digital_output_bit(board_address, int(ord(command[2])), 1)
+                    time.sleep(0.5)
+                    #-----------------------------
+                    # wait until PwrState-Sts (bit 7) is 1
+                    #while (read_portB_digital_input_bit(board_address, 7) != 1):
+                    #    pass
+                    #-----------------------------
+                    # wait until PwrState-Sel (bit 1) is 0
+                    while (read_portB_digital_output_bit(board_address, 1) != 1):
+                        pass
+                    #-----------------------------
+                    # restore last voltage setpoint
+                    queue_voltage.put(last_setpoint)
 #                #-----------------------------------------
                 set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
             #==============================================================
@@ -707,26 +709,33 @@ if __name__ == '__main__':
         global trigger
         global steps
         #-----------------------------------------
-        # check difference between current and intended setpoint
-        current = read_analog_output(board_address)
-        diff = value - current
-        #-----------------------------------------
-        # if difference is lower than the amount to activate the steps trigger
-        # then implement new setpoint directly
-        if diff < trigger:
+        # if PS is off, implement setpoint directly
+        #if (read_portB_digital_input_bit(board_address, 7) == 0):
+        if (read_portB_digital_output_bit(board_address, 1) == 0):
             set_analog_output(board_address, value)
         #-----------------------------------------
-        # if difference is higher than the amount to activate the steps trigger
-        # then calculate calculate graduals setpoints
         else:
-            setpoints = [int(current+(i*diff)/steps) for i in range(1,steps+1)]
-            # loop for 4
-            for voltage in setpoints:
-                set_analog_output(board_address, voltage)
-                start = time.time()
-                while(time.time() - start < step_delay):
-                   if not queue_voltage.empty():
-                        return
+            # check difference between current and intended setpoint
+            current = read_analog_output(board_address)
+            diff = value - current
+            #-----------------------------------------
+            # if difference is lower than the amount to activate the steps trigger
+            # then implement new setpoint directly
+            if diff < trigger:
+                set_analog_output(board_address, value)
+            #-----------------------------------------
+            # if difference is higher than the amount to activate the steps trigger
+            # then calculate calculate graduals setpoints
+            else:
+                setpoints = [int(current+(i*diff)/steps) for i in range(1,steps+1)]
+                # loop for "steps" gradual setpoints
+                for voltage in setpoints:
+                    set_analog_output(board_address, voltage)
+                    start = time.time()
+                    while(time.time() - start < step_delay):
+                       if not queue_voltage.empty():
+                            return
+        #-----------------------------------------
         return
                 
     # define threads            
@@ -737,4 +746,3 @@ if __name__ == '__main__':
     thr_1.start()
     thr_2.start()
     thr_3.start()
-    
