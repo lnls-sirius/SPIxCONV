@@ -467,7 +467,10 @@ if __name__ == '__main__':
     
             #interlocks = "External,High voltage power supply overvoltage,High voltage power supply overcurrent,Personnel protection,Temperature,AC power,Switch"
             logger.info("unix socket running!")
-    
+            #----------------------------
+            # read Voltage-RB at initialization             
+            last_setpoint = read_analog_output(board_address)
+
             while True:
                 connection, client_address = sock.accept()
                 try:
