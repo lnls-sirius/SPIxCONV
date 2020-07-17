@@ -506,8 +506,8 @@ if __name__ == '__main__':
                                 queue_general.put([data[0], "dummy_address", data[2]])
                             #==============================================================
                             # write a bit in Port B GPIO
-                            elif (data[0] == "\x06"):
-                                queue_general.put([data[0], "dummy_address", data[2], data[3]])
+                            #elif (data[0] == "\x06"):
+                            #    queue_general.put([data[0], "dummy_address", data[2], data[3]])
                             #==============================================================
                             # read the whole byte in digital Port A
                             elif (data[0] == "\x07"):
@@ -627,9 +627,9 @@ if __name__ == '__main__':
                 set_digital_output_byte(board_address, ord(command[2]))
             #==============================================================
             # write a bit in Port B GPIO
-            elif (command[0] == "\x06"):
-                #set_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
-                set_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
+            #elif (command[0] == "\x06"):
+            #    #set_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
+            #    set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
             #==============================================================
             # read the whole byte in digital Port A
             #elif (command[0] == "\x07"):
