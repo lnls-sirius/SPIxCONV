@@ -772,9 +772,10 @@ if __name__ == '__main__':
             # wait until there is a command in the list
             while(queue_voltage.empty()):
                 # check if Voltage-SP is equal to Voltage-RB
-                if(last_setpoint != read_analog_output(board_address)):
-                    logger.info('SP different from RB')
-                    queue_voltage.put(last_setpoint)
+                #if((last_setpoint < (read_analog_output(board_address) - 1)) or (last_setpoint > (read_analog_output(board_address) + 1))):
+                #    logger.info('SP different from RB')
+                #    queue_voltage.put(last_setpoint)
+                pass
             #==============================================================
             # adjust DAC output value
             # command[0] = "\x0"
@@ -822,6 +823,13 @@ if __name__ == '__main__':
             # adjust last step
             set_analog_output(board_address, value)
             logger.info('  gradual adjust: {}'.format(value))
+        #-----------------------------------------
+        # check if SP is equal to RB
+        time.sleep(0.1)
+        while((last_setpoint < (read_analog_output(board_address) - 1)) or (last_setpoint > (read_analog_output(board_address) + 1))):
+            logger.info('SP different from RB')
+            time.sleep(0.5)
+            set_analog_output(board_address, value)
         #-----------------------------------------
         return
                 
