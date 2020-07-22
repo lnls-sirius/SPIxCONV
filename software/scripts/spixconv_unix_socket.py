@@ -784,17 +784,17 @@ if __name__ == '__main__':
         # if difference is lower than the amount to activate the steps trigger
         # then implement new setpoint directly
         if diff < trigger:
-            logger.debug('Voltage adjustment below limiar: no gradual adjust')
+            logger.info('Voltage adjustment below limiar: no gradual adjust')
             set_analog_output(board_address, value)
         #-----------------------------------------
         # if difference is higher than the amount to activate the steps trigger
         # then calculate calculate graduals setpoints
         else:
-            logger.debug('Voltage adjustment exceeds limiar: gradual adjust required!')
+            logger.info('Voltage adjustment exceeds limiar: gradual adjust required!')
             setpoints = [int(current+(i*diff)/steps) for i in range(1,steps)]
             # loop for "steps-1" gradual setpoints
             for voltage in setpoints:
-                logger.debug('  gradual adjust: {}'.format(voltage))
+                logger.info('  gradual adjust: {}'.format(voltage))
                 set_analog_output(board_address, voltage)
                 start = time.time()
                 while(time.time() - start < step_delay):
@@ -803,7 +803,7 @@ if __name__ == '__main__':
                     pass
             # adjust last step
             set_analog_output(board_address, value)
-            logger.debug('  gradual adjust: {}'.format(value))
+            logger.info('  gradual adjust: {}'.format(value))
         #-----------------------------------------
         return
                 
