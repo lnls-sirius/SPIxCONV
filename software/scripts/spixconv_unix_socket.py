@@ -762,30 +762,30 @@ if __name__ == '__main__':
         #-----------------------------------------
         # if PS is off, implement setpoint directly
         #if (read_portB_digital_input_bit(board_address, 7) == 0):
-        if (read_portB_digital_output_bit(board_address, 1) == 0):
+        #if (read_portB_digital_output_bit(board_address, 1) == 0):
+        #    set_analog_output(board_address, value)
+        #-----------------------------------------
+        #else:
+        # check difference between current and intended setpoint
+        current = read_analog_output(board_address)
+        diff = value - current
+        #-----------------------------------------
+        # if difference is lower than the amount to activate the steps trigger
+        # then implement new setpoint directly
+        if diff < trigger:
             set_analog_output(board_address, value)
         #-----------------------------------------
+        # if difference is higher than the amount to activate the steps trigger
+        # then calculate calculate graduals setpoints
         else:
-            # check difference between current and intended setpoint
-            current = read_analog_output(board_address)
-            diff = value - current
-            #-----------------------------------------
-            # if difference is lower than the amount to activate the steps trigger
-            # then implement new setpoint directly
-            if diff < trigger:
-                set_analog_output(board_address, value)
-            #-----------------------------------------
-            # if difference is higher than the amount to activate the steps trigger
-            # then calculate calculate graduals setpoints
-            else:
-                setpoints = [int(current+(i*diff)/steps) for i in range(1,steps+1)]
-                # loop for "steps" gradual setpoints
-                for voltage in setpoints:
-                    set_analog_output(board_address, voltage)
-                    start = time.time()
-                    while(time.time() - start < step_delay):
-                       if not queue_voltage.empty():
-                            return
+            setpoints = [int(current+(i*diff)/steps) for i in range(1,steps+1)]
+            # loop for "steps" gradual setpoints
+            for voltage in setpoints:
+                set_analog_output(board_address, voltage)
+                start = time.time()
+                while(time.time() - start < step_delay):
+                   if not queue_voltage.empty():
+                        return
         #-----------------------------------------
         return
                 
