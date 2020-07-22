@@ -456,6 +456,8 @@ def get_steps_var(hostname):
 if __name__ == '__main__':
     global board_address
     global connection
+    global last_setpoint
+    global logger
     logging.basicConfig(level=logging.INFO, format='%(asctime)-15s [%(levelname)s] %(message)s',
         datefmt='%d/%m/%Y %H:%M:%S')
     logger = logging.getLogger()
@@ -487,6 +489,8 @@ if __name__ == '__main__':
     queue_general = Queue()
     # create voltage adjustment queue
     queue_voltage = Queue()
+    # last_setpoint initialization
+    last_setpoint = 131072
     #----------------------------
     def write_to_list():
         global board_address
@@ -497,6 +501,7 @@ if __name__ == '__main__':
         global trigger
         global steps
         global last_setpoint
+        global logger
         try:
             #config(args.board_address)
             config(board_address)
@@ -649,6 +654,7 @@ if __name__ == '__main__':
     def read_from_list():
         global board_address
         global last_setpoint
+        global logger
         while(True):
             # wait until there is a command in the list
             while(queue_general.empty()):
@@ -763,6 +769,7 @@ if __name__ == '__main__':
         global step_delay
         global trigger
         global steps
+        global logger
         #-----------------------------------------
         # if PS is off, implement setpoint directly
         #if (read_portB_digital_input_bit(board_address, 7) == 0):
@@ -785,6 +792,7 @@ if __name__ == '__main__':
             setpoints = [int(current+(i*diff)/steps) for i in range(1,steps)]
             # loop for "steps-1" gradual setpoints
             for voltage in setpoints:
+                #logger.debug('adjust {} '.format(voltage))
                 set_analog_output(board_address, voltage)
                 start = time.time()
                 while(time.time() - start < step_delay):
