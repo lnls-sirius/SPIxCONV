@@ -418,36 +418,51 @@ def get_steps_var(hostname):
       - step_trigger
       - step_delay
     '''
+    global logger
     # racks room 01
     if(hostname == 'BOO-INJ-SEP'):
+        logger.info('Hostname found: BOO-INJ-SEP')
         return 100, 200, 2
     if(hostname == 'BOO-INJ-KICKER'):
+        logger.info('Hostname found: BOO-INJ-KICKER')
         return 1000, 500, 2
     if(hostname == 'SR-INJ-THICK-SEP-1'):
+        logger.info('Hostname found: SR-INJ-THICK-SEP-1')
         return 100, 200, 2
     if(hostname == 'SR-INJ-THICK-SEP-2'):
+        logger.info('Hostname found: SR-INJ-THICK-SEP-2')
         return 100, 200, 2
     if(hostname == 'S-R-INJ-THIN-SEP'):
+        logger.info('Hostname found: S-R-INJ-THIN-SEP')
         return 100, 200, 2
     if(hostname == 'PING-H'):
+        logger.info('Hostname found: PING-H')
         return 3000, 2000, 2
     if(hostname == 'NLK-ON-AXIS-1'):
+        logger.info('Hostname found: NLK-ON-AXIS-1')
         return 1500, 2000, 2
     # racks room 20
     if(hostname == 'BOO-EXT-KICKER'):
+        logger.info('Hostname found: BOO-EXT-KICKER')
         return 1000, 1000, 2
     if(hostname == 'BOO-EXT-THIN-SEP'):
+        logger.info('Hostname found: BOO-EXT-THIN-SEP')
         return 100, 200, 2
     if(hostname == 'BOO-EXT-THICK-SEP'):
+        logger.info('Hostname found: BOO-EXT-THICK-SEP')
         return 100, 200, 2
     if(hostname == 'PING-V'):
+        logger.info('Hostname found: PING-V')
         return 3000, 2000, 2
     # spare
     if((hostname == 'SPARE-SEP-1') or (hostname == 'SPARE-SEP-2') or (hostname == 'SPARE-SEP-3')):
+        logger.info('Hostname found: SPARE-SEP')
         return 100, 200, 2
     if((hostname == 'SPARE-KICKER-1') or (hostname == 'SPARE-KICKER-2') or (hostname == 'SPARE-KICKER-3')):
+        logger.info('Hostname found: SPARE-KICKER')
         return 1000, 2000, 2
     if((hostname == 'NLK-ON-AXIS-2') or (hostname == 'NLK-ON-AXIS-3')):
+        logger.info('Hostname found: SPARE-NLK')
         return 1500, 2000, 2
     #raise ValueError(f'hostname {hostname} not supported')
     raise ValueError('hostname not supported')
