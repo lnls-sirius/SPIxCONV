@@ -456,7 +456,6 @@ def get_steps_var(hostname):
 if __name__ == '__main__':
     global board_address
     global connection
-    global last_setpoint
     global logger
     logging.basicConfig(level=logging.INFO, format='%(asctime)-15s [%(levelname)s] %(message)s',
         datefmt='%d/%m/%Y %H:%M:%S')
@@ -489,8 +488,6 @@ if __name__ == '__main__':
     queue_general = Queue()
     # create voltage adjustment queue
     queue_voltage = Queue()
-    # last_setpoint initialization
-    last_setpoint = 131072
     #----------------------------
     def write_to_list():
         global board_address
@@ -694,6 +691,7 @@ if __name__ == '__main__':
             # generate a pulse in RESET bit (Port B, bit 3)
             elif (command[0] == "\x09"):
                 #reset(ord(command[1]), int(command[2]))
+                logger.info('Reset command')
                 reset(board_address, int(command[2]))
             #==============================================================
             # read interlock labels
@@ -713,6 +711,7 @@ if __name__ == '__main__':
                 #   ... if PS is turned off
                 #if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_input_bit(board_address, 7) == 0) ):
                 if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_output_bit(board_address, 1) == 0) ):
+                    logger.info('Turning PS on')
                     # force voltage setpoint to be zero
                     queue_voltage.put(131072)
                     # wait until voltage setpoint is zero
@@ -733,7 +732,9 @@ if __name__ == '__main__':
                     # restore last voltage setpoint
                     queue_voltage.put(last_setpoint)
 #                #-----------------------------------------
-                set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
+                else:
+                    logger.info('Change bit {}'.format(int(ord(command[2]))))
+                    set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
             #==============================================================
             #
             #elif (command[0] == "\x0D"):
@@ -751,11 +752,13 @@ if __name__ == '__main__':
     def voltage_adjustment():
         global board_address
         global last_setpoint
+        global logger
         while(True):
             # wait until there is a command in the list
             while(queue_voltage.empty()):
                 # check if Voltage-SP is equal to Voltage-RB
                 if(last_setpoint != read_analog_output(board_address)):
+                    logger.info('SP different from RB')
                     queue_voltage.put(last_setpoint)
             #==============================================================
             # adjust DAC output value
@@ -813,5 +816,6 @@ if __name__ == '__main__':
     thr_3 = Thread(target=voltage_adjustment, args=[])
     # start threads
     thr_1.start()
+    time.sleep(3)
     thr_2.start()
     thr_3.start()
