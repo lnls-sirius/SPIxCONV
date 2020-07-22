@@ -408,6 +408,50 @@ def reset(board, polatization):
         set_portB_digital_output_bit(board, 3, 0)
     #caput("TB-04:PM-InjS:Reset-Cmd", 0)
 #==============================================================================
+#    Get steps config with hostname
+#==============================================================================
+def get_steps_var(hostname):
+    #return voltage_factor, step_trigger, step_delay
+    '''
+    return:
+      - voltage_factor
+      - step_trigger
+      - step_delay
+    '''
+    # racks room 01
+    if(hostname == 'BOO-INJ-SEP'):
+        return 100, 200, 2
+    if(hostname == 'BOO-INJ-KICKER'):
+        return 1000, 500, 2
+    if(hostname == 'SR-INJ-THICK-SEP-1'):
+        return 100, 200, 2
+    if(hostname == 'SR-INJ-THICK-SEP-2'):
+        return 100, 200, 2
+    if(hostname == 'S-R-INJ-THIN-SEP'):
+        return 100, 200, 2
+    if(hostname == 'PING-H'):
+        return 3000, 2000, 2
+    if(hostname == 'NLK-ON-AXIS-1'):
+        return 1500, 2000, 2
+    # racks room 20
+    if(hostname == 'BOO-EXT-KICKER'):
+        return 1000, 1000, 2
+    if(hostname == 'BOO-EXT-THIN-SEP'):
+        return 100, 200, 2
+    if(hostname == 'BOO-EXT-THICK-SEP'):
+        return 100, 200, 2
+    if(hostname == 'PING-V'):
+        return 3000, 2000, 2
+    # spare
+    if((hostname == 'SPARE-SEP-1') or (hostname == 'SPARE-SEP-2') or (hostname == 'SPARE-SEP-3')):
+        return 100, 200, 2
+    if((hostname == 'SPARE-KICKER-1') or (hostname == 'SPARE-KICKER-2') or (hostname == 'SPARE-KICKER-3')):
+        return 1000, 2000, 2
+    if((hostname == 'NLK-ON-AXIS-2') or (hostname == 'NLK-ON-AXIS-3')):
+        return 1500, 2000, 2
+    #raise ValueError(f'hostname {hostname} not supported')
+    raise ValueError('hostname not supported')
+#==============================================================================
 
 if __name__ == '__main__':
     global board_address
@@ -470,6 +514,10 @@ if __name__ == '__main__':
             #----------------------------
             # read Voltage-RB at initialization             
             last_setpoint = read_analog_output(board_address)
+            #----------------------------
+            # get hostname to initialize steps variable
+            hostname = socket.gethostname()
+            voltage_factor, step_trigger, step_delay = get_steps_var(hostname)
 
             while True:
                 connection, client_address = sock.accept()
