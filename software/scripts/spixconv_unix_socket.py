@@ -744,6 +744,7 @@ if __name__ == '__main__':
 
     def voltage_adjustment():
         global board_address
+        global last_setpoint
         while(True):
             # wait until there is a command in the list
             while(queue_voltage.empty()):
