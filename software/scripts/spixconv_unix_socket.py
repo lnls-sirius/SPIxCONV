@@ -743,10 +743,13 @@ if __name__ == '__main__':
             #==============================================================
 
     def voltage_adjustment():
+        global board_address
         while(True):
             # wait until there is a command in the list
             while(queue_voltage.empty()):
-                pass
+                # check if Voltage-SP is equal to Voltage-RB
+                if(last_setpoint != read_analog_output(board_address)):
+                    queue_voltage.put(last_setpoint)
             #==============================================================
             # adjust DAC output value
             # command[0] = "\x0"
@@ -778,14 +781,17 @@ if __name__ == '__main__':
         # if difference is higher than the amount to activate the steps trigger
         # then calculate calculate graduals setpoints
         else:
-            setpoints = [int(current+(i*diff)/steps) for i in range(1,steps+1)]
-            # loop for "steps" gradual setpoints
+            setpoints = [int(current+(i*diff)/steps) for i in range(1,steps)]
+            # loop for "steps-1" gradual setpoints
             for voltage in setpoints:
                 set_analog_output(board_address, voltage)
                 start = time.time()
                 while(time.time() - start < step_delay):
-                   if not queue_voltage.empty():
-                        return
+                #   if not queue_voltage.empty():
+                #        return
+                    pass
+            # adjust last step
+            set_analog_output(board_address, value)
         #-----------------------------------------
         return
                 
