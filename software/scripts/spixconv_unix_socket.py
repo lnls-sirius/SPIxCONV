@@ -825,11 +825,7 @@ if __name__ == '__main__':
             logger.info('  gradual adjust: {}'.format(value))
         #-----------------------------------------
         # check if SP is equal to RB
-        time.sleep(0.1)
-        while((last_setpoint < (read_analog_output(board_address) - 1)) or (last_setpoint > (read_analog_output(board_address) + 1))):
-            logger.info('SP different from RB')
-            time.sleep(0.5)
-            set_analog_output(board_address, value)
+        set_analog_output(board_address, value)
         #-----------------------------------------
         return
                 
