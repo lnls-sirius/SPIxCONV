@@ -573,121 +573,131 @@ if __name__ == '__main__':
             voltage_factor, step_trigger, step_delay, steps = get_steps_var(ip)
             trigger = step_trigger/(10.0*voltage_factor) * 131072
             #----------------------------
+            # LF (line feed) = 0x0A
+            LF = 0x0A
+            # CR (carriage return) = 0x0D
+            CR = 0x0D
+            #----------------------------
             while True:
                 connection, client_address = sock.accept()
                 try:
                     logger.info('Client connected {} '.format(client_address))
                     while True:
-                        data = connection.recv(512)
-                        if data:
-                            #==============================================================
-                            # set GPIO pin direction
-                            if (data[0] == "\x01"):
-                                queue_general.put([data[0], "dummy_address", data[2], data[3], data[4]])
-                            #==============================================================
-                            # adjust DAC output value
-                            elif (data[0] == "\x02"):
-                                # update last setpoint
-                                last_setpoint = int(data[2:])
-                                #-----------------------------------------
-                                queue_voltage.put(data[2:])
-                            #==============================================================
-                            # read DAC setpoint value
-                            elif (data[0] == "\x03"):
-                                connection.sendall(str(read_analog_output(board_address)) + "\r\n")
-                            #==============================================================
-                            # read maximum of 10 last ADC input value
-                            elif (data[0] == "\x04"):
-                                #voltage = read_analog_input(ord(command[1]))
-                                voltage = read_analog_input(board_address)
-                                connection.sendall(str(voltage) + "\r\n")
-                                #print str(voltage)
-                            #==============================================================
-                            # write a whole byte in digital Port B
-                            elif (data[0] == "\x05"):
-                                queue_general.put([data[0], "dummy_address", data[2]])
-                            #==============================================================
-                            # write a bit in Port B GPIO
-                            #elif (data[0] == "\x06"):
-                            #    queue_general.put([data[0], "dummy_address", data[2], data[3]])
-                            #==============================================================
-                            # read the whole byte in digital Port A
-                            elif (data[0] == "\x07"):
-                                #byte = read_digital_input_byte(ord(command[1]))
-                                byte = read_digital_input_byte(board_address)
-                                connection.sendall(str(byte))
-                                #print byte
-                            #==============================================================
-                            # read a bit in Port B GPIO
-                            elif (data[0] == "\x08"):
-                                #bit = read_digital_input_bit(ord(command[1]), ord(command[2]))
-                                bit = read_digital_input_bit(board_address, ord(data[2]))
-                                connection.sendall(str(bit))
-                                #print bit
-                            #==============================================================
-                            # generate a pulse in RESET bit (Port B, bit 3)
-                            elif (data[0] == "\x09"):
-                                queue_general.put([data[0], "dummy_address", data[2]])
-                            #==============================================================
-                            # read interlock labels
-                            elif (data[0] == "\x0A"):
-                                pass
-                            #==============================================================
-                            # read a Port B bit setpoint
-                            elif (data[0] == "\x0B"):
-                                #bit = read_portB_digital_output_bit(ord(command[1]), ord(command[2]))
-                                bit = read_portB_digital_output_bit(board_address, ord(data[2]))
-                                connection.sendall(str(bit))
-                            #==============================================================
-                            #
-                            elif (data[0] == "\x0C"):
-                                queue_general.put([data[0], "dummy_address", data[2], data[3]])
-                            #==============================================================
-                            #
-                            elif (data[0] == "\x0D"):
-                                #bit = read_portA_digital_input_bit(ord(command[1]), ord(command[2]))
-                                bit = read_portA_digital_input_bit(board_address, ord(data[2]))
-                                connection.sendall(str(bit))
-                            #==============================================================
-                            #
-                            elif (data[0] == "\x0E"):
-                                #bit = read_portB_digital_input_bit(ord(command[1]), ord(command[2]))
-                                bit = read_portB_digital_input_bit(board_address, ord(data[2]))
-                                connection.sendall(str(bit))
-                            #==============================================================
-                            # read raw ADC input value
-                            elif (data[0] == "\x0F"):
-                                #voltage = read_analog_input_raw(ord(command[1]))
-                                voltage = read_analog_input_raw(ord(board_address))
-                                connection.sendall(str(voltage) + "\r\n")
-                                #print str(voltage)
-                            #==============================================================
-                            # DAC setpoint parameters initialization 
-                            elif (data[0] == "\x10"):
-                                init_values = data[2:].split(',')
-                                #------------------------------
-                                # separate values received
-                                voltage_factor = int(init_values[1])
-                                step_trigger = int(init_values[2])
-                                step_delay = int(init_values[3])
-                                #------------------------------
-                                # calculate trigger in DAC code
-                                trigger = step_trigger/(10.0*voltage_factor) * 131072
-                                steps = 4
-                                #------------------------------
-                                # return DAC RB (readback) value
-                                # dac_code = [0, 262143]
-                                last_setpoint = dac_code = read_analog_output(board_address)
-                                # voltage = [-10, 10]
-                                percentage = (dac_code - 131072.0)/131072
-                                # value = [131072, 10]
-                                value = int(percentage * voltage_factor * 131072 + 131072)
-                                connection.sendall(str(value) + "\r\n")
-                            #==============================================================
-                            # available command
-                            elif (data[0] == "\x11"):
-                                pass
-                            #==============================================================
+                        msg = connection.recv(512)
+                        if msg:
+                            commands = msg.splitlines()
+                            print(commands)
+                            for data in commands:
+                                if data:
+                                    print(data)
+                                    #==============================================================
+                                    # set GPIO pin direction
+                                    if (data[0] == "\x01"):
+                                        queue_general.put([data[0], "dummy_address", data[2], data[3], data[4]])
+                                    #==============================================================
+                                    # adjust DAC output value
+                                    elif (data[0] == "\x02"):
+                                        # update last setpoint
+                                        last_setpoint = int(data[2:])
+                                        #-----------------------------------------
+                                        queue_voltage.put(data[2:])
+                                    #==============================================================
+                                    # read DAC setpoint value
+                                    elif (data[0] == "\x03"):
+                                        connection.sendall(str(read_analog_output(board_address)) + "\r\n")
+                                    #==============================================================
+                                    # read maximum of 10 last ADC input value
+                                    elif (data[0] == "\x04"):
+                                        #voltage = read_analog_input(ord(command[1]))
+                                        voltage = read_analog_input(board_address)
+                                        connection.sendall(str(voltage) + "\r\n")
+                                        #print str(voltage)
+                                    #==============================================================
+                                    # write a whole byte in digital Port B
+                                    elif (data[0] == "\x05"):
+                                        queue_general.put([data[0], "dummy_address", data[2]])
+                                    #==============================================================
+                                    # write a bit in Port B GPIO
+                                    #elif (data[0] == "\x06"):
+                                    #    queue_general.put([data[0], "dummy_address", data[2], data[3]])
+                                    #==============================================================
+                                    # read the whole byte in digital Port A
+                                    elif (data[0] == "\x07"):
+                                        #byte = read_digital_input_byte(ord(command[1]))
+                                        byte = read_digital_input_byte(board_address)
+                                        connection.sendall(str(byte))
+                                        #print byte
+                                    #==============================================================
+                                    # read a bit in Port B GPIO
+                                    elif (data[0] == "\x08"):
+                                        #bit = read_digital_input_bit(ord(command[1]), ord(command[2]))
+                                        bit = read_digital_input_bit(board_address, ord(data[2]))
+                                        connection.sendall(str(bit))
+                                        #print bit
+                                    #==============================================================
+                                    # generate a pulse in RESET bit (Port B, bit 3)
+                                    elif (data[0] == "\x09"):
+                                        queue_general.put([data[0], "dummy_address", data[2]])
+                                    #==============================================================
+                                    # read interlock labels
+                                    elif (data[0] == "\x0A"):
+                                        pass
+                                    #==============================================================
+                                    # read a Port B bit setpoint
+                                    elif (data[0] == "\x0B"):
+                                        #bit = read_portB_digital_output_bit(ord(command[1]), ord(command[2]))
+                                        bit = read_portB_digital_output_bit(board_address, ord(data[2]))
+                                        connection.sendall(str(bit))
+                                    #==============================================================
+                                    #
+                                    elif (data[0] == "\x0C"):
+                                        queue_general.put([data[0], "dummy_address", data[2], data[3]])
+                                    #==============================================================
+                                    #
+                                    elif (data[0] == "\x0D"):
+                                        #bit = read_portA_digital_input_bit(ord(command[1]), ord(command[2]))
+                                        bit = read_portA_digital_input_bit(board_address, ord(data[2]))
+                                        connection.sendall(str(bit))
+                                    #==============================================================
+                                    #
+                                    elif (data[0] == "\x0E"):
+                                        #bit = read_portB_digital_input_bit(ord(command[1]), ord(command[2]))
+                                        bit = read_portB_digital_input_bit(board_address, ord(data[2]))
+                                        connection.sendall(str(bit))
+                                    #==============================================================
+                                    # read raw ADC input value
+                                    elif (data[0] == "\x0F"):
+                                        #voltage = read_analog_input_raw(ord(command[1]))
+                                        voltage = read_analog_input_raw(ord(board_address))
+                                        connection.sendall(str(voltage) + "\r\n")
+                                        #print str(voltage)
+                                    #==============================================================
+                                    # DAC setpoint parameters initialization 
+                                    elif (data[0] == "\x10"):
+                                        init_values = data[2:].split(',')
+                                        #------------------------------
+                                        # separate values received
+                                        voltage_factor = int(init_values[1])
+                                        step_trigger = int(init_values[2])
+                                        step_delay = int(init_values[3])
+                                        #------------------------------
+                                        # calculate trigger in DAC code
+                                        trigger = step_trigger/(10.0*voltage_factor) * 131072
+                                        steps = 4
+                                        #------------------------------
+                                        # return DAC RB (readback) value
+                                        # dac_code = [0, 262143]
+                                        last_setpoint = dac_code = read_analog_output(board_address)
+                                        # voltage = [-10, 10]
+                                        percentage = (dac_code - 131072.0)/131072
+                                        # value = [131072, 10]
+                                        value = int(percentage * voltage_factor * 131072 + 131072)
+                                        connection.sendall(str(value) + "\r\n")
+                                    #==============================================================
+                                    # available command
+                                    #elif (data[0] == "\x11"):
+                                    #pass
+                                    #==============================================================
 
                         else:
                             break
