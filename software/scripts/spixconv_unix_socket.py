@@ -655,7 +655,8 @@ if __name__ == '__main__':
                         else:
                             break
                 except:
-                    logger.exception('Connection Error !')
+                    #logger.exception('Connection Error !')
+                    logger.exception('Error in thread 1! (writing to list')
                 finally:
                     logger.info('Closing connection {}'.format(client_address))
                     connection.close()
@@ -668,118 +669,127 @@ if __name__ == '__main__':
         global last_setpoint
         global logger
         while(True):
-            # wait until there is a command in the list
-            while(queue_general.empty()):
-                pass
-            command = queue_general.get()
-            #==============================================================
-            # set GPIO pin direction
-            if (command[0] == "\x01"):
-                #set_direction_bit(int(ord(command[1])), command[2], int(ord(command[3])), int(command[4]))
-                set_direction_bit(board_address, command[2], int(ord(command[3])), int(command[4]))
-            #==============================================================
-            # adjust DAC output value
-            #elif (command[0] == "\x02"):
-            #==============================================================
-            # read DAC setpoint value
-            #elif (command[0] == "\x03"):
-            #==============================================================
-            # read maximum of 10 last ADC input value
-            #elif (command[0] == "\x04"):
-            #==============================================================
-            # write a whole byte in digital Port B
-            elif (command[0] == "\x05"):
-                #set_digital_output_byte(ord(command[1]), ord(command[2]))
-                set_digital_output_byte(board_address, ord(command[2]))
-            #==============================================================
-            # write a bit in Port B GPIO
-            #elif (command[0] == "\x06"):
-            #    #set_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
-            #    set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
-            #==============================================================
-            # read the whole byte in digital Port A
-            #elif (command[0] == "\x07"):
-            #==============================================================
-            # read a bit in Port B GPIO
-            #elif (command[0] == "\x08"):
-            #==============================================================
-            # generate a pulse in RESET bit (Port B, bit 3)
-            elif (command[0] == "\x09"):
-                #reset(ord(command[1]), int(command[2]))
-                logger.info('Reset command')
-                reset(board_address, int(command[2]))
-            #==============================================================
-            # read interlock labels
-            elif (command[0] == "\x0A"):
-                #connection.sendall(interlocks)
-                pass
-            #==============================================================
-            # read a Port B bit setpoint
-            #elif (command[0] == "\x0B"):
-            #==============================================================
-            # write to port B bit
-            elif (command[0] == "\x0C"):
-                #set_portB_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
-                #-----------------------------------------
-                # check if command is related to PwrState-Sel (bit 1) and
-                #   ... if command is to power the PS on and
-                #   ... if PS is turned off
-                #if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_input_bit(board_address, 7) == 0) ):
-                if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_output_bit(board_address, 1) == 0) ):
-                    logger.info('Turning PS on')
-                    # force voltage setpoint to be zero
-                    queue_voltage.put(131072)
-                    # wait until voltage setpoint is zero
-                    while (read_analog_output(board_address) != 131072):
+            try:
+                while(True):
+                    # wait until there is a command in the list
+                    while(queue_general.empty()):
                         pass
-                    # power the PS on 
-                    set_portB_digital_output_bit(board_address, int(ord(command[2])), 1)
-                    time.sleep(0.5)
-                    #-----------------------------
-                    # wait until PwrState-Sts (bit 7) is 1
-                    #while (read_portB_digital_input_bit(board_address, 7) != 1):
-                    #    pass
-                    #-----------------------------
-                    # wait until PwrState-Sel (bit 1) is 0
-                    while (read_portB_digital_output_bit(board_address, 1) != 1):
+                    command = queue_general.get()
+                    #==============================================================
+                    # set GPIO pin direction
+                    if (command[0] == "\x01"):
+                        #set_direction_bit(int(ord(command[1])), command[2], int(ord(command[3])), int(command[4]))
+                        set_direction_bit(board_address, command[2], int(ord(command[3])), int(command[4]))
+                    #==============================================================
+                    # adjust DAC output value
+                    #elif (command[0] == "\x02"):
+                    #==============================================================
+                    # read DAC setpoint value
+                    #elif (command[0] == "\x03"):
+                    #==============================================================
+                    # read maximum of 10 last ADC input value
+                    #elif (command[0] == "\x04"):
+                    #==============================================================
+                    # write a whole byte in digital Port B
+                    elif (command[0] == "\x05"):
+                        #set_digital_output_byte(ord(command[1]), ord(command[2]))
+                        set_digital_output_byte(board_address, ord(command[2]))
+                    #==============================================================
+                    # write a bit in Port B GPIO
+                    #elif (command[0] == "\x06"):
+                    #    #set_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
+                    #    set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
+                    #==============================================================
+                    # read the whole byte in digital Port A
+                    #elif (command[0] == "\x07"):
+                    #==============================================================
+                    # read a bit in Port B GPIO
+                    #elif (command[0] == "\x08"):
+                    #==============================================================
+                    # generate a pulse in RESET bit (Port B, bit 3)
+                    elif (command[0] == "\x09"):
+                        #reset(ord(command[1]), int(command[2]))
+                        logger.info('Reset command')
+                        reset(board_address, int(command[2]))
+                    #==============================================================
+                    # read interlock labels
+                    elif (command[0] == "\x0A"):
+                        #connection.sendall(interlocks)
                         pass
-                    #-----------------------------
-                    # restore last voltage setpoint
-                    queue_voltage.put(last_setpoint)
-#                #-----------------------------------------
-                else:
-                    logger.info('Change bit {}'.format(int(ord(command[2]))))
-                    set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
-            #==============================================================
-            #
-            #elif (command[0] == "\x0D"):
-            #==============================================================
-            #
-            #elif (command[0] == "\x0E"):
-            #==============================================================
-            # read raw ADC input value
-            #elif (command[0] == "\x0F"):
-            #==============================================================
-            # available command
-            #elif (command[0] == "\x10"):
-            #==============================================================
+                    #==============================================================
+                    # read a Port B bit setpoint
+                    #elif (command[0] == "\x0B"):
+                    #==============================================================
+                    # write to port B bit
+                    elif (command[0] == "\x0C"):
+                        #set_portB_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
+                        #-----------------------------------------
+                        # check if command is related to PwrState-Sel (bit 1) and
+                        #   ... if command is to power the PS on and
+                        #   ... if PS is turned off
+                        #if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_input_bit(board_address, 7) == 0) ):
+                        if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_output_bit(board_address, 1) == 0) ):
+                            logger.info('Turning PS on')
+                            # force voltage setpoint to be zero
+                            queue_voltage.put(131072)
+                            # wait until voltage setpoint is zero
+                            while (read_analog_output(board_address) != 131072):
+                                pass
+                            # power the PS on 
+                            set_portB_digital_output_bit(board_address, int(ord(command[2])), 1)
+                            time.sleep(0.5)
+                            #-----------------------------
+                            # wait until PwrState-Sts (bit 7) is 1
+                            #while (read_portB_digital_input_bit(board_address, 7) != 1):
+                            #    pass
+                            #-----------------------------
+                            # wait until PwrState-Sel (bit 1) is 0
+                            while (read_portB_digital_output_bit(board_address, 1) != 1):
+                                pass
+                            #-----------------------------
+                            # restore last voltage setpoint
+                            queue_voltage.put(last_setpoint)
+                        #-----------------------------------------
+                        else:
+                            logger.info('Change bit {}'.format(int(ord(command[2]))))
+                            set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
+                    #==============================================================
+                    #
+                    #elif (command[0] == "\x0D"):
+                    #==============================================================
+                    #
+                    #elif (command[0] == "\x0E"):
+                    #==============================================================
+                    # read raw ADC input value
+                    #elif (command[0] == "\x0F"):
+                    #==============================================================
+                    # available command
+                    #elif (command[0] == "\x10"):
+                    #==============================================================
+            except:
+                logger.exception('Error in thread 2! (reading from list)')
+
 
     def voltage_adjustment():
         global board_address
         global last_setpoint
         global logger
         while(True):
-            # wait until there is a command in the list
-            while(queue_voltage.empty()):
-                # check if Voltage-SP is equal to Voltage-RB
-                #if((last_setpoint < (read_analog_output(board_address) - 1)) or (last_setpoint > (read_analog_output(board_address) + 1))):
-                #    logger.info('SP different from RB')
-                #    queue_voltage.put(last_setpoint)
-                pass
-            #==============================================================
-            # adjust DAC output value
-            # command[0] = "\x0"
-            voltage_steps(int(queue_voltage.get()))
+            try:
+                while(True):
+                    # wait until there is a command in the list
+                    while(queue_voltage.empty()):
+                        # check if Voltage-SP is equal to Voltage-RB
+                        #if((last_setpoint < (read_analog_output(board_address) - 1)) or (last_setpoint > (read_analog_output(board_address) + 1))):
+                        #    logger.info('SP different from RB')
+                        #    queue_voltage.put(last_setpoint)
+                        pass
+                    #==============================================================
+                    # adjust DAC output value
+                    # command[0] = "\x0"
+                    voltage_steps(int(queue_voltage.get()))
+            except:
+                logger.exception('Error in thread 3! (voltage thread)')
 
     def voltage_steps(value):
         global board_address
