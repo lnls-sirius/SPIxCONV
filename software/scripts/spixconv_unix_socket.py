@@ -407,10 +407,29 @@ def reset(board, polatization):
     elif (polatization == 0):
         set_portB_digital_output_bit(board, 3, 0)
     #caput("TB-04:PM-InjS:Reset-Cmd", 0)
+
 #==============================================================================
 #    Get steps config with hostname
 #==============================================================================
-def get_steps_var(hostname):
+def get_ip_hostname():
+    # get hostname
+    hostname = socket.gethostname()
+    #----------------------------
+    # get IP
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        ip = s.getsockname()[0]
+    except Exception:
+        ip = '127.0.0.1'
+    finally:
+        s.close()
+    return hostname, ip
+#==============================================================================
+#    Get steps config with hostname
+#==============================================================================
+def get_steps_var(ip):
     #return voltage_factor, step_trigger, step_delay
     '''
     return:
@@ -420,38 +439,53 @@ def get_steps_var(hostname):
     '''
     global logger
     # racks room 01
-    if(hostname == 'BOO-INJ-SEP'):
+    if(ip == '10.128.170.107'):
+        logger.info('Host IP found: 10.128.170.107')
         logger.info('Hostname found: BOO-INJ-SEP')
         return 100, 200, 2
-    if(hostname == 'BOO-INJ-KICKER'):
+    if(ip == '10.128.170.108'):
+        logger.info('Host IP found: 10.128.170.108')
         logger.info('Hostname found: BOO-INJ-KICKER')
         return 1000, 500, 2
-    if(hostname == 'SR-INJ-THICK-SEP-1'):
+    if(ip == '10.128.170.109'):
+        logger.info('Host IP found: 10.128.170.109')
         logger.info('Hostname found: SR-INJ-THICK-SEP-1')
         return 100, 200, 2
-    if(hostname == 'SR-INJ-THICK-SEP-2'):
+    if(ip == '10.128.170.110'):
+        logger.info('Host IP found: 10.128.170.110')
         logger.info('Hostname found: SR-INJ-THICK-SEP-2')
         return 100, 200, 2
-    if(hostname == 'S-R-INJ-THIN-SEP'):
+    if(ip == '10.128.170.111'):
+        logger.info('Host IP found: 10.128.170.111')
         logger.info('Hostname found: S-R-INJ-THIN-SEP')
         return 100, 200, 2
-    if(hostname == 'PING-H'):
+    if(ip == '10.128.170.112'):
+        logger.info('Host IP found: 10.128.170.112')
         logger.info('Hostname found: PING-H')
         return 3000, 2000, 2
-    if(hostname == 'NLK-ON-AXIS-1'):
+    if(ip == '10.128.170.113'):
+        logger.info('Host IP found: 10.128.170.113')
         logger.info('Hostname found: NLK-ON-AXIS-1')
         return 1500, 2000, 2
+    if(ip == '10.128.170.116'):
+        logger.info('Host IP found: 10.128.170.116')
+        logger.info('Hostname found: NLK-ON-AXIS-2')
+        return 1500, 2000, 2
     # racks room 20
-    if(hostname == 'BOO-EXT-KICKER'):
+    if(ip == '10.128.180.107'):
+        logger.info('Host IP found: 10.128.180.107')
         logger.info('Hostname found: BOO-EXT-KICKER')
         return 1000, 1000, 2
-    if(hostname == 'BOO-EXT-THIN-SEP'):
+    if(ip == '10.128.180.108'):
+        logger.info('Host IP found: 10.128.180.108')
         logger.info('Hostname found: BOO-EXT-THIN-SEP')
         return 100, 200, 2
-    if(hostname == 'BOO-EXT-THICK-SEP'):
+    if(ip == '10.128.180.109'):
+        logger.info('Host IP found: 10.128.180.109')
         logger.info('Hostname found: BOO-EXT-THICK-SEP')
         return 100, 200, 2
-    if(hostname == 'PING-V'):
+    if(ip == '10.128.180.110'):
+        logger.info('Host IP found: 10.128.180.110')
         logger.info('Hostname found: PING-V')
         return 3000, 2000, 2
     # spare
@@ -533,8 +567,8 @@ if __name__ == '__main__':
             last_setpoint = read_analog_output(board_address)
             #----------------------------
             # get hostname to initialize steps variable
-            hostname = socket.gethostname()
-            voltage_factor, step_trigger, step_delay = get_steps_var(hostname)
+            hostname, ip = get_ip_hostname()
+            voltage_factor, step_trigger, step_delay = get_steps_var(ip)
 
             while True:
                 connection, client_address = sock.accept()
