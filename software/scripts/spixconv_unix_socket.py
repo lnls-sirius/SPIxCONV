@@ -108,12 +108,14 @@ def config(board):
     #   GND            GND        GND
 
     global ADC_array
-    ADC_array = 10 * [0]
-    dac.on(board)
-    adc.on(board)
-    time.sleep(1)
-    dac.config(board)
-    gpio.config(board)
+    global lock
+    with lock:
+        ADC_array = 10 * [0]
+        dac.on(board)
+        adc.on(board)
+        time.sleep(1)
+        dac.config(board)
+        gpio.config(board)
 #==============================================================================
 #    Write a value in analog output
 #==============================================================================
@@ -130,11 +132,13 @@ def set_analog_output(board, code):
         this function writes an analog output (from -10V to 10V, but only used
         monopolar range, i.e., 0 to +10V, mapped in 0 to FULL_SCALE voltage).
     '''
+    global lock
     #global MIN_SCALE, MAX_SCALE, FULL_SCALE
     #value = int(round(((voltage - MIN_SCALE)/FULL_SCALE)*131071 + 131072))
     code = int(code)
-    selection.dac(board)
-    dac.write(code)
+    with lock:
+        selection.dac(board)
+        dac.write(code)
     #print code
 #==============================================================================
 #    Read the value set in analog output
@@ -149,8 +153,11 @@ def read_analog_output(board):
     description:
         this function reads the code set in the analog output (from 0 to 262143)
     '''
-    selection.dac(board)
-    return dac.read()
+    global lock
+    with lock:
+        selection.dac(board)
+        code = dac.read()
+    return code
 #==============================================================================
 #    Read maximum of 10 last analog measures
 #==============================================================================
@@ -165,8 +172,10 @@ def read_analog_input(board):
         this function reads an analog input (from -10V to 10V, but only used
         monopolar range, i.e., 0 to +10V, mapped in 0 to FULL_SCALE voltage).
     '''
-    selection.adc(board)
-    code = adc.read()
+    global lock
+    with lock:
+        selection.adc(board)
+        code = adc.read()
     # remove the oldest measure of the array
     ADC_array.pop(0)
     # append new value to the array
@@ -191,17 +200,20 @@ def read_analog_input_raw(board):
         this function reads an analog input (from -10V to 10V, but only used
         monopolar range, i.e., 0 to +10V, mapped in 0 to FULL_SCALE voltage).
     '''
+    global lock
     #global MIN_SCALE, MAX_SCALE, FULL_SCALE
-    selection.adc(board)
+    with lock:
+        selection.adc(board)
+        code = adc.read()
     #volts = adc.meanVolts(1000)
     #volts = adc.readVolts()
-    code = adc.read()
     #volts = (volts / 10) * (FULL_SCALE - MIN_SCALE)
     #return round(volts,6)
     return code
 #==============================================================================
 #    Configure digital pins as input or output
 #==============================================================================
+def set_direction_bit(board, port, bit, value):
     '''
     input parameters:
         - board: board address
@@ -215,35 +227,36 @@ def read_analog_input_raw(board):
     description:
         this function defines the direction of a bit.
     '''
-def set_direction_bit(board, port, bit, value):
-    # select the correspondent device
-    if((port == "A") or (port == "B")):
-        selection.gpioAB(board)
-    else:
-        selection.gpioCD(board)
-    #-----------------------------------
-    # read current configuration
-    if((port == "A") or (port == "C")):
-        direction = int(gpio.OCR1_read())
-    else:
-        direction = int(gpio.OCR2_read())
-    print "direction BEFORE = " + str(direction)
-    #-----------------------------------
-    # if bit will be set as INPUT ("1" state), performs an "or" with previous byte
-    if (value):
-        direction = (direction | (1 << bit))
-    # if bit will be set as OUTPUT ("0" state), performs an "and" with previous byte
-    else:
-        # mask is an XOR of 0xFF and bit position
-        mask = 0xFF ^ (1 << bit)
-        direction = (direction & mask)
-    #-----------------------------------
-    # rewrite previous byte with bit updated
-    if((port == "A") or (port == "C")):
-        gpio.OCR1_write(direction)
-    else:
-        gpio.OCR2_write(direction)
-    print "direction AFTER = " + str(direction) + "\n=========================="
+    global lock
+    with lock:
+        # select the correspondent device
+        if((port == "A") or (port == "B")):
+            selection.gpioAB(board)
+        else:
+            selection.gpioCD(board)
+        #-----------------------------------
+        # read current configuration
+        if((port == "A") or (port == "C")):
+            direction = int(gpio.OCR1_read())
+        else:
+            direction = int(gpio.OCR2_read())
+        #print "direction BEFORE = " + str(direction)
+        #-----------------------------------
+        # if bit will be set as INPUT ("1" state), performs an "or" with previous byte
+        if (value):
+            direction = (direction | (1 << bit))
+        # if bit will be set as OUTPUT ("0" state), performs an "and" with previous byte
+        else:
+            # mask is an XOR of 0xFF and bit position
+            mask = 0xFF ^ (1 << bit)
+            direction = (direction & mask)
+        #-----------------------------------
+        # rewrite previous byte with bit updated
+        if((port == "A") or (port == "C")):
+            gpio.OCR1_write(direction)
+        else:
+            gpio.OCR2_write(direction)
+        #print "direction AFTER = " + str(direction) + "\n=========================="
 
 #==============================================================================
 #    Write a value in digital output port (Port B)
@@ -260,14 +273,16 @@ def set_digital_output_byte(board, value):
     description:
         this function writes a full byte in digital port B.
     '''
+    global lock
     #-----------------------------------
     # update digital output stored value
     global digital_output
     digital_output = value
-    flash.sector_write(board, 0x68, [value])
-    #-----------------------------------
-    selection.gpioAB(board)
-    gpio.OCR2_write(value)
+    with lock:
+        flash.sector_write(board, 0x68, [value])
+        #-----------------------------------
+        selection.gpioAB(board)
+        gpio.OCR2_write(value)
 #-------------------------------------------------------
 # change just one bit at time
 def set_portB_digital_output_bit(board, bit, value):
@@ -282,6 +297,7 @@ def set_portB_digital_output_bit(board, bit, value):
     description:
         this function modifies a single bit in digital port B.
     '''
+    global lock
     #-----------------------------------
     # previous state stored in lower part of block 5 (0x050000)
     #  current state stored in upper part of block 5 (0x058000)
@@ -307,8 +323,9 @@ def set_portB_digital_output_bit(board, bit, value):
     # update digital output stored value in previous state (0x050000)
     #flash.sector_write(board, 0x050000, [digital_output, 0xFF])
     #-----------------------------------
-    selection.gpioAB(board)
-    gpio.OCR2_write(digital_output)
+    with lock:
+        selection.gpioAB(board)
+        gpio.OCR2_write(digital_output)
 #==============================================================================
 #    Read a value in digital input port (Port A)
 #==============================================================================
@@ -324,8 +341,11 @@ def read_digital_input_byte(board):
     description:
         this function reads a full byte in digital port A.
     '''
-    selection.gpioAB(board)
-    return gpio.GSR1()
+    global lock
+    with lock:
+        selection.gpioAB(board)
+        config_byte = gpio.GSR1()
+    return config_byte
 #-------------------------------------------------------
 # read just one bit at time
 def read_portA_digital_input_bit(board, bit_pos):
@@ -339,9 +359,11 @@ def read_portA_digital_input_bit(board, bit_pos):
     description:
         this function reads a single bit in digital port A.
     '''
-    selection.gpioAB(board)
-    # digital.read() returns a string represented in hexadecimal (e.g.: '0x54')
-    byte = int(gpio.GSR1())
+    global lock
+    with lock:
+        selection.gpioAB(board)
+        # digital.read() returns a string represented in hexadecimal (e.g.: '0x54')
+        byte = int(gpio.GSR1())
     # performs an "and" between byte and mask
     mask = (1 << bit_pos)
     bit = (byte & mask) >> bit_pos
@@ -359,9 +381,11 @@ def read_portB_digital_input_bit(board, bit_pos):
     description:
         this function reads a single bit in digital port A.
     '''
-    selection.gpioAB(board)
-    # digital.read() returns a string represented in hexadecimal (e.g.: '0x54')
-    byte = int(gpio.GSR2())
+    global lock
+    with lock:
+        selection.gpioAB(board)
+        # digital.read() returns a string represented in hexadecimal (e.g.: '0x54')
+        byte = int(gpio.GSR2())
     # performs an "and" between byte and mask
     mask = (1 << bit_pos)
     bit = (byte & mask) >> bit_pos
@@ -380,8 +404,10 @@ def read_portB_digital_output_bit(board, bit_pos):
     description:
         this function reads the setpoint of a single bit in digital port B.
     '''
-    selection.gpioAB(board)
-    byte = int(gpio.OCR2_read())
+    global lock
+    with lock:
+        selection.gpioAB(board)
+        byte = int(gpio.OCR2_read())
     # performs an "and" between byte and mask
     mask = (1 << bit_pos)
     bit = (byte & mask) >> bit_pos
@@ -883,11 +909,14 @@ if __name__ == '__main__':
         set_analog_output(board_address, value)
         #-----------------------------------------
         return
-                
+    
+    # instantiate object Lock            
+    global lock
+    lock = threading.Lock()
     # define threads            
-    thr_1 = Thread(target=write_to_list, args=[])
-    thr_2 = Thread(target=read_from_list, args=[])
-    thr_3 = Thread(target=voltage_adjustment, args=[])
+    thr_1 = Thread(target=write_to_list, args=(lock,))
+    thr_2 = Thread(target=read_from_list, args=(lock,))
+    thr_3 = Thread(target=voltage_adjustment, args=(lock,))
     # start threads
     thr_1.start()
     time.sleep(3)
