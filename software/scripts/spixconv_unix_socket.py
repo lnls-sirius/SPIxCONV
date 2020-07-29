@@ -586,10 +586,8 @@ if __name__ == '__main__':
                         msg = connection.recv(512)
                         if msg:
                             commands = msg.splitlines()
-                            print(commands)
                             for data in commands:
                                 if data:
-                                    print(data)
                                     #==============================================================
                                     # set GPIO pin direction
                                     if (data[0] == "\x01"):
@@ -625,14 +623,14 @@ if __name__ == '__main__':
                                     elif (data[0] == "\x07"):
                                         #byte = read_digital_input_byte(ord(command[1]))
                                         byte = read_digital_input_byte(board_address)
-                                        connection.sendall(str(byte))
+                                        connection.sendall(str(byte) + "\r\n")
                                         #print byte
                                     #==============================================================
                                     # read a bit in Port B GPIO
                                     elif (data[0] == "\x08"):
                                         #bit = read_digital_input_bit(ord(command[1]), ord(command[2]))
                                         bit = read_digital_input_bit(board_address, ord(data[2]))
-                                        connection.sendall(str(bit))
+                                        connection.sendall(str(bit) + "\r\n")
                                         #print bit
                                     #==============================================================
                                     # generate a pulse in RESET bit (Port B, bit 3)
@@ -647,7 +645,7 @@ if __name__ == '__main__':
                                     elif (data[0] == "\x0B"):
                                         #bit = read_portB_digital_output_bit(ord(command[1]), ord(command[2]))
                                         bit = read_portB_digital_output_bit(board_address, ord(data[2]))
-                                        connection.sendall(str(bit))
+                                        connection.sendall(str(bit) + "\r\n")
                                     #==============================================================
                                     #
                                     elif (data[0] == "\x0C"):
@@ -657,13 +655,13 @@ if __name__ == '__main__':
                                     elif (data[0] == "\x0D"):
                                         #bit = read_portA_digital_input_bit(ord(command[1]), ord(command[2]))
                                         bit = read_portA_digital_input_bit(board_address, ord(data[2]))
-                                        connection.sendall(str(bit))
+                                        connection.sendall(str(bit) + "\r\n")
                                     #==============================================================
                                     #
                                     elif (data[0] == "\x0E"):
                                         #bit = read_portB_digital_input_bit(ord(command[1]), ord(command[2]))
                                         bit = read_portB_digital_input_bit(board_address, ord(data[2]))
-                                        connection.sendall(str(bit))
+                                        connection.sendall(str(bit) + "\r\n")
                                     #==============================================================
                                     # read raw ADC input value
                                     elif (data[0] == "\x0F"):
