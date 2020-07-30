@@ -822,7 +822,20 @@ if __name__ == '__main__':
                             queue_voltage.put(last_setpoint)
                         #-----------------------------------------
                         else:
-                            logger.info('Change bit {}'.format(int(ord(command[2]))))
+                            cmd = int(ord(command[2]))
+                            bit = int(ord(command[3]))
+                            if (cmd == 1):
+                                if (bit == 0):
+                                    logger.info('PS off')
+                                elif (bit == 1):
+                                    logger.info('PS on')
+                            elif (cmd == 2):
+                                if (bit == 0):
+                                    logger.info('Pulse disabled')
+                                elif (bit == 1):
+                                    logger.info('Pulse enabled')
+                            else:
+                                logger.info('Change bit {}'.format(int(ord(command[2]))))
                             set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
                     #==============================================================
                     #
@@ -900,7 +913,7 @@ if __name__ == '__main__':
                 while(time.time() - start < step_delay):
                    if not queue_voltage.empty():
                         return
-                    pass
+                   # pass
             # adjust last step
             set_analog_output(board_address, value)
             logger.info(' - Voltage step %d: {:.2f}'.format((value-131072.0)/131072*voltage_factor*10) %(i+2) + ' V')
