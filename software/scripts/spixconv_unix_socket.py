@@ -807,13 +807,15 @@ if __name__ == '__main__':
                         #   ... if PS is turned off
                         #if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_input_bit(board_address, 7) == 0) ):
                         if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_output_bit(board_address, 1) == 0) ):
-                            logger.info('Turning PS on')
+                            #logger.info('Turning PS on')
+                            logger.info('Set voltage to zero to turn PS on')
                             # force voltage setpoint to be zero
                             queue_voltage.put(131072)
                             # wait until voltage setpoint is zero
                             while (read_analog_output(board_address) != 131072):
                                 pass
                             # power the PS on 
+                            logger.info('Turning PS on...')
                             set_portB_digital_output_bit(board_address, int(ord(command[2])), 1)
                             time.sleep(0.5)
                             #-----------------------------
@@ -824,13 +826,15 @@ if __name__ == '__main__':
                             # wait until PwrState-Sel (bit 1) is 0
                             while (read_portB_digital_output_bit(board_address, 1) != 1):
                                 pass
+                            logger.info('PS is on')
                             #-----------------------------
                             # restore last voltage setpoint
+                            logger.info('Restoring voltage setpoint...')
                             queue_voltage.put(last_setpoint)
                         #-----------------------------------------
                         else:
-                            cmd = int(ord(command[2]))
-                            bit = int(ord(command[3]))
+                            cmd = ord(command[2])
+                            bit = int(command[3])
                             if (cmd == 1):
                                 if (bit == 0):
                                     logger.info('PS off')
@@ -842,7 +846,7 @@ if __name__ == '__main__':
                                 elif (bit == 1):
                                     logger.info('Pulse enabled')
                             else:
-                                logger.info('Change bit {}'.format(int(ord(command[2]))))
+                                logger.info('Change bit {}'.format(bit))
                             set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
                     #==============================================================
                     #
