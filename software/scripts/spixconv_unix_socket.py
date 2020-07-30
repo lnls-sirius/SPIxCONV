@@ -617,11 +617,13 @@ if __name__ == '__main__':
                                     #==============================================================
                                     # set GPIO pin direction
                                     if (data[0] == "\x01"):
+                                        logger.info('Command received: set GPIO direction')
                                         queue_general.put([data[0], "dummy_address", data[2], data[3], data[4]])
                                     #==============================================================
                                     # adjust DAC output value
                                     elif (data[0] == "\x02"):
                                         # update last setpoint
+                                        logger.info('Command received: voltage setpoint')
                                         last_setpoint = int(data[2:])
                                         #-----------------------------------------
                                         queue_voltage.put(data[2:])
@@ -639,6 +641,7 @@ if __name__ == '__main__':
                                     #==============================================================
                                     # write a whole byte in digital Port B
                                     elif (data[0] == "\x05"):
+                                        logger.info('Command received: write byte (port B)')
                                         queue_general.put([data[0], "dummy_address", data[2]])
                                     #==============================================================
                                     # write a bit in Port B GPIO
@@ -647,6 +650,7 @@ if __name__ == '__main__':
                                     #==============================================================
                                     # read the whole byte in digital Port A
                                     elif (data[0] == "\x07"):
+                                        logger.info('Command received: write byte (port A)')
                                         #byte = read_digital_input_byte(ord(command[1]))
                                         byte = read_digital_input_byte(board_address)
                                         connection.sendall(str(byte) + "\r\n")
@@ -661,6 +665,7 @@ if __name__ == '__main__':
                                     #==============================================================
                                     # generate a pulse in RESET bit (Port B, bit 3)
                                     elif (data[0] == "\x09"):
+                                        logger.info('Command received: Reset')
                                         queue_general.put([data[0], "dummy_address", data[2]])
                                     #==============================================================
                                     # read interlock labels
@@ -673,17 +678,18 @@ if __name__ == '__main__':
                                         bit = read_portB_digital_output_bit(board_address, ord(data[2]))
                                         connection.sendall(str(bit) + "\r\n")
                                     #==============================================================
-                                    #
+                                    # write bit in port B
                                     elif (data[0] == "\x0C"):
+                                        logger.info('Command received: write bit (port B)')
                                         queue_general.put([data[0], "dummy_address", data[2], data[3]])
                                     #==============================================================
-                                    #
+                                    # read input bit of port A
                                     elif (data[0] == "\x0D"):
                                         #bit = read_portA_digital_input_bit(ord(command[1]), ord(command[2]))
                                         bit = read_portA_digital_input_bit(board_address, ord(data[2]))
                                         connection.sendall(str(bit) + "\r\n")
                                     #==============================================================
-                                    #
+                                    # read input bit of port B
                                     elif (data[0] == "\x0E"):
                                         #bit = read_portB_digital_input_bit(ord(command[1]), ord(command[2]))
                                         bit = read_portB_digital_input_bit(board_address, ord(data[2]))
@@ -698,6 +704,7 @@ if __name__ == '__main__':
                                     #==============================================================
                                     # DAC setpoint parameters initialization 
                                     elif (data[0] == "\x10"):
+                                        logger.info('Command received: init parameters at IOC reboot')
                                         init_values = data[2:].split(',')
                                         #------------------------------
                                         # separate values received
