@@ -893,8 +893,8 @@ if __name__ == '__main__':
             #logger.info('Voltage adjustment exceeds limiar: gradual adjust required!')
             setpoints = [int(current+(i*diff)/steps) for i in range(1,steps)]
             # loop for "steps-1" gradual setpoints
-            for voltage in setpoints:
-                logger.info(' - Voltage gradual setpoint: {:.2f}'.format((voltage-131072.0)/131072*voltage_factor*10) + ' V')
+            for i, voltage in enumerate(setpoints):
+                logger.info(' - Voltage step %d: {:.2f}'.format((voltage-131072.0)/131072*voltage_factor*10) %(i+1) + ' V')
                 set_analog_output(board_address, voltage)
                 start = time.time()
                 while(time.time() - start < step_delay):
@@ -903,13 +903,10 @@ if __name__ == '__main__':
                     pass
             # adjust last step
             set_analog_output(board_address, value)
-            logger.info('  gradual adjust: {:.2}'.format((voltage-131072.0)/131072*voltage_factor*10))
-        #-----------------------------------------
-        # check if SP is equal to RB
-        set_analog_output(board_address, value)
+            logger.info(' - Voltage step %d: {:.2f}'.format((value-131072.0)/131072*voltage_factor*10) %(i+2) + ' V')
         #-----------------------------------------
         return
-    
+
     # instantiate object Lock            
     global lock
     lock = Lock()
