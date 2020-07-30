@@ -10,7 +10,7 @@ import time
 import logging
 import argparse
 import time
-from threading import Thread
+from threading import Thread, Lock
 from Queue import Queue
 
 #from epics import caput, caget
@@ -884,17 +884,17 @@ if __name__ == '__main__':
         # if difference is lower than the amount to activate the steps trigger
         # then implement new setpoint directly
         if diff < trigger:
-            logger.info('Voltage adjustment below limiar: no gradual adjust')
+            logger.info('Voltage setpoint: {:.2f}'.format((value-131072.0)/131072*voltage_factor*10) + ' V')
             set_analog_output(board_address, value)
         #-----------------------------------------
         # if difference is higher than the amount to activate the steps trigger
         # then calculate calculate graduals setpoints
         else:
-            logger.info('Voltage adjustment exceeds limiar: gradual adjust required!')
+            #logger.info('Voltage adjustment exceeds limiar: gradual adjust required!')
             setpoints = [int(current+(i*diff)/steps) for i in range(1,steps)]
             # loop for "steps-1" gradual setpoints
             for voltage in setpoints:
-                logger.info('  gradual adjust: {}'.format(voltage))
+                logger.info(' - Voltage gradual setpoint: {:.2f}'.format((voltage-131072.0)/131072*voltage_factor*10) + ' V')
                 set_analog_output(board_address, voltage)
                 start = time.time()
                 while(time.time() - start < step_delay):
@@ -903,7 +903,7 @@ if __name__ == '__main__':
                     pass
             # adjust last step
             set_analog_output(board_address, value)
-            logger.info('  gradual adjust: {}'.format(value))
+            logger.info('  gradual adjust: {:.2}'.format((voltage-131072.0)/131072*voltage_factor*10))
         #-----------------------------------------
         # check if SP is equal to RB
         set_analog_output(board_address, value)
@@ -912,11 +912,11 @@ if __name__ == '__main__':
     
     # instantiate object Lock            
     global lock
-    lock = threading.Lock()
+    lock = Lock()
     # define threads            
-    thr_1 = Thread(target=write_to_list, args=(lock,))
-    thr_2 = Thread(target=read_from_list, args=(lock,))
-    thr_3 = Thread(target=voltage_adjustment, args=(lock,))
+    thr_1 = Thread(target=write_to_list, args=())
+    thr_2 = Thread(target=read_from_list, args=())
+    thr_3 = Thread(target=voltage_adjustment, args=())
     # start threads
     thr_1.start()
     time.sleep(3)
