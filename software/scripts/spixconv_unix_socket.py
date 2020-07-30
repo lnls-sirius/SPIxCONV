@@ -898,8 +898,8 @@ if __name__ == '__main__':
                 set_analog_output(board_address, voltage)
                 start = time.time()
                 while(time.time() - start < step_delay):
-                #   if not queue_voltage.empty():
-                #        return
+                   if not queue_voltage.empty():
+                        return
                     pass
             # adjust last step
             set_analog_output(board_address, value)
