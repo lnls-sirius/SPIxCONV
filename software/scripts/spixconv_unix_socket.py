@@ -611,7 +611,7 @@ if __name__ == '__main__':
                     while True:
                         msg = connection.recv(512)
                         if msg:
-                            commands = msg.splitlines()
+                            commands = msg.split('\r\n')
                             for data in commands:
                                 if data:
                                     #==============================================================
