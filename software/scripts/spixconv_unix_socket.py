@@ -669,8 +669,8 @@ if __name__ == '__main__':
                                         queue_general.put([data[0], "dummy_address", data[2]])
                                     #==============================================================
                                     # read interlock labels
-                                    elif (data[0] == "\x0A"):
-                                        pass
+                                    #elif (data[0] == "\x0A"):
+                                    #    pass
                                     #==============================================================
                                     # read a Port B bit setpoint
                                     elif (data[0] == "\x0B"):
@@ -684,10 +684,8 @@ if __name__ == '__main__':
                                         queue_general.put([data[0], "dummy_address", data[2], data[3]])
                                     #==============================================================
                                     # read input bit of port A
-                                    elif (data[0] == "\x0D"):
-                                        #bit = read_portA_digital_input_bit(ord(command[1]), ord(command[2]))
-                                        bit = read_portA_digital_input_bit(board_address, ord(data[2]))
-                                        connection.sendall(str(bit) + "\r\n")
+                                    #elif (data[0] == "\x0D"):
+                                    #    pass
                                     #==============================================================
                                     # read input bit of port B
                                     elif (data[0] == "\x0E"):
@@ -725,8 +723,14 @@ if __name__ == '__main__':
                                         value = int(percentage * voltage_factor * 131072 + 131072)
                                         connection.sendall(str(value) + "\r\n")
                                     #==============================================================
+                                    # read input bit of port A
+                                    elif (data[0] == "\x11"):
+                                        #bit = read_portA_digital_input_bit(ord(command[1]), ord(command[2]))
+                                        bit = read_portA_digital_input_bit(board_address, ord(data[2]))
+                                        connection.sendall(str(bit) + "\r\n")
+                                    #==============================================================
                                     # available command
-                                    #elif (data[0] == "\x11"):
+                                    #elif (data[0] == "\x12"):
                                     #pass
                                     #==============================================================
 
