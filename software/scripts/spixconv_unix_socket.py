@@ -455,7 +455,7 @@ def get_ip_hostname():
 #==============================================================================
 #    Get steps config with hostname
 #==============================================================================
-def get_steps_var(ip):
+def get_steps_var(ip, hostname):
     #return voltage_factor, step_trigger, step_delay, nb_steps
     '''
     return:
@@ -596,7 +596,7 @@ if __name__ == '__main__':
             hostname, ip = get_ip_hostname()
             #----------------------------
             # initialize steps variable
-            voltage_factor, step_trigger, step_delay, steps = get_steps_var(ip)
+            voltage_factor, step_trigger, step_delay, steps = get_steps_var(ip, hostname)
             trigger = step_trigger/(10.0*voltage_factor) * 131072
             #----------------------------
             # LF (line feed) = 0x0A
