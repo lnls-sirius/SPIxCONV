@@ -515,10 +515,10 @@ def get_steps_var(ip, hostname):
         logger.info('Hostname found: PING-V')
         return 3000, 2000, 2, 4
     # spare
-    if((hostname == 'SPARE-SEP-1') or (hostname == 'SPARE-SEP-2') or (hostname == 'SPARE-SEP-3')):
+    if((hostname == 'SPARE-SEP-1') or (hostname == 'SPARE-SEP-2') or (hostname == 'SPARE-SEP-3') or (hostname == 'SPARE-SEP')):
         logger.info('Hostname found: SPARE-SEP')
         return 100, 200, 2, 4
-    if((hostname == 'SPARE-KICKER-1') or (hostname == 'SPARE-KICKER-2') or (hostname == 'SPARE-KICKER-3')):
+    if((hostname == 'SPARE-KICKER-1') or (hostname == 'SPARE-KICKER-2') or (hostname == 'SPARE-KICKER-3') or (hostname == 'SPARE-KICKER')):
         logger.info('Hostname found: SPARE-KICKER')
         return 1000, 2000, 2, 4
     if((hostname == 'NLK-ON-AXIS-2') or (hostname == 'NLK-ON-AXIS-3')):
