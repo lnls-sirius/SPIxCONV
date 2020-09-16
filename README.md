@@ -7,50 +7,69 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 <!--==============================-->
 
 <!--====================-->
-### Circuit
+### Main Board
+<!--====================-->
+
+<!--====================-->
+#### Circuit
 <!--====================-->
 
 <!--==========-->
-#### Board
+##### Board
 <!--==========-->
 ![Board circuit](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/circuit_0_board.png)
 
 <!--==========-->
-#### CPLD
+##### CPLD
 <!--==========-->
 ![CPLD circuit](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/circuit_1_cpld.png)
 
 <!--==========-->
-#### DAC
+##### DAC
 <!--==========-->
 ![DAC circuit](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/circuit_2_dac.png)
 
 <!--==========-->
-#### ADC
+##### ADC
 <!--==========-->
 ![ADC circuit](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/circuit_3_adc.png)
 
 <!--==========-->
-#### Digital I/O
+##### Digital I/O
 <!--==========-->
 ![Digital circuit](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/circuit_4_digital.png)
 
 <!--====================-->
-### PCB
+#### PCB
 <!--====================-->
 
 <!--==========-->
-#### Top layer
+##### Top layer
 <!--==========-->
 ![PCB top layer](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/pcb_top_layer.png)
 
 <!--==========-->
-#### Bottom layer layer
+##### Bottom layer layer
 <!--==========-->
 ![PCB bottom layer](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/pcb_bot_layer.png)
 
+<!--====================-->
+#### Connectors
+<!--====================-->
+
+<!--==========-->
+##### SPIxxCON
+<!--==========-->
+![SPIxxCON](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/conn_SPIxxCON.png)
+
+<!--==========-->
+##### Board Connection Link
+<!--==========-->
+![Board Connection Link](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/conn_board_link.png)
+
 <!--==============================-->
-## Software
+### Software
 <!--==============================-->
 
 [https://lnls-sirius.github.io/SPIxCONV/](https://lnls-sirius.github.io/SPIxCONV/)
+
