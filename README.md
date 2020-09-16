@@ -60,11 +60,14 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 <!--==========-->
 ##### SPIxxCON
 <!--==========-->
-![SPIxxCON](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/conn_SPIxxCON.png)
+![SPIxxCON connector](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/main_board_conn_SPIxxCON.jpg)
+![SPIxxCON pinout](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/conn_SPIxxCON.png)
 
 <!--==========-->
 ##### Board Connection Link
 <!--==========-->
+![Main Board Connection Link](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/main_board_conn_link.jpg)
+![GPIO Board Connection Link](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/gpio_front_conn_link.jpg)
 ![Board Connection Link](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/conn_board_link.png)
 
 <!--==============================-->
@@ -89,18 +92,17 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 <!--==========-->
 ##### Interface A/B
 <!--==========-->
-![SPIxxCON](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/conn_interface_AB.png)
+![GPIO Interface A/B](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/gpio_front_conn_AB.jpg)
+![GPIO Interface A/B pinout](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/conn_interface_AB.png)
 
 <!--==========-->
 ##### Interface C/D
 <!--==========-->
-![SPIxxCON](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/conn_interface_CD.png)
-
-
+![GPIO Interface C/D](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/gpio_front_conn_CD.jpg)
+![GPIO Interface C/D pinout](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/conn_interface_CD.png)
 
 <!--========================================-->
 ### Software
 <!--========================================-->
 
 [https://lnls-sirius.github.io/SPIxCONV/](https://lnls-sirius.github.io/SPIxCONV/)
-
