@@ -104,6 +104,14 @@ The IOC was built using [asynDriver](https://epics.anl.gov/modules/soft/asyn/) a
 To configure the parameters of the IOC a [spreadsheet](https://cnpemcamp.sharepoint.com/:x:/s/controle/EUG0_4JUaz9Au7kZNcMZwZQB1x5OJBN_1QMdbbCGJ1Driw?e=Po8LNr) is used (available for CNPEM accounts only). PV's prefix, Power Supply voltage, host IP to connect to, scan rate and other settings can be adjusted. 
 
 <!--====================-->
+#### OPI (Operator Interface)
+<!--====================-->
+
+Previously, [Control System Studio](http://controlsystemstudio.org/) was used to develop the OPI. The windows can still be found under the [CSS](https://github.com/lnls-sirius/SPIxCONV/tree/master/software/CSS) directory. Lately, we have been using [PyDM (Python Display Manager)](https://slaclab.github.io/pydm/) to develop the windows. As stated before, the files related to the PyDM OPI is located in [pydm-opi](https://github.com/lnls-sirius/pydm-opi) repository.
+
+![OPI](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/OPI.jpg)
+
+<!--====================-->
 #### 
 <!--====================-->
 
