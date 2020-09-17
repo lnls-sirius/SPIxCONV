@@ -18,32 +18,32 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 
   - Board
 <p float="left">
-  <img src="./documentation/figures/hardware/circuit_0_board.png" width="400" /> 
-  <img src="./documentation/figures/hardware/SPIxxCONV.jpg" width="400" />
+  <img align="center" src="./documentation/figures/hardware/circuit_0_board.png" width="400" /> 
+  <img align="center" src="./documentation/figures/hardware/main_board_front.jpg" width="400" />
 </p>
 
   - CPLD
 <p float="left">
-  <img src="./documentation/figures/hardware/circuit_1_cpld.png" width="400" /> 
-  <img src="./documentation/figures/hardware/SPIxxCONV.jpg" width="400" />
+  <img align="center" src="./documentation/figures/hardware/circuit_1_cpld.png" width="400" /> 
+  <img align="center" src="./documentation/figures/hardware/main_board_front.jpg" width="400" />
 </p>
 
   - DAC
 <p float="left">
-  <img src="./documentation/figures/hardware/circuit_2_dac.png" width="400" /> 
-  <img src="./documentation/figures/hardware/SPIxxCONV.jpg" width="400" />
+  <img align="center" src="./documentation/figures/hardware/circuit_2_dac.png" width="400" /> 
+  <img align="center" src="./documentation/figures/hardware/main_board_front.jpg" width="400" />
 </p>
 
   - ADC
 <p float="left">
-  <img src="./documentation/figures/hardware/circuit_3_adc.png" width="400" /> 
-  <img src="./documentation/figures/hardware/SPIxxCONV.jpg" width="400" />
+  <img align="center" src="./documentation/figures/hardware/circuit_3_adc.png" width="400" /> 
+  <img align="center" src="./documentation/figures/hardware/main_board_front.jpg" width="400" />
 </p>
 
   - Digital I/O
 <p float="left">
-  <img src="./documentation/figures/hardware/circuit_4_digital.png" width="400" /> 
-  <img src="./documentation/figures/hardware/SPIxxCONV.jpg" width="400" />
+  <img align="center" src="./documentation/figures/hardware/circuit_4_digital.png" width="400" /> 
+  <img align="center" src="./documentation/figures/hardware/main_board_front.jpg" width="400" />
 </p>
 
 <!--====================-->
@@ -62,15 +62,18 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 
   - SPIxxCON
 <p float="left">
-  <img src="./documentation/figures/hardware/main_board_conn_SPIxxCON.jpg" width="400" /> 
-  <img src="./documentation/figures/hardware/conn_SPIxxCON.png" width="400" />
+  <img align="center" src="./documentation/figures/hardware/main_board_conn_SPIxxCON.jpg" width="400" /> 
+  <img align="center" src="./documentation/figures/hardware/conn_SPIxxCON.png" width="400" />
 </p>
+
+  - CPLD
+![CPLD connector](main_board_conn_CPLD.jpg)
 
   - Board Connection Link
 <p float="left">
-  <img src="./documentation/figures/hardware/main_board_conn_link.jpg" width="250" /> 
-  <img src="./documentation/figures/hardware/gpio_front_conn_link.jpg" width="250" />
-  <img src="./documentation/figures/hardware/conn_board_link.png" width="250" />
+  <img align="center" src="./documentation/figures/hardware/main_board_conn_link.jpg" width="250" /> 
+  <img align="center" src="./documentation/figures/hardware/gpio_front_conn_link.jpg" width="250" />
+  <img align="center" src="./documentation/figures/hardware/conn_board_link.png" width="250" />
 </p>
 
 <!--==============================-->
@@ -97,14 +100,14 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 
   - Interface A/B
 <p float="left">
-  <img src="./documentation/figures/hardware/gpio_front_conn_AB.jpg" width="400" /> 
-  <img src="./documentation/figures/hardware/conn_interface_AB.png" width="400" />
+  <img align="center" src="./documentation/figures/hardware/gpio_front_conn_AB.jpg" width="400" /> 
+  <img align="center" src="./documentation/figures/hardware/conn_interface_AB.png" width="400" />
 </p>
 
   - Interface C/D
 <p float="left">
-  <img src="./documentation/figures/hardware/gpio_front_conn_CD.jpg" width="400" /> 
-  <img src="./documentation/figures/hardware/conn_interface_CD.png" width="400" />
+  <img align="center" src="./documentation/figures/hardware/gpio_front_conn_CD.jpg" width="400" /> 
+  <img align="center" src="./documentation/figures/hardware/conn_interface_CD.png" width="400" />
 </p>
 
 <!--========================================-->
@@ -137,7 +140,6 @@ Previously, [Control System Studio](http://controlsystemstudio.org/) was used to
 <!--====================-->
 #### CPLD
 <!--====================-->
-
 
 
 <!--====================-->
