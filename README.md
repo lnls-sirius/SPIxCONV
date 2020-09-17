@@ -10,7 +10,7 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 ### Main Board
 <!--==============================-->
 
-![Main Board](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/figures/hardware/SPIxCONV.png)
+![Main Board](./documentation/figures/hardware/SPIxCONV.jpg)
 
 <!--====================-->
 #### Circuit
