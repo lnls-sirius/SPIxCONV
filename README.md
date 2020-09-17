@@ -17,19 +17,34 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 <!--====================-->
 
   - Board
-![Board circuit](./documentation/figures/hardware/circuit_0_board.png)
+<p float="left">
+  <img src="./documentation/figures/hardware/circuit_0_board.png" width="400" /> 
+  <img src="./documentation/figures/hardware/SPIxxCON.jpg" width="400" />
+</p>
 
   - CPLD
-![CPLD circuit](./documentation/figures/hardware/circuit_1_cpld.png)
+<p float="left">
+  <img src="./documentation/figures/hardware/circuit_1_cpld.png" width="400" /> 
+  <img src="./documentation/figures/hardware/SPIxxCON.jpg" width="400" />
+</p>
 
   - DAC
-![DAC circuit](./documentation/figures/hardware/circuit_2_dac.png)
+<p float="left">
+  <img src="./documentation/figures/hardware/circuit_2_dac.png" width="400" /> 
+  <img src="./documentation/figures/hardware/SPIxxCON.jpg" width="400" />
+</p>
 
   - ADC
-![ADC circuit](./documentation/figures/hardware/circuit_3_adc.png)
+<p float="left">
+  <img src="./documentation/figures/hardware/circuit_3_adc.png" width="400" /> 
+  <img src="./documentation/figures/hardware/SPIxxCON.jpg" width="400" />
+</p>
 
   - Digital I/O
-![Digital circuit](./documentation/figures/hardware/circuit_4_digital.png)
+<p float="left">
+  <img src="./documentation/figures/hardware/circuit_4_digital.png" width="400" /> 
+  <img src="./documentation/figures/hardware/SPIxxCON.jpg" width="400" />
+</p>
 
 <!--====================-->
 #### PCB
@@ -46,13 +61,17 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 <!--====================-->
 
   - SPIxxCON
-![SPIxxCON connector](./documentation/figures/hardware/main_board_conn_SPIxxCON.jpg)
-![SPIxxCON pinout](./documentation/figures/hardware/conn_SPIxxCON.png)
+<p float="left">
+  <img src="./documentation/figures/hardware/main_board_conn_SPIxxCON.jpg" width="400" /> 
+  <img src="./documentation/figures/hardware/conn_SPIxxCON.png" width="400" />
+</p>
 
   - Board Connection Link
-![Main Board Connection Link](./documentation/figures/hardware/main_board_conn_link.jpg)
-![GPIO Board Connection Link](./documentation/figures/hardware/gpio_front_conn_link.jpg)
-![Board Connection Link](./documentation/figures/hardware/conn_board_link.png)
+<p float="left">
+  <img src="./documentation/figures/hardware/main_board_conn_link.jpg" width="250" /> 
+  <img src="./documentation/figures/hardware/gpio_front_conn_link.jpg" width="250" />
+  <img src="./documentation/figures/hardware/conn_board_link.png" width="250" />
+</p>
 
 <!--==============================-->
 ### GPIO Expander Board
@@ -77,12 +96,16 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 <!--====================-->
 
   - Interface A/B
-![GPIO Interface A/B](./documentation/figures/hardware/gpio_front_conn_AB.jpg)
-![GPIO Interface A/B pinout](./documentation/figures/hardware/conn_interface_AB.png)
+<p float="left">
+  <img src="./documentation/figures/hardware/gpio_front_conn_AB.jpg" width="400" /> 
+  <img src="./documentation/figures/hardware/conn_interface_AB.png" width="400" />
+</p>
 
   - Interface C/D
-![GPIO Interface C/D](./documentation/figures/hardware/gpio_front_conn_CD.jpg)
-![GPIO Interface C/D pinout](./documentation/figures/hardware/conn_interface_CD.png)
+<p float="left">
+  <img src="./documentation/figures/hardware/gpio_front_conn_CD.jpg" width="400" /> 
+  <img src="./documentation/figures/hardware/conn_interface_CD.png" width="400" />
+</p>
 
 <!--========================================-->
 ### Software
