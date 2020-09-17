@@ -18,32 +18,32 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 
   - Board
 <p float="left">
-  <img align="center" src="./documentation/figures/hardware/circuit_0_board.png" width="400" /> 
   <img align="center" src="./documentation/figures/hardware/main_board_front.jpg" width="400" />
+  <img align="center" src="./documentation/figures/hardware/circuit_0_board.png" width="400" /> 
 </p>
 
   - CPLD
 <p float="left">
-  <img align="center" src="./documentation/figures/hardware/circuit_1_cpld.png" width="400" /> 
   <img align="center" src="./documentation/figures/hardware/main_board_front.jpg" width="400" />
+  <img align="center" src="./documentation/figures/hardware/circuit_1_cpld.png" width="400" /> 
 </p>
 
   - DAC
 <p float="left">
-  <img align="center" src="./documentation/figures/hardware/circuit_2_dac.png" width="400" /> 
   <img align="center" src="./documentation/figures/hardware/main_board_front.jpg" width="400" />
+  <img align="center" src="./documentation/figures/hardware/circuit_2_dac.png" width="400" /> 
 </p>
 
   - ADC
 <p float="left">
-  <img align="center" src="./documentation/figures/hardware/circuit_3_adc.png" width="400" /> 
   <img align="center" src="./documentation/figures/hardware/main_board_front.jpg" width="400" />
+  <img align="center" src="./documentation/figures/hardware/circuit_3_adc.png" width="400" /> 
 </p>
 
   - Digital I/O
 <p float="left">
-  <img align="center" src="./documentation/figures/hardware/circuit_4_digital.png" width="400" /> 
   <img align="center" src="./documentation/figures/hardware/main_board_front.jpg" width="400" />
+  <img align="center" src="./documentation/figures/hardware/circuit_4_digital.png" width="400" /> 
 </p>
 
 <!--====================-->
@@ -66,13 +66,17 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 </p>
 
   - CPLD
-![CPLD connector](./documentation/figures/hardware/main_board_conn_CPLD.jpg)
+<p float="left">
+  <img align="center" src="./documentation/figures/hardware/main_board_conn_CPLD.jpg" width="400" /> 
+  <img align="center" src="./documentation/figures/hardware/conn_CPLD.png" width="400" />
+</p>
+
 
   - Board Connection Link
 <p float="left">
-  <img align="center" src="./documentation/figures/hardware/main_board_conn_link.jpg" width="250" /> 
+  <img align="center" src="./documentation/figures/hardware/main_board_conn_link.jpg" width="280" /> 
   <img align="center" src="./documentation/figures/hardware/conn_board_link.png" width="250" />
-  <img align="center" src="./documentation/figures/hardware/gpio_front_conn_link.jpg" width="250" />
+  <img align="center" src="./documentation/figures/hardware/gpio_front_conn_link.jpg" width="280" />
 </p>
 
 <!--==============================-->
@@ -110,6 +114,11 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
   <img align="center" src="./documentation/figures/hardware/conn_interface_CD.png" width="400" />
 </p>
 
+<!--====================-->
+#### BOM
+<!--====================-->
+Bill of materials
+
 <!--========================================-->
 ### Software
 <!--========================================-->
@@ -135,7 +144,7 @@ To configure the parameters of the IOC a [spreadsheet](https://cnpemcamp.sharepo
 
 Previously, [Control System Studio](http://controlsystemstudio.org/) was used to develop the OPI. The windows can still be found under the [CSS](https://github.com/lnls-sirius/SPIxCONV/tree/master/software/CSS) directory. Lately, we have been using [PyDM (Python Display Manager)](https://slaclab.github.io/pydm/) to develop the windows. As stated before, the files related to the PyDM OPI is located in [pydm-opi](https://github.com/lnls-sirius/pydm-opi) repository.
 
-![OPI](./documentation/figures/hardware/OPI.jpg)
+![OPI](./documentation/figures/hardware/OPI.png)
 
 <!--====================-->
 #### CPLD
