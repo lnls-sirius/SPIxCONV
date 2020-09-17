@@ -94,5 +94,16 @@ The software files related to the OPI (Operator Interface) is now at [pydm-opi](
 
 Finally, the client-side (Python code) is at this repository under the [scripts](https://github.com/lnls-sirius/SPIxCONV/tree/master/software/scripts) directory.
 
-https://lnls-sirius.github.io/SPIxCONV/](https://lnls-sirius.github.io/SPIxCONV/)
+<!--====================-->
+#### Code
+<!--====================-->
+[https://lnls-sirius.github.io/SPIxCONV/](https://lnls-sirius.github.io/SPIxCONV/)
+
+<!--========================================-->
+### Known Problems
+<!--========================================-->
+
+<!--========================================-->
+### FAQ
+<!--========================================-->
 
