@@ -19,31 +19,31 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
   - Board
 <p float="left">
   <img src="./documentation/figures/hardware/circuit_0_board.png" width="400" /> 
-  <img src="./documentation/figures/hardware/SPIxxCON.jpg" width="400" />
+  <img src="./documentation/figures/hardware/SPIxxCONV.jpg" width="400" />
 </p>
 
   - CPLD
 <p float="left">
   <img src="./documentation/figures/hardware/circuit_1_cpld.png" width="400" /> 
-  <img src="./documentation/figures/hardware/SPIxxCON.jpg" width="400" />
+  <img src="./documentation/figures/hardware/SPIxxCONV.jpg" width="400" />
 </p>
 
   - DAC
 <p float="left">
   <img src="./documentation/figures/hardware/circuit_2_dac.png" width="400" /> 
-  <img src="./documentation/figures/hardware/SPIxxCON.jpg" width="400" />
+  <img src="./documentation/figures/hardware/SPIxxCONV.jpg" width="400" />
 </p>
 
   - ADC
 <p float="left">
   <img src="./documentation/figures/hardware/circuit_3_adc.png" width="400" /> 
-  <img src="./documentation/figures/hardware/SPIxxCON.jpg" width="400" />
+  <img src="./documentation/figures/hardware/SPIxxCONV.jpg" width="400" />
 </p>
 
   - Digital I/O
 <p float="left">
   <img src="./documentation/figures/hardware/circuit_4_digital.png" width="400" /> 
-  <img src="./documentation/figures/hardware/SPIxxCON.jpg" width="400" />
+  <img src="./documentation/figures/hardware/SPIxxCONV.jpg" width="400" />
 </p>
 
 <!--====================-->
