@@ -50,11 +50,10 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 #### PCB
 <!--====================-->
 
-  - Top layer
-![PCB top layer](./documentation/figures/hardware/pcb_top_layer.png)
-
-  - Bottom layer layer
-![PCB bottom layer](./documentation/figures/hardware/pcb_bot_layer.png)
+<p float="left">
+  <img align="center" src="./documentation/figures/hardware/pcb_top_layer.png" width="400" /> 
+  <img align="center" src="./documentation/figures/hardware/pcb_bot_layer.png" width="400" />
+</p>
 
 <!--====================-->
 #### Connectors
@@ -67,18 +66,20 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 </p>
 
   - CPLD
-![CPLD connector](main_board_conn_CPLD.jpg)
+![CPLD connector](./documentation/figures/hardware/main_board_conn_CPLD.jpg)
 
   - Board Connection Link
 <p float="left">
   <img align="center" src="./documentation/figures/hardware/main_board_conn_link.jpg" width="250" /> 
-  <img align="center" src="./documentation/figures/hardware/gpio_front_conn_link.jpg" width="250" />
   <img align="center" src="./documentation/figures/hardware/conn_board_link.png" width="250" />
+  <img align="center" src="./documentation/figures/hardware/gpio_front_conn_link.jpg" width="250" />
 </p>
 
 <!--==============================-->
 ### GPIO Expander Board
 <!--==============================-->
+
+![GPIO Expander Board](gpio_image.jpg)
 
 <!--====================-->
 #### Circuit
@@ -88,11 +89,10 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 <!--====================-->
 #### PCB
 <!--====================-->
-  - Top Layer
-![Top Layer](./documentation/figures/hardware/gpio_pcb_top.png)
-
-  - Bottom Layer
-![Bottom Layer](./documentation/figures/hardware/gpio_pcb_bot.png)
+<p float="left">
+  <img align="center" src="./documentation/figures/hardware/gpio_pcb_top.png" width="400" /> 
+  <img align="center" src="./documentation/figures/hardware/gpio_pcb_bot.png" width="400" />
+</p>
 
 <!--====================-->
 #### Connectors
