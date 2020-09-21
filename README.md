@@ -24,25 +24,25 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 
   - CPLD
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_front.jpg" width="400" />
+  <img align="center" src="./documentation/figures/main_board_cpld.jpg" width="400" />
   <img align="center" src="./documentation/figures/circuit_1_cpld.png" width="400" /> 
 </p>
 
   - DAC
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_front.jpg" width="400" />
+  <img align="center" src="./documentation/figures/main_board_dac.jpg" width="400" />
   <img align="center" src="./documentation/figures/circuit_2_dac.png" width="400" /> 
 </p>
 
   - ADC
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_front.jpg" width="400" />
+  <img align="center" src="./documentation/figures/main_board_adc.jpg" width="400" />
   <img align="center" src="./documentation/figures/circuit_3_adc.png" width="400" /> 
 </p>
 
   - Digital I/O
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_front.jpg" width="400" />
+  <img align="center" src="./documentation/figures/main_board_digital.jpg" width="400" />
   <img align="center" src="./documentation/figures/circuit_4_digital.png" width="400" /> 
 </p>
 
