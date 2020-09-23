@@ -97,6 +97,11 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
   <img align="center" src="./documentation/figures/main_board_testpoint_analog.png" width="400" />
 </p>
 
+<!--====================-->
+#### BOM
+<!--====================-->
+Bill of materials
+
 <!--==============================-->
 ### GPIO Expander Board
 <!--==============================-->
@@ -133,12 +138,26 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 </p>
 
 <!--====================-->
+#### Test Points
+<!--====================-->
+
+  - Power Voltage
+<p float="left">
+  <img align="center" src="./documentation/figures/gpio_testpoint_voltage.png" width="400" />
+</p>
+
+  - Analog In/Out
+<p float="left">
+  <img align="center" src="./documentation/figures/gpio_testpoint_analog.png" width="400" />
+</p>
+
+<!--====================-->
 #### BOM
 <!--====================-->
 Bill of materials
 
 <!--====================-->
-#### Identification
+### Identification
 <!--====================-->
 <p float="left">
   <img align="center" src="./documentation/figures/main_board_ID.jpg" width="400" /> 
