@@ -104,13 +104,13 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 
   - Interface A/B
 <p float="left">
-  <img align="center" src="./documentation/figures/gpio_front_conn_AB.jpg" width="400" /> 
+  <img align="center" src="./documentation/figures/gpio_front_conn_AB.png" width="400" /> 
   <img align="center" src="./documentation/figures/conn_interface_AB.png" width="400" />
 </p>
 
   - Interface C/D
 <p float="left">
-  <img align="center" src="./documentation/figures/gpio_front_conn_CD.jpg" width="400" /> 
+  <img align="center" src="./documentation/figures/gpio_front_conn_CD.png" width="400" /> 
   <img align="center" src="./documentation/figures/conn_interface_CD.png" width="400" />
 </p>
 
@@ -118,6 +118,15 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 #### BOM
 <!--====================-->
 Bill of materials
+
+<!--====================-->
+#### Identification
+<!--====================-->
+<p float="left">
+  <img align="center" src="./documentation/figures/main_board_ID.jpg" width="400" /> 
+  <img align="center" src="./documentation/figures/gpio_ID.jpg" width="400" />
+</p>
+
 
 <!--========================================-->
 ### Software
