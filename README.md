@@ -71,12 +71,30 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
   <img align="center" src="./documentation/figures/conn_CPLD.png" width="400" />
 </p>
 
-
   - Board Connection Link
 <p float="left">
   <img align="center" src="./documentation/figures/main_board_conn_link.jpg" width="280" /> 
   <img align="center" src="./documentation/figures/conn_board_link.png" width="250" />
   <img align="center" src="./documentation/figures/gpio_front_conn_link.jpg" width="280" />
+</p>
+
+<!--====================-->
+#### Test Points
+<!--====================-->
+
+  - SPI
+<p float="left">
+  <img align="center" src="./documentation/figures/main_board_testpoint_spi.png" width="400" />
+</p>
+
+  - Power Voltage
+<p float="left">
+  <img align="center" src="./documentation/figures/main_board_testpoint_voltage.png" width="400" />
+</p>
+
+  - Analog In/Out
+<p float="left">
+  <img align="center" src="./documentation/figures/main_board_testpoint_analog.png" width="400" />
 </p>
 
 <!--==============================-->
