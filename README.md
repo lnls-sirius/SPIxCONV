@@ -10,7 +10,7 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 ### Main Board
 <!--==============================-->
 
-![Main Board](./documentation/figures/SPIxCONV.jpg)
+![Main Board](./documentation/figures/SPIxCONV.jpeg)
 
 <!--====================-->
 #### Circuit
@@ -18,32 +18,32 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 
   - Board
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_front.jpg" width="400" />
-  <img align="center" src="./documentation/figures/circuit_0_board.png" width="400" /> 
+  <img align="center" src="./documentation/figures/main_board_front.jpeg" width="400" />
+  <img align="center" src="./documentation/figures/circuit_0_board.jpeg" width="400" /> 
 </p>
 
   - CPLD
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_cpld.jpg" width="400" />
-  <img align="center" src="./documentation/figures/circuit_1_cpld.png" width="400" /> 
+  <img align="center" src="./documentation/figures/main_board_cpld.jpeg" width="400" />
+  <img align="center" src="./documentation/figures/circuit_1_cpld.jpeg" width="400" /> 
 </p>
 
   - DAC
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_dac.jpg" width="400" />
-  <img align="center" src="./documentation/figures/circuit_2_dac.png" width="400" /> 
+  <img align="center" src="./documentation/figures/main_board_dac.jpeg" width="400" />
+  <img align="center" src="./documentation/figures/circuit_2_dac.jpeg" width="400" /> 
 </p>
 
   - ADC
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_adc.jpg" width="400" />
-  <img align="center" src="./documentation/figures/circuit_3_adc.png" width="400" /> 
+  <img align="center" src="./documentation/figures/main_board_adc.jpeg" width="400" />
+  <img align="center" src="./documentation/figures/circuit_3_adc.jpeg" width="400" /> 
 </p>
 
   - Digital I/O
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_digital.jpg" width="400" />
-  <img align="center" src="./documentation/figures/circuit_4_digital.png" width="400" /> 
+  <img align="center" src="./documentation/figures/main_board_digital.jpeg" width="400" />
+  <img align="center" src="./documentation/figures/circuit_4_digital.jpeg" width="400" /> 
 </p>
 
 <!--====================-->
@@ -51,8 +51,8 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 <!--====================-->
 
 <p float="left">
-  <img align="center" src="./documentation/figures/pcb_top_layer.png" width="400" /> 
-  <img align="center" src="./documentation/figures/pcb_bot_layer.png" width="400" />
+  <img align="center" src="./documentation/figures/pcb_top_layer.jpeg" width="400" /> 
+  <img align="center" src="./documentation/figures/pcb_bot_layer.jpeg" width="400" />
 </p>
 
 <!--====================-->
@@ -61,21 +61,21 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 
   - SPIxxCON
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_conn_SPIxxCON.jpg" width="400" /> 
-  <img align="center" src="./documentation/figures/conn_SPIxxCON.png" width="400" />
+  <img align="center" src="./documentation/figures/main_board_conn_SPIxxCON.jpeg" width="400" /> 
+  <img align="center" src="./documentation/figures/conn_SPIxxCON.jpeg" width="400" />
 </p>
 
   - CPLD
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_conn_CPLD.jpg" width="400" /> 
-  <img align="center" src="./documentation/figures/conn_CPLD.png" width="400" />
+  <img align="center" src="./documentation/figures/main_board_conn_CPLD.jpeg" width="400" /> 
+  <img align="center" src="./documentation/figures/conn_CPLD.jpeg" width="400" />
 </p>
 
   - Board Connection Link
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_conn_link.jpg" width="280" /> 
-  <img align="center" src="./documentation/figures/conn_board_link.png" width="250" />
-  <img align="center" src="./documentation/figures/gpio_front_conn_link.jpg" width="280" />
+  <img align="center" src="./documentation/figures/main_board_conn_link.jpeg" width="280" /> 
+  <img align="center" src="./documentation/figures/conn_board_link.jpeg" width="250" />
+  <img align="center" src="./documentation/figures/gpio_front_conn_link.jpeg" width="280" />
 </p>
 
 <!--====================-->
@@ -84,17 +84,17 @@ This project consists of an 18-bit analog input (ADC) and output (DAC) within a 
 
   - SPI
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_testpoint_spi.png" width="400" />
+  <img align="center" src="./documentation/figures/main_board_testpoint_spi.jpeg" width="400" />
 </p>
 
   - Power Voltage
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_testpoint_voltage.png" width="400" />
+  <img align="center" src="./documentation/figures/main_board_testpoint_voltage.jpeg" width="400" />
 </p>
 
   - Analog In/Out
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_testpoint_analog.png" width="400" />
+  <img align="center" src="./documentation/figures/main_board_testpoint_analog.jpeg" width="400" />
 </p>
 
 <!--====================-->
@@ -106,19 +106,19 @@ Bill of materials
 ### GPIO Expander Board
 <!--==============================-->
 
-![GPIO Expander Board](./documentation/figures/gpio_image.jpg)
+![GPIO Expander Board](./documentation/figures/gpio_image.jpeg)
 
 <!--====================-->
 #### Circuit
 <!--====================-->
-![GPIO board circuit](./documentation/figures/gpio_schematic.png)
+![GPIO board circuit](./documentation/figures/gpio_schematic.jpeg)
 
 <!--====================-->
 #### PCB
 <!--====================-->
 <p float="left">
-  <img align="center" src="./documentation/figures/gpio_pcb_top.png" width="400" /> 
-  <img align="center" src="./documentation/figures/gpio_pcb_bot.png" width="400" />
+  <img align="center" src="./documentation/figures/gpio_pcb_top.jpeg" width="400" /> 
+  <img align="center" src="./documentation/figures/gpio_pcb_bot.jpeg" width="400" />
 </p>
 
 <!--====================-->
@@ -127,14 +127,14 @@ Bill of materials
 
   - Interface A/B
 <p float="left">
-  <img align="center" src="./documentation/figures/gpio_front_conn_AB.png" width="400" /> 
-  <img align="center" src="./documentation/figures/conn_interface_AB.png" width="400" />
+  <img align="center" src="./documentation/figures/gpio_front_conn_AB.jpeg" width="400" /> 
+  <img align="center" src="./documentation/figures/conn_interface_AB.jpeg" width="400" />
 </p>
 
   - Interface C/D
 <p float="left">
-  <img align="center" src="./documentation/figures/gpio_front_conn_CD.png" width="400" /> 
-  <img align="center" src="./documentation/figures/conn_interface_CD.png" width="400" />
+  <img align="center" src="./documentation/figures/gpio_front_conn_CD.jpeg" width="400" /> 
+  <img align="center" src="./documentation/figures/conn_interface_CD.jpeg" width="400" />
 </p>
 
 <!--====================-->
@@ -143,12 +143,12 @@ Bill of materials
 
   - Power Voltage
 <p float="left">
-  <img align="center" src="./documentation/figures/gpio_testpoint_voltage.png" width="400" />
+  <img align="center" src="./documentation/figures/gpio_testpoint_voltage.jpeg" width="400" />
 </p>
 
   - Analog In/Out
 <p float="left">
-  <img align="center" src="./documentation/figures/gpio_testpoint_analog.png" width="400" />
+  <img align="center" src="./documentation/figures/gpio_testpoint_analog.jpeg" width="400" />
 </p>
 
 <!--====================-->
@@ -160,8 +160,8 @@ Bill of materials
 ### Identification
 <!--====================-->
 <p float="left">
-  <img align="center" src="./documentation/figures/main_board_ID.jpg" width="400" /> 
-  <img align="center" src="./documentation/figures/gpio_ID.jpg" width="400" />
+  <img align="center" src="./documentation/figures/main_board_ID.jpeg" width="400" /> 
+  <img align="center" src="./documentation/figures/gpio_ID.jpeg" width="400" />
 </p>
 
 <!--========================================-->
@@ -189,15 +189,15 @@ To configure the parameters of the IOC a [spreadsheet](https://cnpemcamp.sharepo
 
 Previously, [Control System Studio](http://controlsystemstudio.org/) was used to develop the OPI. The windows can still be found under the [CSS](https://github.com/lnls-sirius/SPIxCONV/tree/master/software/CSS) directory. Lately, we have been using [PyDM (Python Display Manager)](https://slaclab.github.io/pydm/) to develop the windows. As stated before, the files related to the PyDM OPI is located in [pydm-opi](https://github.com/lnls-sirius/pydm-opi) repository.
 
-![OPI](./documentation/figures/OPI.png)
+![OPI](./documentation/figures/OPI.jpeg)
 
 <!--====================-->
 #### CPLD
 <!--====================-->
 
 <p float="left">
-  <img align="center" src="./documentation/figures/cpld_setup.jpg" width="400" /> 
-  <img align="center" src="./documentation/figures/cpld_usb_blaster.jpg" width="400" />
+  <img align="center" src="./documentation/figures/cpld_setup.jpeg" width="400" /> 
+  <img align="center" src="./documentation/figures/cpld_usb_blaster.jpeg" width="400" />
 </p>
 
 
@@ -207,14 +207,14 @@ Previously, [Control System Studio](http://controlsystemstudio.org/) was used to
 <!--====================-->
 
 <p float="left">
-  <img align="center" src="./documentation/figures/calibration_overview.jpg" width="400" /> 
-  <img align="center" src="./documentation/figures/calibration_setup.jpg" width="400" />
+  <img align="center" src="./documentation/figures/calibration_overview.jpeg" width="400" /> 
+  <img align="center" src="./documentation/figures/calibration_setup.jpeg" width="400" />
 </p>
 
 
 <p float="left">
-  <img align="center" src="./documentation/figures/calibration_usb_rs232_converter.jpg" width="400" /> 
-  <img align="center" src="./documentation/figures/calibration_multimeter_cable.jpg" width="400" />
+  <img align="center" src="./documentation/figures/calibration_usb_rs232_converter.jpeg" width="400" /> 
+  <img align="center" src="./documentation/figures/calibration_multimeter_cable.jpeg" width="400" />
 </p>
 
 
