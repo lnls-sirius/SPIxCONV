@@ -127,7 +127,6 @@ Bill of materials
   <img align="center" src="./documentation/figures/gpio_ID.jpg" width="400" />
 </p>
 
-
 <!--========================================-->
 ### Software
 <!--========================================-->
@@ -158,6 +157,24 @@ Previously, [Control System Studio](http://controlsystemstudio.org/) was used to
 <!--====================-->
 #### CPLD
 <!--====================-->
+
+
+<!--====================-->
+#### DAC & ADC Calibration
+<!--====================-->
+
+<p float="left">
+  <img align="center" src="./documentation/figures/calibration_overview.jpg" width="400" /> 
+  <img align="center" src="./documentation/figures/calibration_setup.jpg" width="400" />
+</p>
+
+
+<p float="left">
+  <img align="center" src="./documentation/figures/calibration_usb_rs232_converter.jpg" width="400" /> 
+  <img align="center" src="./documentation/figures/calibration_multimeter_cable.jpg" width="400" />
+</p>
+
+
 
 
 <!--====================-->
