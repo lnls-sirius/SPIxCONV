@@ -203,22 +203,42 @@ Previously, [Control System Studio](http://controlsystemstudio.org/) was used to
 
 
 <!--====================-->
-#### DAC & ADC Calibration
+#### Board Calibration
 <!--====================-->
+
+To achieve more confiability, a calibration is done considering the DAC adjusts and the ADC measures. The next figures show the setup for this procedure. We basically connect the DAC output to the voltmeter and to the ADC input simultaneously.
 
 <p float="left">
   <img align="center" src="./documentation/figures/calibration_overview.jpeg" width="400" /> 
   <img align="center" src="./documentation/figures/calibration_setup.jpeg" width="400" />
 </p>
 
+  - DAC calibration:
+To calibrate the DAC we set its output to -9 V and later to +9 V and measure the real output voltage with the help of a 7 ½ digit voltmeter (here we are using the [Keysight 34420A](https://raw.githubusercontent.com/lnls-sirius/SPIxCONV/master/documentation/Keysight 34420A datasheet.pdf). We then use both measures to calculate the angular and linear coeffients for this curve.
+
+  - ADC calibration:
+Now that we have the DAC calibrated, we will use its output to calibrate the ADC coefficients. Again, we set the DAC output to -9 V (already considering the corrections), wait 60 s for thermal stabilization and read the voltage with the ADC. We then repeat the procedure for an adjustment of +9 V on the DAC output. Finally, these measures are used to calculate an angular and linear coefficient for the ADC.
+
+An automated script was developed for this process. To control the voltmeter 34420A remotely we need a RS-232/USB adaptor to plug it in the USB connector of the BeagleBone Black. An important thing to note, is that the serial cable (RS-232) has an identification to show which side is the voltmeter's one and which should be connected to the adaptor.
 
 <p float="left">
   <img align="center" src="./documentation/figures/calibration_usb_rs232_converter.jpeg" width="400" /> 
   <img align="center" src="./documentation/figures/calibration_multimeter_cable.jpeg" width="400" />
 </p>
 
+Finally, to calibrate the board, just connect to the BeagleBone Black and run the appropriate scrips, as showed below:
 
+```console
+$ ssh root@<BBB-IP>
+root@beaglebone:~# systemctl stop bbb-function
+root@beaglebone:~# /root/spixconv/software/scripts/calibration.py <BOARD-ID>
+    gain = 1.00014284735
+    offset = -15.81235112
+    gain = 1.00052568324
+    offset = -66.6829873034
+```
 
+Where <BBB-IP> is the BeagleBone IP (for example "192.168.7.2") and the <BOARD-ID> is the identification of the board (for example "15").
 
 <!--====================-->
 #### Code
