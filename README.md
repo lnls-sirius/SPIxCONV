@@ -158,6 +158,12 @@ Previously, [Control System Studio](http://controlsystemstudio.org/) was used to
 #### CPLD
 <!--====================-->
 
+<p float="left">
+  <img align="center" src="./documentation/figures/cpld_setup.jpg" width="400" /> 
+  <img align="center" src="./documentation/figures/cpld_usb_blaster.jpg" width="400" />
+</p>
+
+
 
 <!--====================-->
 #### DAC & ADC Calibration
