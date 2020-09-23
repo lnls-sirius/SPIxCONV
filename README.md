@@ -273,6 +273,14 @@ Where <BBB-IP> is the BeagleBone IP (for example "192.168.7.2") and the <BOARD-I
 ### Known Problems
 <!--========================================-->
 
+  - Not connecting to IOC after BBB reboots:  
+    Status: both nodes (IOC and BBB) show they are connected, but the IOC does not respond.
+    Solution: reboot IOC.
+
+  - Flash memory loses data:
+    Status: this happened once in three years. After a power cycle, the flash suddenly lost al its data!
+    Solution: record information in flash memory again.
+
 <!--========================================-->
 ### FAQ
 <!--========================================-->
