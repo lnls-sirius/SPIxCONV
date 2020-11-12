@@ -754,9 +754,9 @@ if __name__ == '__main__':
             try:
                 while(True):
                     # wait until there is a command in the list
-                    while(queue_general.empty()):
-                        pass
-                    command = queue_general.get()
+                    #while(queue_general.empty()):
+                    #    pass
+                    command = queue_general.get(block=True)
                     #==============================================================
                     # set GPIO pin direction
                     if (command[0] == "\x01"):
@@ -877,16 +877,16 @@ if __name__ == '__main__':
             try:
                 while(True):
                     # wait until there is a command in the list
-                    while(queue_voltage.empty()):
+                    #while(queue_voltage.empty()):
                         # check if Voltage-SP is equal to Voltage-RB
                         #if((last_setpoint < (read_analog_output(board_address) - 1)) or (last_setpoint > (read_analog_output(board_address) + 1))):
                         #    logger.info('SP different from RB')
                         #    queue_voltage.put(last_setpoint)
-                        pass
+                    #    pass
                     #==============================================================
                     # adjust DAC output value
                     # command[0] = "\x0"
-                    voltage_steps(int(queue_voltage.get()))
+                    voltage_steps(int(queue_voltage.get(block = True)))
             except:
                 logger.exception('Error in thread 3! (voltage thread)')
 
