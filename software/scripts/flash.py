@@ -131,6 +131,7 @@ def date_write(board, date):
 def ID_read(board):
     ID = read(board, 0x06, 1)
     print("board ID: 0x{:X}".format(ID[0]))
+    return(ID[0])
 #---------------------------------------------------------------------
 # write board ID
 def ID_write(board, ID):
@@ -143,6 +144,7 @@ def ID_write(board, ID):
 def address_read(board):
     address = read(board, 0x07, 1)
     print("board address: {}".format(address[0]))
+    return(address[0])
 #---------------------------------------------------------------------
 # write board address
 def address_write(board, address):
