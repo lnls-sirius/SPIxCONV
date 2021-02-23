@@ -514,18 +514,40 @@ def get_steps_var(ip, hostname):
         logger.info('Host IP found: 10.128.180.110')
         logger.info('Hostname found: PING-V')
         return 3000, 2000, 2, 4
-    # spare
-    if((hostname == 'SPARE-SEP-1') or (hostname == 'SPARE-SEP-2') or (hostname == 'SPARE-SEP-3') or (hostname == 'SPARE-SEP')):
-        logger.info('Hostname found: SPARE-SEP')
+
+    # IP NOT FOUND. CHECK HOSTNAME!
+    if((hostname == 'BOO-INJ-SEP') or (hostname == 'SR-INJ-THICK-SEP-1') or (hostname == 'SR-INJ-THICK-SEP-2') or (hostname == 'S-R-INJ-THIN-SEP') or (hostname == 'BOO-EXT-THIN-SEP') or (hostname == 'BOO-EXT-THICK-SEP') \
+        or (hostname == 'SPARE-SEP-1') or (hostname == 'SPARE-SEP-2') or (hostname == 'SPARE-SEP-3') or (hostname == 'SPARE-SEP')):
+        logger.info('Hostname identified: {}'.format(hostname))
         return 100, 200, 2, 4
+        
+    if(hostname == 'BOO-INJ-KICKER'):
+        logger.info('Hostname identified: {}'.format(hostname))
+        return 1000, 500, 2, 4
+
+    if(hostname == 'BOO-EXT-KICKER'):
+        logger.info('Hostname identified: {}'.format(hostname))
+        return 1000, 1000, 2, 4
+
     if((hostname == 'SPARE-KICKER-1') or (hostname == 'SPARE-KICKER-2') or (hostname == 'SPARE-KICKER-3') or (hostname == 'SPARE-KICKER')):
-        logger.info('Hostname found: SPARE-KICKER')
+        logger.info('Hostname identified: {}'.format(hostname))
         return 1000, 2000, 2, 4
-    if((hostname == 'NLK-ON-AXIS-2') or (hostname == 'NLK-ON-AXIS-3')):
-        logger.info('Hostname found: SPARE-NLK')
+
+    if((hostname == 'NLK-ON-AXIS-1') or (hostname == 'NLK-ON-AXIS-2') or (hostname == 'NLK-ON-AXIS-3')):
+        logger.info('Hostname identified: {}'.format(hostname))
         return 1500, 2000, 2, 4
+
+    if((hostname == 'PING-H') or (hostname == 'PING-V')):
+        logger.info('Hostname identified: {}'.format(hostname))
+        return 3000, 2000, 2, 4
+
+    # ELSE: RETURN A DEFAULT VALUE
+    else:
+        logger.info('Hostname identified ({}) IS UNKNOWN! WORST CASE SELECTED.'.format(hostname))
+        return 3000, 2000, 2, 4
+
     #raise ValueError(f'hostname {hostname} not supported')
-    raise ValueError('hostname not supported')
+    #raise ValueError('hostname not supported')
 #==============================================================================
 
 if __name__ == '__main__':
