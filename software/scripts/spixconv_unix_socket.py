@@ -529,6 +529,8 @@ def get_steps_var(ip, hostname):
             hostnameFile.close()
         logger.info('New Hostname: {}'.format(hostname))
 
+    os.system("umount /dev/sda1")
+
     if((hostname == 'BOO-INJ-SEP') or (hostname == 'SR-INJ-THICK-SEP-1') or (hostname == 'SR-INJ-THICK-SEP-2') or (hostname == 'S-R-INJ-THIN-SEP') or (hostname == 'BOO-EXT-THIN-SEP') or (hostname == 'BOO-EXT-THICK-SEP') \
         or (hostname == 'SPARE-SEP-1') or (hostname == 'SPARE-SEP-2') or (hostname == 'SPARE-SEP-3') or (hostname == 'SPARE-SEP')):
         logger.info('Hostname identified: {}'.format(hostname))
