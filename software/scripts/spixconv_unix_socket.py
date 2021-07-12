@@ -516,6 +516,26 @@ def get_steps_var(ip, hostname):
         return 3000, 2000, 2, 4
 
     # IP NOT FOUND. CHECK HOSTNAME!
+    #First, check if hostname must be changed - USB STICK
+    if not os.path.exists("/media/usb"):
+        os.system("mkdir /media/usb")
+        
+    if os.path.exists("/dev/sda1"):
+        os.system("mount /dev/sda1 /media/usb")
+
+        if os.path.isfile("/media/usb/ConfigByHostname.txt"):
+            with open("/media/usb/ConfigByHostname.txt") as name:
+                hostname = name.readline().split("\n")[0]
+                name.close()
+
+            with open("/etc/hostname", "w") as hostnameFile:
+                hostnameFile.write(hostname)
+                hostnameFile.close()
+            logger.info('New Hostname: {}'.format(hostname))
+    
+        os.system("umount /dev/sda1")
+
+        
     if((hostname == 'BOO-INJ-SEP') or (hostname == 'SR-INJ-THICK-SEP-1') or (hostname == 'SR-INJ-THICK-SEP-2') or (hostname == 'S-R-INJ-THIN-SEP') or (hostname == 'BOO-EXT-THIN-SEP') or (hostname == 'BOO-EXT-THICK-SEP') \
         or (hostname == 'SPARE-SEP-1') or (hostname == 'SPARE-SEP-2') or (hostname == 'SPARE-SEP-3') or (hostname == 'SPARE-SEP')):
         logger.info('Hostname identified: {}'.format(hostname))
