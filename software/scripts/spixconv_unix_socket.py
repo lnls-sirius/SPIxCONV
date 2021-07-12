@@ -513,7 +513,7 @@ def get_steps_var(ip, hostname):
     if(ip == '10.128.180.110'):
         logger.info('Host IP found: 10.128.180.110')
         logger.info('Hostname found: PING-V')
-        return 3000, 2000, 2, 4
+        return 1000, 2000, 2, 4
 
     # IP NOT FOUND. CHECK HOSTNAME!
     #First, check if hostname must be changed - USB STICK
@@ -557,9 +557,13 @@ def get_steps_var(ip, hostname):
         logger.info('Hostname identified: {}'.format(hostname))
         return 1500, 2000, 2, 4
 
-    if((hostname == 'PING-H') or (hostname == 'PING-V')):
+    if(hostname == 'PING-H'):
         logger.info('Hostname identified: {}'.format(hostname))
         return 3000, 2000, 2, 4
+       
+    if(hostname == 'PING-V'):
+        logger.info('Hostname identified: {}'.format(hostname))
+        return 1000, 2000, 2, 4
 
     # ELSE: RETURN A DEFAULT VALUE
     else:
