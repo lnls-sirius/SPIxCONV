@@ -1,0 +1,14 @@
+[Unit]
+Description=Redis-based script for reading Voltage FeedBack.
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Restart=on-failure
+RestartSec=5
+Type=simple
+WorkingDirectory=/root/FeedBack
+ExecStart=/bin/bash /root/FeedBack/run.sh
+
+[Install]
+WantedBy=multi-user.target
