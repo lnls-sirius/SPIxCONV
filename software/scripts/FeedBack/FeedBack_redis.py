@@ -1,7 +1,6 @@
 from Adafruit_BBIO import ADC
 from time import sleep
 from redis import *
-from epics import caget
 import socket, sys
 
 ADC.setup()
@@ -39,7 +38,7 @@ def get_ip():
 
 my_ip = get_ip()
 
-if my_ip == '127.0.0.1':
+if my_ip == '127.0.0.1' or not(my_ip in VoltageFactor_ip):
     sys.exit()
 
 else:
