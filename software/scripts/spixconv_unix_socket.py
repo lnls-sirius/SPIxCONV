@@ -809,12 +809,20 @@ if __name__ == '__main__':
                                     #pass
                                     #==============================================================
                                     #==============================================================
+                                    # NLK UPGRADE ----- DAC #2 setpoint parameters initialization 
+                                    elif (data[0] == "\x30"):
+                                        logger.info('Command received for DAC #2: init parameters at IOC reboot')
+                                        # return DAC RB (readback) value
+                                        # dac_code = [0, 262143] - voltage = [-10, 10]
+                                        percentage = (read_analog_output(board_address+1) - 131072.0)/131072
+                                        # value = [131072, 10]
+                                        value = int(percentage * voltage_factor * 131072 + 131072)
+                                        connection.sendall(str(value) + "\r\n")
+                                    #==============================================================
                                     # NLK UPGRADE ----- adjust DAC #2 output value
                                     elif (data[0] == "\x22"):
                                         # update last setpoint
                                         logger.info('Command received: voltage setpoint')
-                                        last_setpoint = int(data[2:])
-                                        #-----------------------------------------
                                         queue_voltage.put([board_address+1, data[2:]])
                                     #==============================================================
                                     # NLK UPGRADE ----- read DAC #2 setpoint value
@@ -823,26 +831,28 @@ if __name__ == '__main__':
                                     #==============================================================
                                     # NLK UPGRADE ----- read maximum of 10 last ADC #2 input value
                                     elif (data[0] == "\x24"):
-                                        #voltage = read_analog_input(ord(command[1]))
                                         voltage = read_analog_input(board_address+1)
                                         connection.sendall(str(voltage) + "\r\n")
-                                        #print str(voltage)
-                                    #==============================================================
                                     #==============================================================
                                     # NLK UPGRADE ----- read raw ADC #2 input value
                                     elif (data[0] == "\x2F"):
-                                        #voltage = read_analog_input_raw(ord(command[1]))
                                         voltage = read_analog_input_raw(board_address+1)
                                         connection.sendall(str(voltage) + "\r\n")
-                                        #print str(voltage)
                                     #==============================================================
+                                    # NLK UPGRADE ----- DAC #3 setpoint parameters initialization 
+                                    elif (data[0] == "\x30"):
+                                        logger.info('Command received for DAC #3: init parameters at IOC reboot')
+                                        # return DAC RB (readback) value
+                                        # dac_code = [0, 262143] - voltage = [-10, 10]
+                                        percentage = (read_analog_output(board_address+2) - 131072.0)/131072
+                                        # value = [131072, 10]
+                                        value = int(percentage * voltage_factor * 131072 + 131072)
+                                        connection.sendall(str(value) + "\r\n")
                                     #==============================================================
                                     # NLK UPGRADE ----- adjust DAC #3 output value
                                     elif (data[0] == "\x32"):
                                         # update last setpoint
                                         logger.info('Command received: voltage setpoint')
-                                        last_setpoint = int(data[2:])
-                                        #-----------------------------------------
                                         queue_voltage.put([board_address+2, data[2:]])
                                     #==============================================================
                                     # NLK UPGRADE ----- read DAC #3 setpoint value
@@ -851,18 +861,13 @@ if __name__ == '__main__':
                                     #==============================================================
                                     # NLK UPGRADE ----- read maximum of 10 last ADC #3 input value
                                     elif (data[0] == "\x34"):
-                                        #voltage = read_analog_input(ord(command[1]))
                                         voltage = read_analog_input(board_address+2)
                                         connection.sendall(str(voltage) + "\r\n")
-                                        #print str(voltage)
-                                    #==============================================================
                                     #==============================================================
                                     # NLK UPGRADE ----- read raw ADC #3 input value
                                     elif (data[0] == "\x3F"):
-                                        #voltage = read_analog_input_raw(ord(command[1]))
                                         voltage = read_analog_input_raw(board_address+2)
                                         connection.sendall(str(voltage) + "\r\n")
-                                        #print str(voltage)
                                     #==============================================================
 
                         else:
@@ -1086,3 +1091,41 @@ if __name__ == '__main__':
     time.sleep(3)
     thr_2.start()
     thr_3.start()
+
+
+
+
+#==============================================================
+# DAC #2 setpoint parameters initialization (IOC reboot)
+elif (data[0] == "\x20"):
+#==============================================================
+# NLK UPGRADE ----- adjust DAC #2 output value
+elif (data[0] == "\x22"):
+#==============================================================
+# NLK UPGRADE ----- read DAC #2 setpoint value
+elif (data[0] == "\x23"):
+#==============================================================
+# NLK UPGRADE ----- read ADC #2 input value
+elif (data[0] == "\x24"):
+#==============================================================
+# NLK UPGRADE ----- read raw ADC #2 input value
+elif (data[0] == "\x2F"):
+
+
+
+#==============================================================
+# DAC #3 setpoint parameters initialization (IOC reboot)
+elif (data[0] == "\x30"):
+#==============================================================
+# NLK UPGRADE ----- adjust DAC #3 output value
+elif (data[0] == "\x32"):
+#==============================================================
+# NLK UPGRADE ----- read DAC #3 setpoint value
+elif (data[0] == "\x33"):
+#==============================================================
+# NLK UPGRADE ----- read ADC #3 input value
+elif (data[0] == "\x34"):
+#==============================================================
+# NLK UPGRADE ----- read raw ADC #3 input value
+elif (data[0] == "\x3F"):
+
