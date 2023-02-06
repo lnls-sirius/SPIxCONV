@@ -135,8 +135,8 @@ def calibration(board):
     flash.adc_offset_write(board, OFFSET)
     # return two parameters: gain and offset
     #output = [GAIN, OFFSET]
-    print "\tgain = " + str(GAIN)
-    print "\toffset = " + str(OFFSET)
+    print("\tgain = " + str(GAIN))
+    print("\toffset = " + str(OFFSET))
     #return output
 #---------------------------------------------------------------------
 def read_calibration(board):
@@ -144,14 +144,18 @@ def read_calibration(board):
     # global variables
     GAIN = flash.adc_gain_read(3)
     OFFSET = flash.adc_offset_read(3)
-    print "\tgain = " + str(GAIN)
-    print "\toffset = " + str(OFFSET)
+    print("\tgain = " + str(GAIN))
+    print("\toffset = " + str(OFFSET))
 #=======================================================
 #    read a value in DAC (value in binary code)
 #=======================================================
-def read():
+def read(adc_gain=None, adc_offset=None):
     # global variables
     global GAIN, OFFSET
+    if adc_gain is None:
+        adc_gain = GAIN
+    if adc_offset is None:
+        adc_offset = OFFSET
     # CNVST = 0 --> start conversion
     GPIO.output(CNVST, GPIO.LOW)
     #################################
@@ -189,7 +193,7 @@ def read():
     data = spi.readbytes(3)
     adc = (data[0] << 10) + (data[1] << 2) + (data[2] >> 6)
     # applying GAIN and OFFSET corretion
-    adc = int(round(adc * GAIN + OFFSET))
+    adc = int(round(adc * adc_gain + adc_offset))
     if (adc < 0):
         adc = 0
     elif (adc > 262143):
@@ -206,8 +210,14 @@ def readVolts():
 #=======================================================
 #    read ADC many times and calculate a mean
 #=======================================================
-def mean(value):
+def mean(value, adc_gain=None, adc_offset=None):
+    # global variables
     global GAIN, OFFSET
+    if adc_gain is None:
+        adc_gain = GAIN
+    if adc_offset is None:
+        adc_offset = OFFSET
+
     # defining variables for MAX, MIN and MEAN (ADC measure)
     measure = []
     min_adc = 0
@@ -245,7 +255,7 @@ def mean(value):
     #-------------------------------------------------------
     diff = max_adc - min_adc
     #mean_adc = int(round(mean_adc * GAIN + OFFSET, 2))
-    mean_adc = round(mean_adc * GAIN + OFFSET, 2)
+    mean_adc = round(mean_adc * adc_gain + OFFadc_offsetSET, 2)
     return [std_var, diff, mean_adc, min_adc, max_adc]
 '''
     print "\nnumber of measures = " + str(value)

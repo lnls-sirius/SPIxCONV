@@ -109,8 +109,8 @@ def calibration(board):
     flash.dac_offset_write(board, OFFSET)
     # return two parameters: gain and offset
     #output = [GAIN, OFFSET]
-    print "\tgain = " + str(GAIN)
-    print "\toffset = " + str(OFFSET)
+    print("\tgain = " + str(GAIN))
+    print("\toffset = " + str(OFFSET))
     #return output
 #---------------------------------------------------------------------
 def read_calibration(board):
@@ -118,8 +118,8 @@ def read_calibration(board):
     # global variables
     GAIN = flash.dac_gain_read(3)
     OFFSET = flash.dac_offset_read(3)
-    print "\tgain = " + str(GAIN)
-    print "\toffset = " + str(OFFSET)
+    print("\tgain = " + str(GAIN))
+    print("\toffset = " + str(OFFSET))
 #=======================================================
 #    config DAC
 #=======================================================
@@ -135,10 +135,15 @@ def config(board):
 #=======================================================
 #    write a value in DAC (value in binary code)
 #=======================================================
-def write(value):
+def write(value, dac_gain=None, dac_offset=None):
     # global variables
     global GAIN, OFFSET
-    code = int(round((13107 + (value - 13107)*GAIN + OFFSET)))
+    if dac_gain is None:
+        dac_gain = GAIN
+    if dac_offset is None:
+        dac_offset = OFFSET
+
+    code = int(round((13107 + (value - 13107)*dac_gain + dac_offset)))
     if (code < 0):
         code = 0
     elif (code > 262143):
@@ -157,14 +162,19 @@ def write(value):
 #=======================================================
 #    write a value in DAC (value in Volts)
 #=======================================================
-def writeVolts(value):
+def writeVolts(value, dac_gain=None, dac_offset=None):
     # global variables
     global GAIN, OFFSET
+    if dac_gain is None:
+        dac_gain = GAIN
+    if dac_offset is None:
+        dac_offset = OFFSET
+
     if( (value < -10) or (value > 10)):
-        print "invalid argument"
+        print("invalid argument")
     else:
         value = int(round((value + 10.0)/20 * 262143))
-        code = int(round((13107 + (value - 13107)*GAIN + OFFSET)))
+        code = int(round((13107 + (value - 13107)*dac_gain + dac_offset)))
         # prepare to send data to the Control Register
         bytes = ( (1 << 20) + (code << 2) )
         byte_1 = (bytes & 0xFF0000) >> 16
@@ -179,13 +189,18 @@ def writeVolts(value):
 #=======================================================
 #    read the value in DAC
 #=======================================================
-def read():
+def read(dac_gain=None, dac_offset=None):
     global GAIN, OFFSET
+    if dac_gain is None:
+        dac_gain = GAIN
+    if dac_offset is None:
+        dac_offset = OFFSET
+
     spi.xfer2([0x90,0x00,0x00])
     dac = spi.readbytes(3)
     dac = 0x03ffff & (((dac[0] << 16) + (dac[1] << 8) + dac[2]) >> 2)
     # adjusting to calibration parameters
-    code = (dac - 13107.0 - OFFSET)/GAIN + 13107
+    code = (dac - 13107.0 - dac_offset)/dac_gain + 13107
     return int(round(code))
 #=======================================================
 #    CLEAR the DAC of correspondent board

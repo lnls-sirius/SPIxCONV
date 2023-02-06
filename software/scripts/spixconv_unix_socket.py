@@ -154,9 +154,10 @@ def read_analog_output(board):
         this function reads the code set in the analog output (from 0 to 262143)
     '''
     global lock
+    global board_calibration
     with lock:
         selection.dac(board)
-        code = dac.read()
+        code = dac.read(board_calibration[board]["DAC gain"], board_calibration[board]["DAC offset"])
     return code
 #==============================================================================
 #    Read maximum of 10 last analog measures
@@ -173,9 +174,10 @@ def read_analog_input(board):
         monopolar range, i.e., 0 to +10V, mapped in 0 to FULL_SCALE voltage).
     '''
     global lock
+    global board_calibration
     with lock:
         selection.adc(board)
-        code = adc.read()
+        code = adc.read(board_calibration[board]["ADC gain"], board_calibration[board]["ADC offset"])
     # remove the oldest measure of the array
     ADC_array.pop(0)
     # append new value to the array
@@ -201,10 +203,11 @@ def read_analog_input_raw(board):
         monopolar range, i.e., 0 to +10V, mapped in 0 to FULL_SCALE voltage).
     '''
     global lock
+    global board_calibration
     #global MIN_SCALE, MAX_SCALE, FULL_SCALE
     with lock:
         selection.adc(board)
-        code = adc.read()
+        code = adc.read(board_calibration[board]["ADC gain"], board_calibration[board]["ADC offset"])
     #volts = adc.meanVolts(1000)
     #volts = adc.readVolts()
     #volts = (volts / 10) * (FULL_SCALE - MIN_SCALE)
@@ -576,6 +579,7 @@ def get_steps_var(ip, hostname):
 
 if __name__ == '__main__':
     global board_address
+    global board_calibration
     global connection
     global logger
     logging.basicConfig(level=logging.INFO, format='%(asctime)-15s [%(levelname)s] %(message)s',
@@ -587,6 +591,7 @@ if __name__ == '__main__':
     parser.add_argument('--tcp', help='Use a TCP socket instead of an UNIX.', action='store_true')
     parser.add_argument('--port', '-p', dest='port', type=int, help='TCP server port.', default=5005)
     parser.add_argument('--unix-address', dest='unix_socket_address', help='UNIX socket address.', default='/tmp/socket_spixconv')
+    parser.add_argument('--nlk', '-nlk', dest='nlk', type=bool, help='NLK magnet', default=False)
     args = parser.parse_args()
 
     server_address = ('0.0.0.0', args.port) if args.tcp else args.unix_socket_address
@@ -600,10 +605,15 @@ if __name__ == '__main__':
                 raise
     #----------------------------
     # identify board address:
-    for addr in range(255):
-        if(flash.ID_read(addr) == 4):
-            board_address = addr
-            break
+#    for addr in range(255):
+#        if(flash.ID_read(addr) == 4):
+#            board_address = addr
+#            break
+
+
+    board_calibration = {}
+    board_address = args.board_address
+    print(board_address)
     #----------------------------
     # create general queue
     queue_general = Queue()
@@ -619,15 +629,34 @@ if __name__ == '__main__':
         global trigger
         global steps
         global last_setpoint
+        global board_calibration
         global logger
+
         try:
-            #config(args.board_address)
-            config(board_address)
-    
+            
             sock = socket.socket(socket.AF_INET if args.tcp else socket.AF_UNIX, socket.SOCK_STREAM)
             if args.tcp:
                 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+            #config(args.board_address)
+            config(board_address)
+            board_calibration[board_address] = {"DAC gain":dac.GAIN,
+                                                "DAC offset":dac.OFFSET,
+                                                "ADC gain":adc.GAIN,
+                                                "ADC offset":adc.OFFSET}
+            if args.nlk:
+                config(board_address+1)
+                board_calibration[board_address+1] = {"DAC gain":dac.GAIN,
+                                                    "DAC offset":dac.OFFSET,
+                                                    "ADC gain":adc.GAIN,
+                                                    "ADC offset":adc.OFFSET}
+                config(board_address+2)
+                board_calibration[board_address+2] = {"DAC gain":dac.GAIN,
+                                                    "DAC offset":dac.OFFSET,
+                                                    "ADC gain":adc.GAIN,
+                                                    "ADC offset":adc.OFFSET}
     
+            print(board_calibration)
             sock.bind(server_address)
             logger.info('Created socket at {} '.format(server_address))
             sock.listen(1)
@@ -672,7 +701,7 @@ if __name__ == '__main__':
                                         logger.info('Command received: voltage setpoint')
                                         last_setpoint = int(data[2:])
                                         #-----------------------------------------
-                                        queue_voltage.put(data[2:])
+                                        queue_voltage.put([board_address, data[2:]])
                                     #==============================================================
                                     # read DAC setpoint value
                                     elif (data[0] == "\x03"):
@@ -742,7 +771,7 @@ if __name__ == '__main__':
                                     # read raw ADC input value
                                     elif (data[0] == "\x0F"):
                                         #voltage = read_analog_input_raw(ord(command[1]))
-                                        voltage = read_analog_input_raw(ord(board_address))
+                                        voltage = read_analog_input_raw(board_address)
                                         connection.sendall(str(voltage) + "\r\n")
                                         #print str(voltage)
                                     #==============================================================
@@ -778,6 +807,62 @@ if __name__ == '__main__':
                                     # available command
                                     #elif (data[0] == "\x12"):
                                     #pass
+                                    #==============================================================
+                                    #==============================================================
+                                    # NLK UPGRADE ----- adjust DAC #2 output value
+                                    elif (data[0] == "\x22"):
+                                        # update last setpoint
+                                        logger.info('Command received: voltage setpoint')
+                                        last_setpoint = int(data[2:])
+                                        #-----------------------------------------
+                                        queue_voltage.put([board_address+1, data[2:]])
+                                    #==============================================================
+                                    # NLK UPGRADE ----- read DAC #2 setpoint value
+                                    elif (data[0] == "\x23"):
+                                        connection.sendall(str(read_analog_output(board_address+1)) + "\r\n")
+                                    #==============================================================
+                                    # NLK UPGRADE ----- read maximum of 10 last ADC #2 input value
+                                    elif (data[0] == "\x24"):
+                                        #voltage = read_analog_input(ord(command[1]))
+                                        voltage = read_analog_input(board_address+1)
+                                        connection.sendall(str(voltage) + "\r\n")
+                                        #print str(voltage)
+                                    #==============================================================
+                                    #==============================================================
+                                    # NLK UPGRADE ----- read raw ADC #2 input value
+                                    elif (data[0] == "\x2F"):
+                                        #voltage = read_analog_input_raw(ord(command[1]))
+                                        voltage = read_analog_input_raw(board_address+1)
+                                        connection.sendall(str(voltage) + "\r\n")
+                                        #print str(voltage)
+                                    #==============================================================
+                                    #==============================================================
+                                    # NLK UPGRADE ----- adjust DAC #3 output value
+                                    elif (data[0] == "\x32"):
+                                        # update last setpoint
+                                        logger.info('Command received: voltage setpoint')
+                                        last_setpoint = int(data[2:])
+                                        #-----------------------------------------
+                                        queue_voltage.put([board_address+2, data[2:]])
+                                    #==============================================================
+                                    # NLK UPGRADE ----- read DAC #3 setpoint value
+                                    elif (data[0] == "\x33"):
+                                        connection.sendall(str(read_analog_output(board_address+2)) + "\r\n")
+                                    #==============================================================
+                                    # NLK UPGRADE ----- read maximum of 10 last ADC #3 input value
+                                    elif (data[0] == "\x34"):
+                                        #voltage = read_analog_input(ord(command[1]))
+                                        voltage = read_analog_input(board_address+2)
+                                        connection.sendall(str(voltage) + "\r\n")
+                                        #print str(voltage)
+                                    #==============================================================
+                                    #==============================================================
+                                    # NLK UPGRADE ----- read raw ADC #3 input value
+                                    elif (data[0] == "\x3F"):
+                                        #voltage = read_analog_input_raw(ord(command[1]))
+                                        voltage = read_analog_input_raw(board_address+2)
+                                        connection.sendall(str(voltage) + "\r\n")
+                                        #print str(voltage)
                                     #==============================================================
 
                         else:
@@ -919,6 +1004,8 @@ if __name__ == '__main__':
         global board_address
         global last_setpoint
         global logger
+        global board_calibration
+
         while(True):
             try:
                 while(True):
@@ -932,11 +1019,12 @@ if __name__ == '__main__':
                     #==============================================================
                     # adjust DAC output value
                     # command[0] = "\x0"
-                    voltage_steps(int(queue_voltage.get(block = True)))
+                    voltage_steps(queue_voltage.get(block = True))
             except:
                 logger.exception('Error in thread 3! (voltage thread)')
 
-    def voltage_steps(value):
+    def voltage_steps(info):
+        # info = [board, value]
         global board_address
         global voltage_factor
         global step_trigger
@@ -944,6 +1032,11 @@ if __name__ == '__main__':
         global trigger
         global steps
         global logger
+        global board_calibration
+
+        board = info[0]
+        value = int(info[1])
+        logger.info("Board: {} - Value {}".format(board, value))
         #-----------------------------------------
         # if PS is off, implement setpoint directly
         #if (read_portB_digital_input_bit(board_address, 7) == 0):
@@ -952,14 +1045,14 @@ if __name__ == '__main__':
         #-----------------------------------------
         #else:
         # check difference between current and intended setpoint
-        current = read_analog_output(board_address)
+        current = read_analog_output(board)
         diff = value - current
         #-----------------------------------------
         # if difference is lower than the amount to activate the steps trigger
         # then implement new setpoint directly
         if diff < trigger:
             logger.info('Voltage setpoint: {:.2f}'.format((value-131072.0)/131072*voltage_factor*10) + ' V')
-            set_analog_output(board_address, value)
+            set_analog_output(board, value)
         #-----------------------------------------
         # if difference is higher than the amount to activate the steps trigger
         # then calculate calculate graduals setpoints
@@ -969,14 +1062,14 @@ if __name__ == '__main__':
             # loop for "steps-1" gradual setpoints
             for i, voltage in enumerate(setpoints):
                 logger.info(' - Voltage step %d: {:.2f}'.format((voltage-131072.0)/131072*voltage_factor*10) %(i+1) + ' V')
-                set_analog_output(board_address, voltage)
+                set_analog_output(board, voltage)
                 start = time.time()
                 while(time.time() - start < step_delay):
                    if not queue_voltage.empty():
                         return
                    # pass
             # adjust last step
-            set_analog_output(board_address, value)
+            set_analog_output(board, value)
             logger.info(' - Voltage step %d: {:.2f}'.format((value-131072.0)/131072*voltage_factor*10) %(i+2) + ' V')
         #-----------------------------------------
         return
