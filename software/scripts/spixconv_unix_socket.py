@@ -829,7 +829,7 @@ if __name__ == '__main__':
                                     #==============================================================
                                     elif (args.nlk):
                                         # NLK UPGRADE ----- DAC #2 setpoint parameters initialization 
-                                        if (data[0] == "\x30"):
+                                        if (data[0] == "\x20"):
                                             logger.info('Command received for DAC #2: init parameters at IOC reboot')
                                             # return DAC RB (readback) value
                                             # dac_code = [0, 262143] - voltage = [-10, 10]
