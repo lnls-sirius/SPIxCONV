@@ -144,6 +144,8 @@ def write(value, dac_gain=None, dac_offset=None):
         dac_offset = OFFSET
 
     code = int(round((13107 + (value - 13107)*dac_gain + dac_offset)))
+    print("GAIN: {} - OFFSET: {}".format(dac_gain, dac_offset))
+    print("VALUE: {} - CODE: {}".format(value, code))
     if (code < 0):
         code = 0
     elif (code > 262143):
@@ -200,6 +202,7 @@ def read(dac_gain=None, dac_offset=None):
     dac = spi.readbytes(3)
     dac = 0x03ffff & (((dac[0] << 16) + (dac[1] << 8) + dac[2]) >> 2)
     # adjusting to calibration parameters
+    print(dac)
     code = (dac - 13107.0 - dac_offset)/dac_gain + 13107
     return int(round(code))
 #=======================================================
