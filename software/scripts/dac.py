@@ -4,6 +4,7 @@ import Adafruit_BBIO.GPIO as GPIO
 #-------------------------------------------------------
 import selection
 import time
+import math
 import flash
 # initialize the bus and device /dev/spidev1.0
 spi = SPI(0,0)
@@ -38,6 +39,11 @@ def on(board):
     if (GAIN == 0):
         GAIN = 1
     OFFSET = flash.dac_offset_read(board)
+    if math.isnan(GAIN):
+        GAIN = 1.0
+    if math.isnan(OFFSET):
+        OFFSET = 0.0
+
 #=======================================================
 #    Power off DAC circuit
 #=======================================================
@@ -144,8 +150,7 @@ def write(value, dac_gain=None, dac_offset=None):
         dac_offset = OFFSET
 
     code = int(round((13107 + (value - 13107)*dac_gain + dac_offset)))
-    print("GAIN: {} - OFFSET: {}".format(dac_gain, dac_offset))
-    print("VALUE: {} - CODE: {}".format(value, code))
+    
     if (code < 0):
         code = 0
     elif (code > 262143):
@@ -200,9 +205,9 @@ def read(dac_gain=None, dac_offset=None):
 
     spi.xfer2([0x90,0x00,0x00])
     dac = spi.readbytes(3)
+    print(hex(dac[0]), hex(dac[1]), hex(dac[2]))
     dac = 0x03ffff & (((dac[0] << 16) + (dac[1] << 8) + dac[2]) >> 2)
     # adjusting to calibration parameters
-    print(dac)
     code = (dac - 13107.0 - dac_offset)/dac_gain + 13107
     return int(round(code))
 #=======================================================

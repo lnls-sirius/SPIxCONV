@@ -36,6 +36,10 @@ def on(board):
     global GAIN, OFFSET
     GAIN = flash.adc_gain_read(board)
     OFFSET = flash.adc_offset_read(board)
+    if math.isnan(GAIN):
+        GAIN = 1.0
+    if math.isnan(OFFSET):
+        OFFSET = 0.0
 #=======================================================
 #    Power off ADC circuit
 #=======================================================

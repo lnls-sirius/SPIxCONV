@@ -193,7 +193,6 @@ def read_analog_input(board):
         ADC_array[board].append(code)
     #print(ADC_array)
     #print(max(ADC_array))
-    logger.info(ADC_array[board])
     return max(ADC_array[board])
 #==============================================================================
 #    Read raw value in analog input
@@ -614,19 +613,21 @@ if __name__ == '__main__':
                 raise
     #----------------------------
     # identify board address:
-    for addr in range(255):
-        if(flash.ID_read(addr) == 4):
-            board_address = addr
-            break
+    #for addr in range(255):
+    #    if(flash.ID_read(addr) == 4):
+    #        board_address = addr
+    #        break
 
+    board_address = 6
     if args.nlk:
-        board_address_2 = board_address + 2
-        board_address_3 = board_address
-        board_address = board_address + 1
+        board_address_2 = 5
+        board_address_3 = 7
+        board_address = 6
+
+    #print(board_address, board_address_2, board_address_3)
 
 
     board_calibration = {}
-    print(board_address)
     #----------------------------
     # create general queue
     queue_general = Queue()
