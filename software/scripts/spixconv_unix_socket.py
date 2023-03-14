@@ -613,16 +613,15 @@ if __name__ == '__main__':
                 raise
     #----------------------------
     # identify board address:
-    #for addr in range(255):
-    #    if(flash.ID_read(addr) == 4):
-    #        board_address = addr
-    #        break
+    for addr in range(255):
+        if(flash.ID_read(addr) == 4):
+            board_address = addr
+            break
 
-    board_address = 6
-    if args.nlk:
-        board_address_2 = 5
-        board_address_3 = 7
-        board_address = 6
+    if "NLK-ON-AXIS-1" in socket.gethostname():
+        board_address = 7
+        board_address_2 = 6
+        board_address_3 = 5
 
     #print(board_address, board_address_2, board_address_3)
 
@@ -661,7 +660,7 @@ if __name__ == '__main__':
                                                 "DAC offset":dac.OFFSET,
                                                 "ADC gain":adc.GAIN,
                                                 "ADC offset":adc.OFFSET}
-            if args.nlk:
+            if "NLK-ON-AXIS-1" in socket.gethostname():
                 config(board_address_2)
                 time.sleep(1)
                 board_calibration[board_address_2] = {"DAC gain":dac.GAIN,
@@ -675,7 +674,7 @@ if __name__ == '__main__':
                                                     "ADC gain":adc.GAIN,
                                                     "ADC offset":adc.OFFSET}
     
-            print(board_calibration)
+            logger.info(board_calibration)
             sock.bind(server_address)
             logger.info('Created socket at {} '.format(server_address))
             sock.listen(1)
@@ -708,6 +707,7 @@ if __name__ == '__main__':
                             commands = msg.split('\r\n')
                             for data in commands:
                                 if data:
+#                                    logger.info("Comando recebido: {}".format(ord(data[0])))
                                     #==============================================================
                                     # set GPIO pin direction
                                     if (data[0] == "\x01"):
@@ -755,7 +755,7 @@ if __name__ == '__main__':
                                         #bit = read_digital_input_bit(ord(command[1]), ord(command[2]))
                                         bit = read_digital_input_bit(board_address, ord(data[2]))
                                         connection.sendall(str(bit) + "\r\n")
-                                        #print bit
+#                                        logger.info(bit)
                                     #==============================================================
                                     # generate a pulse in RESET bit (Port B, bit 3)
                                     elif (data[0] == "\x09"):
@@ -785,6 +785,7 @@ if __name__ == '__main__':
                                     elif (data[0] == "\x0E"):
                                         #bit = read_portB_digital_input_bit(ord(command[1]), ord(command[2]))
                                         bit = read_portB_digital_input_bit(board_address, ord(data[2]))
+#                                        logger.info("Bit {}: {}".format(ord(data[2]), bit))
                                         connection.sendall(str(bit) + "\r\n")
                                     #==============================================================
                                     # read raw ADC input value
@@ -821,6 +822,7 @@ if __name__ == '__main__':
                                     elif (data[0] == "\x11"):
                                         #bit = read_portA_digital_input_bit(ord(command[1]), ord(command[2]))
                                         bit = read_portA_digital_input_bit(board_address, ord(data[2]))
+#                                        logger.info("Bit {}: {}".format(ord(data[2]), bit))
                                         connection.sendall(str(bit) + "\r\n")
                                     #==============================================================
                                     # available command
@@ -828,7 +830,7 @@ if __name__ == '__main__':
                                     #pass
                                     #==============================================================
                                     #==============================================================
-                                    elif (args.nlk):
+                                    elif ("NLK-ON-AXIS-1" in socket.gethostname()):
                                         # NLK UPGRADE ----- DAC #2 setpoint parameters initialization 
                                         if (data[0] == "\x20"):
                                             logger.info('Command received for DAC #2: init parameters at IOC reboot')
@@ -970,7 +972,7 @@ if __name__ == '__main__':
                             #logger.info('Turning PS on')
                             logger.info('Set voltage to zero to turn PS on')
                             # force voltage setpoint to be zero
-                            queue_voltage.put(131072)
+                            queue_voltage.put([board_address, 131072])
                             # wait until voltage setpoint is zero
                             while (read_analog_output(board_address) != 131072):
                                 pass
@@ -990,7 +992,7 @@ if __name__ == '__main__':
                             #-----------------------------
                             # restore last voltage setpoint
                             logger.info('Restoring voltage setpoint...')
-                            queue_voltage.put(last_setpoint)
+                            queue_voltage.put([board_address, last_setpoint])
                         #-----------------------------------------
                         else:
                             cmd = ord(command[2])
