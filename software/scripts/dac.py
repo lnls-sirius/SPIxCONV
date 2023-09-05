@@ -205,7 +205,7 @@ def read(dac_gain=None, dac_offset=None):
 
     spi.xfer2([0x90,0x00,0x00])
     dac = spi.readbytes(3)
-    print(hex(dac[0]), hex(dac[1]), hex(dac[2]))
+#    print(hex(dac[0]), hex(dac[1]), hex(dac[2]))
     dac = 0x03ffff & (((dac[0] << 16) + (dac[1] << 8) + dac[2]) >> 2)
     # adjusting to calibration parameters
     code = (dac - 13107.0 - dac_offset)/dac_gain + 13107

@@ -618,7 +618,7 @@ if __name__ == '__main__':
             board_address = addr
             break
 
-    if "NLK-ON-AXIS-1" in socket.gethostname():
+    if "NLK-ON-AXIS-2" in socket.gethostname():
         board_address = 7
         board_address_2 = 6
         board_address_3 = 5
@@ -660,7 +660,7 @@ if __name__ == '__main__':
                                                 "DAC offset":dac.OFFSET,
                                                 "ADC gain":adc.GAIN,
                                                 "ADC offset":adc.OFFSET}
-            if "NLK-ON-AXIS-1" in socket.gethostname():
+            if "NLK-ON-AXIS-2" in socket.gethostname():
                 config(board_address_2)
                 time.sleep(1)
                 board_calibration[board_address_2] = {"DAC gain":dac.GAIN,
@@ -830,7 +830,7 @@ if __name__ == '__main__':
                                     #pass
                                     #==============================================================
                                     #==============================================================
-                                    elif ("NLK-ON-AXIS-1" in socket.gethostname()):
+                                    elif ("NLK-ON-AXIS-2" in socket.gethostname()):
                                         # NLK UPGRADE ----- DAC #2 setpoint parameters initialization 
                                         if (data[0] == "\x20"):
                                             logger.info('Command received for DAC #2: init parameters at IOC reboot')
