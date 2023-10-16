@@ -473,58 +473,8 @@ def get_steps_var(ip, hostname):
       - step_delay
     '''
     global logger
-    # racks room 01
-    if(ip == '10.128.170.107'):
-        logger.info('Host IP found: 10.128.170.107')
-        logger.info('Hostname found: BOO-INJ-SEP')
-        return 100, 200, 2, 4
-    if(ip == '10.128.170.108'):
-        logger.info('Host IP found: 10.128.170.108')
-        logger.info('Hostname found: BOO-INJ-KICKER')
-        return 1000, 500, 2, 4
-    if(ip == '10.128.170.109'):
-        logger.info('Host IP found: 10.128.170.109')
-        logger.info('Hostname found: SR-INJ-THICK-SEP-1')
-        return 100, 200, 2, 4
-    if(ip == '10.128.170.110'):
-        logger.info('Host IP found: 10.128.170.110')
-        logger.info('Hostname found: SR-INJ-THICK-SEP-2')
-        return 100, 200, 2, 4
-    if(ip == '10.128.170.111'):
-        logger.info('Host IP found: 10.128.170.111')
-        logger.info('Hostname found: S-R-INJ-THIN-SEP')
-        return 100, 200, 2, 4
-    if(ip == '10.128.170.112'):
-        logger.info('Host IP found: 10.128.170.112')
-        logger.info('Hostname found: PING-H')
-        return 3000, 2000, 2, 4
-    if(ip == '10.128.170.113'):
-        logger.info('Host IP found: 10.128.170.113')
-        logger.info('Hostname found: NLK-ON-AXIS-1')
-        return 1500, 2000, 2, 4
-    if(ip == '10.128.170.116'):
-        logger.info('Host IP found: 10.128.170.116')
-        logger.info('Hostname found: NLK-ON-AXIS-2')
-        return 1500, 2000, 2, 4
-    # racks room 20
-    if(ip == '10.128.180.107'):
-        logger.info('Host IP found: 10.128.180.107')
-        logger.info('Hostname found: BOO-EXT-KICKER')
-        return 1000, 1000, 2, 4
-    if(ip == '10.128.180.108'):
-        logger.info('Host IP found: 10.128.180.108')
-        logger.info('Hostname found: BOO-EXT-THIN-SEP')
-        return 100, 200, 2, 4
-    if(ip == '10.128.180.109'):
-        logger.info('Host IP found: 10.128.180.109')
-        logger.info('Hostname found: BOO-EXT-THICK-SEP')
-        return 100, 200, 2, 4
-    if(ip == '10.128.180.110'):
-        logger.info('Host IP found: 10.128.180.110')
-        logger.info('Hostname found: PING-V')
-        return 1000, 2000, 2, 4
 
-    # IP NOT FOUND. CHECK HOSTNAME!
+    # CHECK HOSTNAME FOR CONFIGURING
     #First, check if hostname must be changed - USB STICK
     if not os.path.exists("/media/usb"):
         os.system("mkdir /media/usb")
@@ -545,32 +495,27 @@ def get_steps_var(ip, hostname):
         os.system("umount /dev/sda1")
 
         
-    if((hostname == 'BOO-INJ-SEP') or (hostname == 'SR-INJ-THICK-SEP-1') or (hostname == 'SR-INJ-THICK-SEP-2') or (hostname == 'S-R-INJ-THIN-SEP') or (hostname == 'BOO-EXT-THIN-SEP') or (hostname == 'BOO-EXT-THICK-SEP') \
-        or (hostname == 'SPARE-SEP-1') or (hostname == 'SPARE-SEP-2') or (hostname == 'SPARE-SEP-3') or (hostname == 'SPARE-SEP')):
+        if((hostname == 'TB-InjSept') or (hostname == 'TS-InjSeptG-1') or (hostname == 'TS-InjSeptG-2') or (hostname == 'TS-InjSeptF') or (hostname == 'TS-EjeSeptF') or (hostname == 'TS-EjeSeptG')):
         logger.info('Hostname identified: {}'.format(hostname))
         return 100, 200, 2, 4
         
-    if(hostname == 'BOO-INJ-KICKER'):
+    if(hostname == 'BO-InjKckr'):
         logger.info('Hostname identified: {}'.format(hostname))
         return 1000, 500, 2, 4
 
-    if(hostname == 'BOO-EXT-KICKER'):
+    if(hostname == 'BO-EjeKckr'):
         logger.info('Hostname identified: {}'.format(hostname))
         return 1000, 1000, 2, 4
 
-    if((hostname == 'SPARE-KICKER-1') or (hostname == 'SPARE-KICKER-2') or (hostname == 'SPARE-KICKER-3') or (hostname == 'SPARE-KICKER')):
-        logger.info('Hostname identified: {}'.format(hostname))
-        return 1000, 2000, 2, 4
-
-    if((hostname == 'NLK-ON-AXIS-1') or (hostname == 'NLK-ON-AXIS-2') or (hostname == 'NLK-ON-AXIS-3')):
+    if((hostname == 'SI-InjDpKckr') or (hostname == 'SI-InjNLKckr')):
         logger.info('Hostname identified: {}'.format(hostname))
         return 1500, 2000, 2, 4
 
-    if(hostname == 'PING-H'):
+    if(hostname == 'SI-PingH'):
         logger.info('Hostname identified: {}'.format(hostname))
         return 3000, 2000, 2, 4
        
-    if(hostname == 'PING-V'):
+    if(hostname == 'SI-PingV'):
         logger.info('Hostname identified: {}'.format(hostname))
         return 1000, 2000, 2, 4
 
@@ -580,7 +525,6 @@ def get_steps_var(ip, hostname):
         return 3000, 2000, 2, 4
 
     #raise ValueError(f'hostname {hostname} not supported')
-    #raise ValueError('hostname not supported')
 #==============================================================================
 
 if __name__ == '__main__':
@@ -618,7 +562,7 @@ if __name__ == '__main__':
             board_address = addr
             break
 
-    if "NLK-ON-AXIS-2" in socket.gethostname():
+    if "NLK" in socket.gethostname():
         board_address = 7
         board_address_2 = 6
         board_address_3 = 5
@@ -660,7 +604,7 @@ if __name__ == '__main__':
                                                 "DAC offset":dac.OFFSET,
                                                 "ADC gain":adc.GAIN,
                                                 "ADC offset":adc.OFFSET}
-            if "NLK-ON-AXIS-2" in socket.gethostname():
+            if "NLK" in socket.gethostname():
                 config(board_address_2)
                 time.sleep(1)
                 board_calibration[board_address_2] = {"DAC gain":dac.GAIN,
@@ -830,7 +774,7 @@ if __name__ == '__main__':
                                     #pass
                                     #==============================================================
                                     #==============================================================
-                                    elif ("NLK-ON-AXIS-2" in socket.gethostname()):
+                                    elif ("NLK" in socket.gethostname()):
                                         # NLK UPGRADE ----- DAC #2 setpoint parameters initialization 
                                         if (data[0] == "\x20"):
                                             logger.info('Command received for DAC #2: init parameters at IOC reboot')
