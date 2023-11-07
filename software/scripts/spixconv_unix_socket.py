@@ -495,7 +495,7 @@ def get_steps_var(ip, hostname):
         os.system("umount /dev/sda1")
 
         
-        if((hostname == 'TB-InjSept') or (hostname == 'TS-InjSeptG-1') or (hostname == 'TS-InjSeptG-2') or (hostname == 'TS-InjSeptF') or (hostname == 'TS-EjeSeptF') or (hostname == 'TS-EjeSeptG')):
+    if((hostname == 'TB-InjSept') or (hostname == 'TS-InjSeptG-1') or (hostname == 'TS-InjSeptG-2') or (hostname == 'TS-InjSeptF') or (hostname == 'TS-EjeSeptF') or (hostname == 'TS-EjeSeptG')):
         logger.info('Hostname identified: {}'.format(hostname))
         return 100, 200, 2, 4
         
