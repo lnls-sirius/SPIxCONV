@@ -7,5 +7,5 @@ spi = SPI(0,0)
 #defining mode (CPOL = 0; CPHA = 1)
 spi.mode = 1
 #defining speed (in bps)
-spi.msh = 10000000
+spi.msh = 10000
 #-------------------------------------------------------
