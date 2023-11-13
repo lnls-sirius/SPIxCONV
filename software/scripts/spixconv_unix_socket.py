@@ -1034,9 +1034,8 @@ if __name__ == '__main__':
                 set_analog_output(board, voltage)
                 start = time.time()
                 while(time.time() - start < step_delay):
-                   if not queue_voltage.empty():
-                        return
-                   # pass
+                   time.sleep(0.1)
+                    
             # adjust last step
             set_analog_output(board, value)
             logger.info(' - Voltage step %d: {:.2f}'.format((value-131072.0)/131072*voltage_factor*10) %(i+2) + ' V')
