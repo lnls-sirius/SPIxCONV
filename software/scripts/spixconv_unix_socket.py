@@ -643,6 +643,10 @@ if __name__ == '__main__':
             #----------------------------
             while True:
                 connection, client_address = sock.accept()
+                connection.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1) # Enable KeepAlive functionality
+                connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPIDLE, 1) # Wait 1 sec before testing keepalive
+                connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPINTVL, 3) # Retry keepalive after 3 secs
+                connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPCNT, 3) # Retry keepalive 3 times
                 try:
                     logger.info('Client connected {} '.format(client_address))
                     while True:
@@ -838,9 +842,9 @@ if __name__ == '__main__':
 
                         else:
                             break
-                except:
+                except Exception as e:
                     #logger.exception('Connection Error !')
-                    logger.exception('Error in thread 1! (writing to list')
+                    logger.exception('Exception in socket thread: ', e)
                 finally:
                     logger.info('Closing connection {}'.format(client_address))
                     connection.close()
