@@ -741,7 +741,6 @@ if __name__ == '__main__':
                                         #voltage = read_analog_input_raw(ord(command[1]))
                                         voltage = read_analog_input_raw(board_address)
                                         connection.sendall(str(voltage) + "\r\n")
-                                        #print str(voltage)
                                     #==============================================================
                                     # DAC setpoint parameters initialization 
                                     elif (data[0] == "\x10"):
