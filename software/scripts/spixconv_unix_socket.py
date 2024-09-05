@@ -8,6 +8,7 @@ import sys
 import os
 import time
 import logging
+from logging.handlers import RotatingFileHandler
 import argparse
 import time
 from threading import Thread, Lock
@@ -534,11 +535,18 @@ if __name__ == '__main__':
     global board_calibration
     global connection
     global logger
-    logging.basicConfig(level=logging.INFO, format='%(asctime)-15s [%(levelname)s] %(message)s',
-        datefmt='%d/%m/%Y %H:%M:%S')
-    logger = logging.getLogger()
 
-    parser = argparse.ArgumentParser(description='SPIxCONV Socket Binding', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    logger = logging.getLogger("spixconv")
+    formatter = logging.Formatter(
+    "%(asctime)-15s - (%(name)s) %(levelname)s - %(message)s", datefmt="%d/%m/%Y %H:%M:%S"
+    )
+    file_handler = RotatingFileHandler("/var/log/spixconv.log", maxBytes=15000000, backupCount=5)
+    file_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+    logger.setLevel(logging.INFO)
+
+
     parser.add_argument('board_address', type=int, help='Board address.')
     parser.add_argument('--tcp', help='Use a TCP socket instead of an UNIX.', action='store_true')
     parser.add_argument('--port', '-p', dest='port', type=int, help='TCP server port.', default=5005)
