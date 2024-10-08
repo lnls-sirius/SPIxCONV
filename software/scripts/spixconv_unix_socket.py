@@ -8,6 +8,7 @@ import sys
 import os
 import time
 import logging
+from logging.handlers import RotatingFileHandler
 import argparse
 import time
 from threading import Thread, Lock
@@ -534,9 +535,16 @@ if __name__ == '__main__':
     global board_calibration
     global connection
     global logger
-    logging.basicConfig(level=logging.INFO, format='%(asctime)-15s [%(levelname)s] %(message)s',
-        datefmt='%d/%m/%Y %H:%M:%S')
-    logger = logging.getLogger()
+
+    logger = logging.getLogger("spixconv")
+    formatter = logging.Formatter(
+    "%(asctime)-15s - (%(name)s) %(levelname)s - %(message)s", datefmt="%d/%m/%Y %H:%M:%S"
+    )
+    file_handler = RotatingFileHandler("/var/log/spixconv.log", maxBytes=15000000, backupCount=5)
+    file_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+    logger.setLevel(logging.INFO)
 
     parser = argparse.ArgumentParser(description='SPIxCONV Socket Binding', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('board_address', type=int, help='Board address.')
@@ -741,7 +749,6 @@ if __name__ == '__main__':
                                         #voltage = read_analog_input_raw(ord(command[1]))
                                         voltage = read_analog_input_raw(board_address)
                                         connection.sendall(str(voltage) + "\r\n")
-                                        #print str(voltage)
                                     #==============================================================
                                     # DAC setpoint parameters initialization 
                                     elif (data[0] == "\x10"):
