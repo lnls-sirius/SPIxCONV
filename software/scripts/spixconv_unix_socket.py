@@ -565,7 +565,9 @@ if __name__ == '__main__':
                 raise
     #----------------------------
     # identify board address:
-    for addr in range(255):
+    # TEST ONLY
+    #for addr in range(255):
+    for addr in list(range(10, -1, -1)):
         if(flash.ID_read(addr) == 4):
             board_address = addr
             break
