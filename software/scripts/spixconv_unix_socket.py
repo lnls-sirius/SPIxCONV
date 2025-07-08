@@ -997,7 +997,8 @@ if __name__ == '__main__':
                                     if response_payload is not None:
                                         # Compute checksum and fill the complete response 
                                         checksum = compute_checksum(response_payload)
-                                        response = response_payload + chr(checksum) + "\r\n"
+                                        response = response_payload + "\r\n"
+                                        #response = response_payload + chr(checksum) + "\r\n"
 
                                         # Transmit it 
                                         connection.sendall(response)
