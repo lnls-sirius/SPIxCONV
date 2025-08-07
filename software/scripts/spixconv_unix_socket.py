@@ -535,6 +535,7 @@ if __name__ == '__main__':
     global board_calibration
     global connection
     global logger
+    global logger_debug
 
     logger = logging.getLogger("spixconv")
     formatter = logging.Formatter(
@@ -545,6 +546,18 @@ if __name__ == '__main__':
 
     logger.addHandler(file_handler)
     logger.setLevel(logging.INFO)
+
+    # Temporary logger for debugging communication problem
+    logger_debug = logging.getLogger("spixconv_debug")
+    formatter_debug = logging.Formatter(
+    "%(asctime)-15s - (%(name)s) %(levelname)s - %(message)s", datefmt="%d/%m/%Y %H:%M:%S"
+    )
+    file_handler_debug = RotatingFileHandler("/var/log/spixconv_debug.log", maxBytes=15000000, backupCount=5)
+    file_handler_debug.setFormatter(formatter_debug)
+
+    logger_debug.addHandler(file_handler_debug)
+    logger_debug.setLevel(logging.INFO)
+
 
     parser = argparse.ArgumentParser(description='SPIxCONV Socket Binding', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('board_address', type=int, help='Board address.')
@@ -663,97 +676,166 @@ if __name__ == '__main__':
                         msg = connection.recv(512)
                         if msg:
                             commands = msg.split('\r\n')
+
+                            # Check if the last command is unterminated (non-empty)
+                            if commands and commands[-1] != "":
+                                unterminated_command = commands[-1]
+                                logger_debug.info("Unterminated command: {}".format(repr(unterminated_command)))
+
                             for data in commands:
                                 if data:
 #                                    logger.info("Comando recebido: {}".format(ord(data[0])))
                                     #==============================================================
                                     # set GPIO pin direction
-                                    if (data[0] == "\x01"):
+                                    if (ord(data[0]) == 0x01):
                                         logger.info('Command received: set GPIO direction')
                                         queue_general.put([data[0], "dummy_address", data[2], data[3], data[4]])
+                                        
+                                        # Fill response payload
+                                        response_data = ""
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
                                     #==============================================================
                                     # adjust DAC output value
-                                    elif (data[0] == "\x02"):
-                                        # update last setpoint
+                                    elif (ord(data[0]) == 0x02):
+                                        # Update last setpoint
                                         logger.info('Command received: voltage setpoint')
                                         last_setpoint = int(data[2:])
                                         #-----------------------------------------
                                         queue_voltage.put([board_address, data[2:]])
+
+                                        # Fill response payload
+                                        response_data = ""
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
                                     #==============================================================
                                     # read DAC setpoint value
-                                    elif (data[0] == "\x03"):
-                                        connection.sendall(str(read_analog_output(board_address)) + "\r\n")
+                                    elif (ord(data[0]) == 0x03):
+                                        # Fill response payload
+                                        response_data = str(read_analog_output(board_address))
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+                                        
+                                        # Send message 
+                                        # connection.sendall(str(read_analog_output(board_address)) + "\r\n")
                                     #==============================================================
                                     # read maximum of 10 last ADC input value
-                                    elif (data[0] == "\x04"):
+                                    elif (ord(data[0]) == 0x04):
                                         #voltage = read_analog_input(ord(command[1]))
                                         voltage = read_analog_input(board_address)
-                                        connection.sendall(str(voltage) + "\r\n")
-                                        #print str(voltage)
+
+                                        # Fill response payload
+                                        response_data = str(voltage)
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data
+
+                                        # Send message 
+                                        # connection.send(str(voltage) + "\r\n") 
                                     #==============================================================
                                     # write a whole byte in digital Port B
-                                    elif (data[0] == "\x05"):
+                                    elif (ord(data[0]) == 0x05):
                                         logger.info('Command received: write byte (port B)')
                                         queue_general.put([data[0], "dummy_address", data[2]])
+
+                                        # Fill response payload
+                                        response_data = ""
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
                                     #==============================================================
                                     # write a bit in Port B GPIO
                                     #elif (data[0] == "\x06"):
                                     #    queue_general.put([data[0], "dummy_address", data[2], data[3]])
                                     #==============================================================
                                     # read the whole byte in digital Port A
-                                    elif (data[0] == "\x07"):
+                                    elif (ord(data[0]) == 0x07):
                                         logger.info('Command received: write byte (port A)')
-                                        #byte = read_digital_input_byte(ord(command[1]))
-                                        byte = read_digital_input_byte(board_address)
-                                        connection.sendall(str(byte) + "\r\n")
+
+                                        # Fill response payload
+                                        response_data = str(read_digital_input_byte(board_address))
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data
+                                        
+                                        # #byte = read_digital_input_byte(ord(command[1]))
+                                        # byte = read_digital_input_byte(board_address)
+                                        # connection.sendall(str(byte) + "\r\n")
                                         #print byte
                                     #==============================================================
                                     # read a bit in Port B GPIO
-                                    elif (data[0] == "\x08"):
-                                        #bit = read_digital_input_bit(ord(command[1]), ord(command[2]))
-                                        bit = read_digital_input_bit(board_address, ord(data[2]))
-                                        connection.sendall(str(bit) + "\r\n")
+                                    elif (ord(data[0]) == 0x08):
+                                        # Fill response payload
+                                        response_data = str(read_digital_input_bit(board_address, ord(data[2])))
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+
+                                        # #bit = read_digital_input_bit(ord(command[1]), ord(command[2]))
+                                        # bit = read_digital_input_bit(board_address, ord(data[2]))
+                                        # connection.sendall(str(bit) + "\r\n")
 #                                        logger.info(bit)
                                     #==============================================================
                                     # generate a pulse in RESET bit (Port B, bit 3)
-                                    elif (data[0] == "\x09"):
+                                    elif (ord(data[0]) == 0x09):
                                         logger.info('Command received: Reset')
                                         queue_general.put([data[0], "dummy_address", data[2]])
+                                        
+                                        # Fill response payload 
+                                        response_data = ""
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
                                     #==============================================================
                                     # read interlock labels
                                     #elif (data[0] == "\x0A"):
                                     #    pass
                                     #==============================================================
                                     # read a Port B bit setpoint
-                                    elif (data[0] == "\x0B"):
-                                        #bit = read_portB_digital_output_bit(ord(command[1]), ord(command[2]))
-                                        bit = read_portB_digital_output_bit(board_address, ord(data[2]))
-                                        connection.sendall(str(bit) + "\r\n")
+                                    elif (ord(data[0]) == 0x0B):
+                                        # Fill response payload 
+                                        response_data = str(read_portB_digital_output_bit(board_address, ord(data[2])))
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+
+                                        # #bit = read_portB_digital_output_bit(ord(command[1]), ord(command[2]))
+                                        # bit = read_portB_digital_output_bit(board_address, ord(data[2]))
+                                        # connection.sendall(str(bit) + "\r\n")
                                     #==============================================================
                                     # write bit in port B
-                                    elif (data[0] == "\x0C"):
+                                    elif (ord(data[0]) == 0x0C):
                                         logger.info('Command received: write bit (port B)')
                                         queue_general.put([data[0], "dummy_address", data[2], data[3]])
+
+                                        # Fill response payload 
+                                        response_data = ""
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
                                     #==============================================================
                                     # read input bit of port A
                                     #elif (data[0] == "\x0D"):
                                     #    pass
                                     #==============================================================
                                     # read input bit of port B
-                                    elif (data[0] == "\x0E"):
-                                        #bit = read_portB_digital_input_bit(ord(command[1]), ord(command[2]))
-                                        bit = read_portB_digital_input_bit(board_address, ord(data[2]))
-#                                        logger.info("Bit {}: {}".format(ord(data[2]), bit))
-                                        connection.sendall(str(bit) + "\r\n")
+                                    elif (ord(data[0]) == 0x0E):
+                                        # Fill response payload
+                                        response_data = str(read_portB_digital_input_bit(board_address, ord(data[2])))
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+
+#                                         #bit = read_portB_digital_input_bit(ord(command[1]), ord(command[2]))
+#                                         bit = read_portB_digital_input_bit(board_address, ord(data[2]))
+# #                                        logger.info("Bit {}: {}".format(ord(data[2]), bit))
+#                                         connection.sendall(str(bit) + "\r\n")
                                     #==============================================================
                                     # read raw ADC input value
-                                    elif (data[0] == "\x0F"):
-                                        #voltage = read_analog_input_raw(ord(command[1]))
-                                        voltage = read_analog_input_raw(board_address)
-                                        connection.sendall(str(voltage) + "\r\n")
+                                    elif (ord(data[0]) == 0x0F):
+                                        # Fill response payload
+                                        response_data = str(read_analog_input_raw(board_address))
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+
+                                        # #voltage = read_analog_input_raw(ord(command[1]))
+                                        # voltage = read_analog_input_raw(board_address)
+                                        # connection.sendall(str(voltage) + "\r\n")
                                     #==============================================================
                                     # DAC setpoint parameters initialization 
-                                    elif (data[0] == "\x10"):
+                                    elif (ord(data[0]) == 0x10):
                                         logger.info('Command received: init parameters at IOC reboot')
                                         init_values = data[2:].split(',')
                                         #------------------------------
@@ -773,14 +855,25 @@ if __name__ == '__main__':
                                         percentage = (dac_code - 131072.0)/131072
                                         # value = [131072, 10]
                                         value = int(percentage * voltage_factor * 131072 + 131072)
-                                        connection.sendall(str(value) + "\r\n")
+
+                                        # Fill response payload
+                                        response_data = str(value)
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+
+                                        # connection.sendall(str(value) + "\r\n")
                                     #==============================================================
                                     # read input bit of port A
-                                    elif (data[0] == "\x11"):
-                                        #bit = read_portA_digital_input_bit(ord(command[1]), ord(command[2]))
-                                        bit = read_portA_digital_input_bit(board_address, ord(data[2]))
-#                                        logger.info("Bit {}: {}".format(ord(data[2]), bit))
-                                        connection.sendall(str(bit) + "\r\n")
+                                    elif (ord(data[0]) == 0x11):
+                                        # Fill response payload
+                                        response_data = str(read_portA_digital_input_bit(board_address, ord(data[2])))
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+                                        
+#                                         #bit = read_portA_digital_input_bit(ord(command[1]), ord(command[2]))
+#                                         bit = read_portA_digital_input_bit(board_address, ord(data[2]))
+# #                                        logger.info("Bit {}: {}".format(ord(data[2]), bit))
+#                                         connection.sendall(str(bit) + "\r\n")
                                     #==============================================================
                                     # available command
                                     #elif (data[0] == "\x12"):
@@ -789,65 +882,148 @@ if __name__ == '__main__':
                                     #==============================================================
                                     elif ("NLK" in socket.gethostname()):
                                         # NLK UPGRADE ----- DAC #2 setpoint parameters initialization 
-                                        if (data[0] == "\x20"):
+                                        if (ord(data[0]) == 0x20):
                                             logger.info('Command received for DAC #2: init parameters at IOC reboot')
                                             # return DAC RB (readback) value
                                             # dac_code = [0, 262143] - voltage = [-10, 10]
                                             percentage = (read_analog_output(board_address_2) - 131072.0)/131072
                                             # value = [131072, 10]
                                             value = int(percentage * voltage_factor * 131072 + 131072)
-                                            connection.sendall(str(value) + "\r\n")
+
+                                            # Fill response payload
+                                            response_data = str(value)
+                                            response_status = chr(0x01)
+                                            response_payload = data[0] + response_status + response_data 
+
+                                            # connection.sendall(str(value) + "\r\n")
                                         #==============================================================
                                         # NLK UPGRADE ----- adjust DAC #2 output value
-                                        elif (data[0] == "\x22"):
+                                        elif (ord(data[0]) == 0x22):
                                             # update last setpoint
                                             logger.info('Command received: voltage setpoint')
                                             queue_voltage.put([board_address_2, data[2:]])
+
+                                            # Fill response payload
+                                            response_data = ""
+                                            response_status = chr(0x01)
+                                            response_payload = data[0] + response_status + response_data 
                                         #==============================================================
                                         # NLK UPGRADE ----- read DAC #2 setpoint value
-                                        elif (data[0] == "\x23"):
-                                            connection.sendall(str(read_analog_output(board_address_2)) + "\r\n")
+                                        elif (ord(data[0]) == 0x23):
+                                            # Fill response payload
+                                            response_data = str(read_analog_output(board_address_2))
+                                            response_status = chr(0x01)
+                                            response_payload = data[0] + response_status + response_data 
+
+                                            # connection.sendall(str(read_analog_output(board_address_2)) + "\r\n")
                                         #==============================================================
                                         # NLK UPGRADE ----- read maximum of 10 last ADC #2 input value
-                                        elif (data[0] == "\x24"):
+                                        elif (ord(data[0]) == 0x24):
                                             voltage = read_analog_input(board_address_2)
-                                            connection.sendall(str(voltage) + "\r\n")
+
+                                            # Fill response payload
+                                            response_data = str(voltage)
+                                            response_status = chr(0x01)
+                                            response_payload = data[0] + response_status + response_data 
+
+                                            # connection.sendall(str(voltage) + "\r\n")
                                         #==============================================================
                                         # NLK UPGRADE ----- read raw ADC #2 input value
-                                        elif (data[0] == "\x2F"):
+                                        elif (ord(data[0]) == 0x2F):
                                             voltage = read_analog_input_raw(board_address_2)
-                                            connection.sendall(str(voltage) + "\r\n")
+
+                                            # Fill response payload
+                                            response_data = str(voltage)
+                                            response_status = chr(0x01)
+                                            response_payload = data[0] + response_status + response_data 
+
+                                            # connection.sendall(str(voltage) + "\r\n")
                                         #==============================================================
                                         # NLK UPGRADE ----- DAC #3 setpoint parameters initialization 
-                                        elif (data[0] == "\x30"):
+                                        elif (ord(data[0]) == 0x30):
                                             logger.info('Command received for DAC #3: init parameters at IOC reboot')
                                             # return DAC RB (readback) value
                                             # dac_code = [0, 262143] - voltage = [-10, 10]
                                             percentage = (read_analog_output(board_address_3) - 131072.0)/131072
                                             # value = [131072, 10]
                                             value = int(percentage * voltage_factor * 131072 + 131072)
-                                            connection.sendall(str(value) + "\r\n")
+
+                                            # Fill response payload
+                                            response_data = str(value)
+                                            response_status = chr(0x01)
+                                            response_payload = data[0] + response_status + response_data 
+
+                                            # connection.sendall(str(value) + "\r\n")
                                         #==============================================================
                                         # NLK UPGRADE ----- adjust DAC #3 output value
-                                        elif (data[0] == "\x32"):
+                                        elif (ord(data[0]) == 0x32):
                                             # update last setpoint
                                             logger.info('Command received: voltage setpoint')
                                             queue_voltage.put([board_address_3, data[2:]])
+
+                                            # Fill response payload
+                                            response_data = ""
+                                            response_status = chr(0x01)
+                                            response_payload = data[0] + response_status + response_data
                                         #==============================================================
                                         # NLK UPGRADE ----- read DAC #3 setpoint value
-                                        elif (data[0] == "\x33"):
-                                            connection.sendall(str(read_analog_output(board_address_3)) + "\r\n")
+                                        elif (ord(data[0]) == 0x33):
+                                            # Fill response payload
+                                            response_data = str(read_analog_output(board_address_3))
+                                            response_status = chr(0x01)
+                                            response_payload = data[0] + response_status + response_data 
+
+                                            # connection.sendall(str(read_analog_output(board_address_3)) + "\r\n")
                                         #==============================================================
                                         # NLK UPGRADE ----- read maximum of 10 last ADC #3 input value
-                                        elif (data[0] == "\x34"):
+                                        elif (ord(data[0]) == 0x34):
                                             voltage = read_analog_input(board_address_3)
-                                            connection.sendall(str(voltage) + "\r\n")
+
+                                            # Fill response payload
+                                            response_data = str(voltage)
+                                            response_status = chr(0x01)
+                                            response_payload = data[0] + response_status + response_data 
+                                            
+                                            # connection.sendall(str(voltage) + "\r\n")
                                         #==============================================================
                                         # NLK UPGRADE ----- read raw ADC #3 input value
-                                        elif (data[0] == "\x3F"):
+                                        elif (ord(data[0]) == 0x3F):
                                             voltage = read_analog_input_raw(board_address_3)
-                                            connection.sendall(str(voltage) + "\r\n")
+
+                                            # Fill response payload
+                                            response_data = str(voltage)
+                                            response_status = chr(0x01)
+                                            response_payload = data[0] + response_status + response_data 
+                                            
+                                            # connection.sendall(str(voltage) + "\r\n")
                                         #==============================================================
+                                    
+                                    # If a valid command was decoded
+                                    if response_payload is not None:
+                                        if isinstance(response_payload, unicode):
+                                             response_payload_bytes = response_payload.encode('latin1') 
+                                             # test if this really happens 
+                                             # after that remove and amend 
+                                        elif isinstance(response_payload, str):
+                                            response_payload_bytes = response_payload
+                                        else:
+                                            logger_debug.warning("Uneexpected type for response_payload :{}".format(type(response_payload)))
+                                            raise ValueError("Unexpected type for response_payload")
+                                        
+
+                                        # Compute checksum and fill the complete response 
+                                        #checksum = compute_checksum(response_payload_bytes)
+                                        response = response_payload_bytes + "\r\n"
+                                        #response = response_payload + chr(checksum) + "\r\n"
+                                        
+                                        # remove and amend 
+                                        raw_hex = " ".join("0x{:02X}".format(ord(c)) for c in data) 
+                                        logger.info("Command: 0x{:02X} | Raw input: {!r} | Raw hex: {} | Response payload: {!r} | Full response: {!r}".format(ord(data[0]), data, raw_hex, response_payload_bytes, response))
+
+                                        # Transmit it 
+                                        connection.sendall(response)
+                                    else:
+                                        logger.info('Invalid command received: ' + repr(data[0]))
 
                         else:
                             break
