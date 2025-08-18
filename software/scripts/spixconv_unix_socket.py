@@ -47,9 +47,9 @@ import gpio
 global digital_output
 global ADC_array
 
-
 digital_output = 0x00
 ADC_array = {}
+
 #==============================================================================
 #global MIN_SCALE, MAX_SCALE, FULL_SCALE
 #MIN_SCALE = 0 
@@ -519,6 +519,618 @@ def get_steps_var(ip, hostname):
     #raise ValueError(f'hostname {hostname} not supported')
 
 
+#==============================================================================
+#    Thread the writes to
+#==============================================================================
+def write_to_list():
+    global board_address
+    global board_address_2
+    global board_address_3
+    global connection
+    global voltage_factor
+    global step_trigger
+    global step_delay
+    global trigger
+    global steps
+    global last_setpoint
+    global board_calibration
+    global logger
+    global args
+    global queue_general
+    global queue_voltage
+
+    try:
+        sock = socket.socket(socket.AF_INET if args.tcp else socket.AF_UNIX, socket.SOCK_STREAM)
+        if args.tcp:
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+        #config(args.board_address)
+        config(board_address)
+        time.sleep(1)
+        board_calibration[board_address] = {"DAC gain":dac.GAIN,
+                                            "DAC offset":dac.OFFSET,
+                                            "ADC gain":adc.GAIN,
+                                            "ADC offset":adc.OFFSET}
+        if "NLK" in socket.gethostname():
+            config(board_address_2)
+            time.sleep(1)
+            board_calibration[board_address_2] = {"DAC gain":dac.GAIN,
+                                                "DAC offset":dac.OFFSET,
+                                                "ADC gain":adc.GAIN,
+                                                "ADC offset":adc.OFFSET}
+            config(board_address_3)
+            time.sleep(1)
+            board_calibration[board_address_3] = {"DAC gain":dac.GAIN,
+                                                "DAC offset":dac.OFFSET,
+                                                "ADC gain":adc.GAIN,
+                                                "ADC offset":adc.OFFSET}
+
+        logger.info(board_calibration)
+        sock.bind(server_address)
+        logger.info('Created socket at {} '.format(server_address))
+        sock.listen(1)
+
+        #interlocks = "External,High voltage power supply overvoltage,High voltage power supply overcurrent,Personnel protection,Temperature,AC power,Switch"
+        logger.info("unix socket running!")
+
+        # Read Voltage-RB at initialization             
+        last_setpoint = read_analog_output(board_address)
+
+        # Get hostname and IP
+        hostname, ip = get_ip_hostname()
+
+        # Initialize steps variable
+        voltage_factor, step_trigger, step_delay, steps = get_steps_var(ip, hostname)
+        trigger = step_trigger/(10.0*voltage_factor) * 131072
+
+        # LF (line feed) = 0x0A
+        # CR (carriage return) = 0x0D
+        LF = 0x0A
+        CR = 0x0D
+
+        while True:
+            connection, client_address = sock.accept()
+
+            # Enable keepalive functionality 
+            connection.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)  
+
+            # Wait one second before testing keepalive
+            connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPIDLE, 1)  
+
+            # Retry keepalive after three seconds
+            connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPINTVL, 3) 
+            
+            # Retry keepalive three times
+            connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPCNT, 3)
+            try:
+                logger.info('Client connected {} '.format(client_address))
+                while True:
+                    msg = connection.recv(512)
+                    if msg:
+                        commands = msg.split('\r\n')
+
+                        # Check if the last command is unterminated (non-empty)
+                        if commands and commands[-1] != "":
+                            unterminated_command = commands[-1]
+                            logger_debug.info("Unterminated command: {}".format(repr(unterminated_command)))
+
+                        for data in commands:
+                            if data:
+                                #logger.info("Comando recebido: {}".format(ord(data[0]))) 
+                                # Set GPIO pin direction
+                                if (ord(data[0]) == 0x01):
+                                    logger.info('Command received: set GPIO direction')
+                                    queue_general.put([data[0], "dummy_address", data[2], data[3], data[4]])
+                                    
+                                    # Fill response payload
+                                    response_data = ""
+                                    response_status = chr(0x01)
+                                    response_payload = data[0] + response_status + response_data 
+                                
+                                # Adjust DAC output value
+                                elif (ord(data[0]) == 0x02):
+                                    # Update last setpoint
+                                    logger.info('Command received: voltage setpoint')
+                                    last_setpoint = int(data[2:])
+                                    queue_voltage.put([board_address, data[2:]])
+
+                                    # Fill response payload
+                                    response_data = ""
+                                    response_status = chr(0x01)
+                                    response_payload = data[0] + response_status + response_data 
+                                
+                                # Read DAC setpoint value
+                                elif (ord(data[0]) == 0x03):
+                                    # Fill response payload
+                                    response_data = str(read_analog_output(board_address))
+                                    response_status = chr(0x01)
+                                    response_payload = data[0] + response_status + response_data 
+                                    
+                                # Read maximum of 10 last ADC input value
+                                elif (ord(data[0]) == 0x04):
+                                    #voltage = read_analog_input(ord(command[1]))
+                                    voltage = read_analog_input(board_address)
+
+                                    # Fill response payload
+                                    response_data = str(voltage)
+                                    response_status = chr(0x01)
+                                    response_payload = data[0] + response_status + response_data
+
+                                # Write a whole byte in digital Port B
+                                elif (ord(data[0]) == 0x05):
+                                    logger.info('Command received: write byte (port B)')
+                                    queue_general.put([data[0], "dummy_address", data[2]])
+
+                                    # Fill response payload
+                                    response_data = ""
+                                    response_status = chr(0x01)
+                                    response_payload = data[0] + response_status + response_data 
+                                
+                                # Write a bit in Port B GPIO
+                                #elif (data[0] == "\x06"):
+                                #    queue_general.put([data[0], "dummy_address", data[2], data[3]])
+                                
+                                # Read the whole byte in digital Port A
+                                elif (ord(data[0]) == 0x07):
+                                    logger.info('Command received: write byte (port A)')
+
+                                    # Fill response payload
+                                    response_data = str(read_digital_input_byte(board_address))
+                                    response_status = chr(0x01)
+                                    response_payload = data[0] + response_status + response_data
+                                    
+                                # Read a bit in Port B GPIO
+                                elif (ord(data[0]) == 0x08):
+                                    # Fill response payload
+                                    response_data = str(read_digital_input_bit(board_address, ord(data[2])))
+                                    response_status = chr(0x01)
+                                    response_payload = data[0] + response_status + response_data 
+
+                                # Generate a pulse in RESET bit (Port B, bit 3)
+                                elif (ord(data[0]) == 0x09):
+                                    logger.info('Command received: Reset')
+                                    queue_general.put([data[0], "dummy_address", data[2]])
+                                    
+                                    # Fill response payload 
+                                    response_data = ""
+                                    response_status = chr(0x01)
+                                    response_payload = data[0] + response_status + response_data 
+                                
+                                # Read interlock labels
+                                #elif (data[0] == "\x0A"):
+                                #    pass
+                                
+                                # Read a Port B bit setpoint
+                                elif (ord(data[0]) == 0x0B):
+                                    # Fill response payload 
+                                    response_data = str(read_portB_digital_output_bit(board_address, ord(data[2])))
+                                    response_status = chr(0x01)
+                                    response_payload = data[0] + response_status + response_data 
+
+                                # Write bit in port B
+                                elif (ord(data[0]) == 0x0C):
+                                    logger.info('Command received: write bit (port B)')
+                                    queue_general.put([data[0], "dummy_address", data[2], data[3]])
+
+                                    # Fill response payload 
+                                    response_data = ""
+                                    response_status = chr(0x01)
+                                    response_payload = data[0] + response_status + response_data 
+                                
+                                # Read input bit of port A
+                                #elif (data[0] == "\x0D"):
+                                #    pass
+                                
+                                # Read input bit of port B
+                                elif (ord(data[0]) == 0x0E):
+                                    # Fill response payload
+                                    response_data = str(read_portB_digital_input_bit(board_address, ord(data[2])))
+                                    response_status = chr(0x01)
+                                    response_payload = data[0] + response_status + response_data 
+
+                                # Read raw ADC input value
+                                elif (ord(data[0]) == 0x0F):
+                                    # Fill response payload
+                                    response_data = str(read_analog_input_raw(board_address))
+                                    response_status = chr(0x01)
+                                    response_payload = data[0] + response_status + response_data 
+
+                                # DAC setpoint parameters initialization 
+                                elif (ord(data[0]) == 0x10):
+                                    logger.info('Command received: init parameters at IOC reboot')
+                                    init_values = data[2:].split(',')
+                                    
+                                    # Separate values received
+                                    voltage_factor = int(init_values[1])
+                                    step_trigger = int(init_values[2])
+                                    step_delay = int(init_values[3])
+                                    
+                                    # Calculate trigger in DAC code
+                                    trigger = step_trigger/(10.0*voltage_factor) * 131072
+                                    steps = 4
+                                    
+                                    # Return DAC RB (readback) value
+                                    # dac_code = [0, 262143]
+                                    last_setpoint = dac_code = read_analog_output(board_address)
+                                    
+                                    # Voltage = [-10, 10]
+                                    percentage = (dac_code - 131072.0)/131072
+                                    
+                                    # value = [131072, 10]
+                                    value = int(percentage * voltage_factor * 131072 + 131072)
+
+                                    # Fill response payload
+                                    response_data = str(value)
+                                    response_status = chr(0x01)
+                                    response_payload = data[0] + response_status + response_data 
+
+                                # Read input bit of port A
+                                elif (ord(data[0]) == 0x11):
+                                    # Fill response payload
+                                    response_data = str(read_portA_digital_input_bit(board_address, ord(data[2])))
+                                    response_status = chr(0x01)
+                                    response_payload = data[0] + response_status + response_data 
+                                    
+#                                   # Available command
+                                #elif (data[0] == "\x12"):
+                                #pass
+                                
+                                elif ("NLK" in socket.gethostname()):
+                                    # NLK UPGRADE ----- DAC #2 setpoint parameters initialization 
+                                    if (ord(data[0]) == 0x20):
+                                        logger.info('Command received for DAC #2: init parameters at IOC reboot')
+                                        # Return DAC RB (readback) value
+                                        
+                                        # dac_code = [0, 262143] - voltage = [-10, 10]
+                                        percentage = (read_analog_output(board_address_2) - 131072.0)/131072
+                                        
+                                        # value = [131072, 10]
+                                        value = int(percentage * voltage_factor * 131072 + 131072)
+
+                                        # Fill response payload
+                                        response_data = str(value)
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+
+                                    # NLK UPGRADE ----- adjust DAC #2 output value
+                                    elif (ord(data[0]) == 0x22):
+                                        # update last setpoint
+                                        logger.info('Command received: voltage setpoint')
+                                        queue_voltage.put([board_address_2, data[2:]])
+
+                                        # Fill response payload
+                                        response_data = ""
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+                                    
+                                    # NLK UPGRADE ----- read DAC #2 setpoint value
+                                    elif (ord(data[0]) == 0x23):
+                                        # Fill response payload
+                                        response_data = str(read_analog_output(board_address_2))
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+
+                                    # NLK UPGRADE ----- read maximum of 10 last ADC #2 input value
+                                    elif (ord(data[0]) == 0x24):
+                                        voltage = read_analog_input(board_address_2)
+
+                                        # Fill response payload
+                                        response_data = str(voltage)
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+
+                                    # NLK UPGRADE ----- read raw ADC #2 input value
+                                    elif (ord(data[0]) == 0x2F):
+                                        voltage = read_analog_input_raw(board_address_2)
+
+                                        # Fill response payload
+                                        response_data = str(voltage)
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+
+                                    # NLK UPGRADE ----- DAC #3 setpoint parameters initialization 
+                                    elif (ord(data[0]) == 0x30):
+                                        logger.info('Command received for DAC #3: init parameters at IOC reboot')
+                                        # Return DAC RB (readback) value
+                                        
+                                        # dac_code = [0, 262143] - voltage = [-10, 10]
+                                        percentage = (read_analog_output(board_address_3) - 131072.0)/131072
+                                        
+                                        # value = [131072, 10]
+                                        value = int(percentage * voltage_factor * 131072 + 131072)
+
+                                        # Fill response payload
+                                        response_data = str(value)
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+
+                                    # NLK UPGRADE ----- adjust DAC #3 output value
+                                    elif (ord(data[0]) == 0x32):
+                                        # update last setpoint
+                                        logger.info('Command received: voltage setpoint')
+                                        queue_voltage.put([board_address_3, data[2:]])
+
+                                        # Fill response payload
+                                        response_data = ""
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data
+                                    
+                                    # NLK UPGRADE ----- read DAC #3 setpoint value
+                                    elif (ord(data[0]) == 0x33):
+                                        # Fill response payload
+                                        response_data = str(read_analog_output(board_address_3))
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+
+                                    # NLK UPGRADE ----- read maximum of 10 last ADC #3 input value
+                                    elif (ord(data[0]) == 0x34):
+                                        voltage = read_analog_input(board_address_3)
+
+                                        # Fill response payload
+                                        response_data = str(voltage)
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+                                        
+                                    # NLK UPGRADE ----- read raw ADC #3 input value
+                                    elif (ord(data[0]) == 0x3F):
+                                        voltage = read_analog_input_raw(board_address_3)
+
+                                        # Fill response payload
+                                        response_data = str(voltage)
+                                        response_status = chr(0x01)
+                                        response_payload = data[0] + response_status + response_data 
+                                        
+                                    
+                                # If a valid command was decoded
+                                if response_payload is not None:
+                                    if isinstance(response_payload, unicode):
+                                            response_payload_bytes = response_payload.encode('latin1') 
+                                            # test if this really happens 
+                                            # after that remove and amend 
+                                    elif isinstance(response_payload, str):
+                                        response_payload_bytes = response_payload
+                                    else:
+                                        logger_debug.warning("Uneexpected type for response_payload :{}".format(type(response_payload)))
+                                        raise ValueError("Unexpected type for response_payload")
+                                    
+                                    # Compute checksum and fill the complete response 
+                                    #checksum = compute_checksum(response_payload_bytes)
+                                    response = response_payload_bytes + "\r\n"
+                                    #response = response_payload + chr(checksum) + "\r\n"
+                                    
+                                    # remove and amend 
+                                    raw_hex = " ".join("0x{:02X}".format(ord(c)) for c in data) 
+                                    logger.info("Command: 0x{:02X} | Raw input: {!r} | Raw hex: {} | Response payload: {!r} | Full response: {!r}".format(ord(data[0]), data, raw_hex, response_payload_bytes, response))
+
+                                    # Transmit it 
+                                    connection.sendall(response)
+                                else:
+                                    logger.info('Invalid command received: ' + repr(data[0]))
+
+                    else:
+                        break
+            except Exception as e:
+                logger.exception('Exception in socket thread: ', e)
+            finally:
+                logger.info('Closing connection {}'.format(client_address))
+                connection.close()
+    finally:
+        sock.close()
+
+
+
+#==============================================================================
+#    Thread that reads from 
+#==============================================================================
+def read_from_list():
+    global board_address
+    global last_setpoint
+    global logger
+    global queue_voltage
+    global queue_general
+    
+    while(True):
+        try:
+            while(True):
+                # Wait until there is a command in the list
+                #while(queue_general.empty()):
+                #    pass
+                command = queue_general.get(block=True)
+                
+                # set GPIO pin direction
+                if (command[0] == "\x01"):
+                    #set_direction_bit(int(ord(command[1])), command[2], int(ord(command[3])), int(command[4]))
+                    set_direction_bit(board_address, command[2], int(ord(command[3])), int(command[4]))
+                
+                # Adjust DAC output value
+                #elif (command[0] == "\x02"):
+                
+                # Read DAC setpoint value
+                #elif (command[0] == "\x03"):
+                
+                # Read maximum of 10 last ADC input value
+                #elif (command[0] == "\x04"):
+                
+                # Write a whole byte in digital Port B
+                elif (command[0] == "\x05"):
+                    #set_digital_output_byte(ord(command[1]), ord(command[2]))
+                    set_digital_output_byte(board_address, ord(command[2]))
+                
+                # Write a bit in Port B GPIO
+                #elif (command[0] == "\x06"):
+                #    #set_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
+                #    set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
+                
+                # Read the whole byte in digital Port A
+                #elif (command[0] == "\x07"):
+                
+                # Read a bit in Port B GPIO
+                #elif (command[0] == "\x08"):
+                
+                # Generate a pulse in RESET bit (Port B, bit 3)
+                elif (command[0] == "\x09"):
+                    #reset(ord(command[1]), int(command[2]))
+                    logger.info('Reset command')
+                    reset(board_address, int(command[2]))
+                
+                # Read interlock labels
+                elif (command[0] == "\x0A"):
+                    #connection.sendall(interlocks)
+                    pass
+                
+                # Read a Port B bit setpoint
+                #elif (command[0] == "\x0B"):
+                
+                # Write to port B bit
+                elif (command[0] == "\x0C"):
+                    #set_portB_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
+                    
+                    # Check if command is related to PwrState-Sel (bit 1) and
+                    #   ... if command is to power the PS on and
+                    #   ... if PS is turned off
+                    #if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_input_bit(board_address, 7) == 0) ):
+                    if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_output_bit(board_address, 1) == 0) ):
+                        #logger.info('Turning PS on')
+                        logger.info('Set voltage to zero to turn PS on')
+                        
+                        # Force voltage setpoint to be zero
+                        queue_voltage.put([board_address, 131072])
+                        
+                        # Wait until voltage setpoint is zero
+                        while (read_analog_output(board_address) != 131072):
+                            pass
+                        
+                        # power the PS on 
+                        logger.info('Turning PS on...')
+                        set_portB_digital_output_bit(board_address, int(ord(command[2])), 1)
+                        time.sleep(0.5)
+                        
+                        # Wait until PwrState-Sts (bit 7) is 1
+                        #while (read_portB_digital_input_bit(board_address, 7) != 1):
+                        #    pass
+                        
+                        # Wait until PwrState-Sel (bit 1) is 0
+                        while (read_portB_digital_output_bit(board_address, 1) != 1):
+                            pass
+                        logger.info('PS is on')
+                        
+                        # Restore last voltage setpoint
+                        logger.info('Restoring voltage setpoint...')
+                        queue_voltage.put([board_address, last_setpoint])
+                    
+                    else:
+                        cmd = ord(command[2])
+                        bit = int(command[3])
+                        if (cmd == 1):
+                            if (bit == 0):
+                                logger.info('PS off')
+                            elif (bit == 1):
+                                logger.info('PS on')
+                        elif (cmd == 2):
+                            if (bit == 0):
+                                logger.info('Pulse disabled')
+                            elif (bit == 1):
+                                logger.info('Pulse enabled')
+                        else:
+                            logger.info('Change bit {}'.format(bit))
+                        set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
+                
+                #elif (command[0] == "\x0D"):
+                
+                #elif (command[0] == "\x0E"):
+                
+                # Read raw ADC input value
+                #elif (command[0] == "\x0F"):
+                
+                # Available command
+                #elif (command[0] == "\x10"):
+                
+        except:
+            logger.exception('Error in thread 2! (reading from list)')
+
+
+
+#==============================================================================
+#    Thread that run voltage_steps
+#==============================================================================
+def voltage_adjustment():
+    global last_setpoint
+    global logger
+    global board_calibration
+    global queue_voltage
+
+    while(True):
+        try:
+            while(True):
+                # Wait until there is a command in the list
+                #while(queue_voltage.empty()):
+                    # check if Voltage-SP is equal to Voltage-RB
+                    #if((last_setpoint < (read_analog_output(board_address) - 1)) or (last_setpoint > (read_analog_output(board_address) + 1))):
+                    #    logger.info('SP different from RB')
+                    #    queue_voltage.put(last_setpoint)
+                #    pass
+                
+                # Adjust DAC output value
+                # command[0] = "\x0"
+                voltage_steps(queue_voltage.get(block = True))
+        except:
+            logger.exception('Error in thread 3! (voltage thread)')
+
+
+#==============================================================================
+#    Function called by the thread voltage_adjustment
+#==============================================================================
+def voltage_steps(info):
+    # info = [board, value]
+    global voltage_factor
+    global step_trigger
+    global step_delay
+    global trigger
+    global steps
+    global logger
+    global board_calibration
+
+    board = info[0]
+    value = int(info[1])
+    current = read_analog_output(board)
+    logger.info("Board: {} - Value {} - Current: {}".format(board, value, current))
+    
+    # If PS is off, implement setpoint directly
+    #if (read_portB_digital_input_bit(board_address, 7) == 0):
+    #if (read_portB_digital_output_bit(board_address, 1) == 0):
+    #    set_analog_output(board_address, value)
+    
+    #else:
+    # check difference between current and intended setpoint
+    diff = value - current
+
+    # If difference is lower than the amount to activate the steps trigger
+    # then implement new setpoint directly
+    if diff < trigger:
+        logger.info('Voltage setpoint: {:.2f}'.format((value-131072.0)/131072*voltage_factor*10) + ' V')
+        set_analog_output(board, value)
+
+    # If difference is higher than the amount to activate the steps trigger
+    # then calculate calculate graduals setpoints
+    else:
+        #logger.info('Voltage adjustment exceeds limiar: gradual adjust required!')
+        setpoints = [int(current+(i*diff)/steps) for i in range(1,steps)]
+        # loop for "steps-1" gradual setpoints
+        for i, voltage in enumerate(setpoints):
+            logger.info(' - Voltage step %d: {:.2f}'.format((voltage-131072.0)/131072*voltage_factor*10) %(i+1) + ' V')
+            set_analog_output(board, voltage)
+            start = time.time()
+            while(time.time() - start < step_delay):
+                time.sleep(0.1)
+                
+        # adjust last step
+        set_analog_output(board, value)
+        logger.info(' - Voltage step %d: {:.2f}'.format((value-131072.0)/131072*voltage_factor*10) %(i+2) + ' V')
+
+    return
+
+
+
 if __name__ == '__main__':
     global board_address
     global board_address_2
@@ -527,6 +1139,9 @@ if __name__ == '__main__':
     global connection
     global logger
     global logger_debug
+    global queue_general
+    global queue_voltage
+    global args
 
     logger = logging.getLogger("spixconv")
     formatter = logging.Formatter(
@@ -589,595 +1204,6 @@ if __name__ == '__main__':
     
     # Create voltage adjustment queue
     queue_voltage = Queue()
-    
-    def write_to_list():
-        global board_address
-        global board_address_2
-        global board_address_3
-        global connection
-        global voltage_factor
-        global step_trigger
-        global step_delay
-        global trigger
-        global steps
-        global last_setpoint
-        global board_calibration
-        global logger
-
-        try:
-            
-            sock = socket.socket(socket.AF_INET if args.tcp else socket.AF_UNIX, socket.SOCK_STREAM)
-            if args.tcp:
-                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
-            #config(args.board_address)
-            config(board_address)
-            time.sleep(1)
-            board_calibration[board_address] = {"DAC gain":dac.GAIN,
-                                                "DAC offset":dac.OFFSET,
-                                                "ADC gain":adc.GAIN,
-                                                "ADC offset":adc.OFFSET}
-            if "NLK" in socket.gethostname():
-                config(board_address_2)
-                time.sleep(1)
-                board_calibration[board_address_2] = {"DAC gain":dac.GAIN,
-                                                    "DAC offset":dac.OFFSET,
-                                                    "ADC gain":adc.GAIN,
-                                                    "ADC offset":adc.OFFSET}
-                config(board_address_3)
-                time.sleep(1)
-                board_calibration[board_address_3] = {"DAC gain":dac.GAIN,
-                                                    "DAC offset":dac.OFFSET,
-                                                    "ADC gain":adc.GAIN,
-                                                    "ADC offset":adc.OFFSET}
-    
-            logger.info(board_calibration)
-            sock.bind(server_address)
-            logger.info('Created socket at {} '.format(server_address))
-            sock.listen(1)
-    
-            #interlocks = "External,High voltage power supply overvoltage,High voltage power supply overcurrent,Personnel protection,Temperature,AC power,Switch"
-            logger.info("unix socket running!")
-
-            # Read Voltage-RB at initialization             
-            last_setpoint = read_analog_output(board_address)
-
-            # Get hostname and IP
-            hostname, ip = get_ip_hostname()
-
-            # Initialize steps variable
-            voltage_factor, step_trigger, step_delay, steps = get_steps_var(ip, hostname)
-            trigger = step_trigger/(10.0*voltage_factor) * 131072
-
-            # LF (line feed) = 0x0A
-            # CR (carriage return) = 0x0D
-            LF = 0x0A
-            CR = 0x0D
-
-            while True:
-                connection, client_address = sock.accept()
-
-                # Enable keepalive functionality 
-                connection.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)  
-
-                # Wait one second before testing keepalive
-                connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPIDLE, 1)  
-
-                # Retry keepalive after three seconds
-                connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPINTVL, 3) 
-                
-                # Retry keepalive three times
-                connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPCNT, 3)
-                try:
-                    logger.info('Client connected {} '.format(client_address))
-                    while True:
-                        msg = connection.recv(512)
-                        if msg:
-                            commands = msg.split('\r\n')
-
-                            # Check if the last command is unterminated (non-empty)
-                            if commands and commands[-1] != "":
-                                unterminated_command = commands[-1]
-                                logger_debug.info("Unterminated command: {}".format(repr(unterminated_command)))
-
-                            for data in commands:
-                                if data:
-                                    #logger.info("Comando recebido: {}".format(ord(data[0]))) 
-                                    # Set GPIO pin direction
-                                    if (ord(data[0]) == 0x01):
-                                        logger.info('Command received: set GPIO direction')
-                                        queue_general.put([data[0], "dummy_address", data[2], data[3], data[4]])
-                                        
-                                        # Fill response payload
-                                        response_data = ""
-                                        response_status = chr(0x01)
-                                        response_payload = data[0] + response_status + response_data 
-                                    
-                                    # Adjust DAC output value
-                                    elif (ord(data[0]) == 0x02):
-                                        # Update last setpoint
-                                        logger.info('Command received: voltage setpoint')
-                                        last_setpoint = int(data[2:])
-                                        queue_voltage.put([board_address, data[2:]])
-
-                                        # Fill response payload
-                                        response_data = ""
-                                        response_status = chr(0x01)
-                                        response_payload = data[0] + response_status + response_data 
-                                    
-                                    # Read DAC setpoint value
-                                    elif (ord(data[0]) == 0x03):
-                                        # Fill response payload
-                                        response_data = str(read_analog_output(board_address))
-                                        response_status = chr(0x01)
-                                        response_payload = data[0] + response_status + response_data 
-                                        
-                                    # Read maximum of 10 last ADC input value
-                                    elif (ord(data[0]) == 0x04):
-                                        #voltage = read_analog_input(ord(command[1]))
-                                        voltage = read_analog_input(board_address)
-
-                                        # Fill response payload
-                                        response_data = str(voltage)
-                                        response_status = chr(0x01)
-                                        response_payload = data[0] + response_status + response_data
-
-                                    # Write a whole byte in digital Port B
-                                    elif (ord(data[0]) == 0x05):
-                                        logger.info('Command received: write byte (port B)')
-                                        queue_general.put([data[0], "dummy_address", data[2]])
-
-                                        # Fill response payload
-                                        response_data = ""
-                                        response_status = chr(0x01)
-                                        response_payload = data[0] + response_status + response_data 
-                                    
-                                    # Write a bit in Port B GPIO
-                                    #elif (data[0] == "\x06"):
-                                    #    queue_general.put([data[0], "dummy_address", data[2], data[3]])
-                                    
-                                    # Read the whole byte in digital Port A
-                                    elif (ord(data[0]) == 0x07):
-                                        logger.info('Command received: write byte (port A)')
-
-                                        # Fill response payload
-                                        response_data = str(read_digital_input_byte(board_address))
-                                        response_status = chr(0x01)
-                                        response_payload = data[0] + response_status + response_data
-                                        
-                                    # Read a bit in Port B GPIO
-                                    elif (ord(data[0]) == 0x08):
-                                        # Fill response payload
-                                        response_data = str(read_digital_input_bit(board_address, ord(data[2])))
-                                        response_status = chr(0x01)
-                                        response_payload = data[0] + response_status + response_data 
-
-                                    # Generate a pulse in RESET bit (Port B, bit 3)
-                                    elif (ord(data[0]) == 0x09):
-                                        logger.info('Command received: Reset')
-                                        queue_general.put([data[0], "dummy_address", data[2]])
-                                        
-                                        # Fill response payload 
-                                        response_data = ""
-                                        response_status = chr(0x01)
-                                        response_payload = data[0] + response_status + response_data 
-                                    
-                                    # Read interlock labels
-                                    #elif (data[0] == "\x0A"):
-                                    #    pass
-                                    
-                                    # Read a Port B bit setpoint
-                                    elif (ord(data[0]) == 0x0B):
-                                        # Fill response payload 
-                                        response_data = str(read_portB_digital_output_bit(board_address, ord(data[2])))
-                                        response_status = chr(0x01)
-                                        response_payload = data[0] + response_status + response_data 
-
-                                    # Write bit in port B
-                                    elif (ord(data[0]) == 0x0C):
-                                        logger.info('Command received: write bit (port B)')
-                                        queue_general.put([data[0], "dummy_address", data[2], data[3]])
-
-                                        # Fill response payload 
-                                        response_data = ""
-                                        response_status = chr(0x01)
-                                        response_payload = data[0] + response_status + response_data 
-                                    
-                                    # Read input bit of port A
-                                    #elif (data[0] == "\x0D"):
-                                    #    pass
-                                    
-                                    # Read input bit of port B
-                                    elif (ord(data[0]) == 0x0E):
-                                        # Fill response payload
-                                        response_data = str(read_portB_digital_input_bit(board_address, ord(data[2])))
-                                        response_status = chr(0x01)
-                                        response_payload = data[0] + response_status + response_data 
-
-                                    # Read raw ADC input value
-                                    elif (ord(data[0]) == 0x0F):
-                                        # Fill response payload
-                                        response_data = str(read_analog_input_raw(board_address))
-                                        response_status = chr(0x01)
-                                        response_payload = data[0] + response_status + response_data 
-
-                                    # DAC setpoint parameters initialization 
-                                    elif (ord(data[0]) == 0x10):
-                                        logger.info('Command received: init parameters at IOC reboot')
-                                        init_values = data[2:].split(',')
-                                        
-                                        # Separate values received
-                                        voltage_factor = int(init_values[1])
-                                        step_trigger = int(init_values[2])
-                                        step_delay = int(init_values[3])
-                                        
-                                        # Calculate trigger in DAC code
-                                        trigger = step_trigger/(10.0*voltage_factor) * 131072
-                                        steps = 4
-                                        
-                                        # Return DAC RB (readback) value
-                                        # dac_code = [0, 262143]
-                                        last_setpoint = dac_code = read_analog_output(board_address)
-                                        
-                                        # Voltage = [-10, 10]
-                                        percentage = (dac_code - 131072.0)/131072
-                                        
-                                        # value = [131072, 10]
-                                        value = int(percentage * voltage_factor * 131072 + 131072)
-
-                                        # Fill response payload
-                                        response_data = str(value)
-                                        response_status = chr(0x01)
-                                        response_payload = data[0] + response_status + response_data 
-
-                                    # Read input bit of port A
-                                    elif (ord(data[0]) == 0x11):
-                                        # Fill response payload
-                                        response_data = str(read_portA_digital_input_bit(board_address, ord(data[2])))
-                                        response_status = chr(0x01)
-                                        response_payload = data[0] + response_status + response_data 
-                                        
-#                                   # Available command
-                                    #elif (data[0] == "\x12"):
-                                    #pass
-                                    
-                                    elif ("NLK" in socket.gethostname()):
-                                        # NLK UPGRADE ----- DAC #2 setpoint parameters initialization 
-                                        if (ord(data[0]) == 0x20):
-                                            logger.info('Command received for DAC #2: init parameters at IOC reboot')
-                                            # Return DAC RB (readback) value
-                                            
-                                            # dac_code = [0, 262143] - voltage = [-10, 10]
-                                            percentage = (read_analog_output(board_address_2) - 131072.0)/131072
-                                            
-                                            # value = [131072, 10]
-                                            value = int(percentage * voltage_factor * 131072 + 131072)
-
-                                            # Fill response payload
-                                            response_data = str(value)
-                                            response_status = chr(0x01)
-                                            response_payload = data[0] + response_status + response_data 
-
-                                        # NLK UPGRADE ----- adjust DAC #2 output value
-                                        elif (ord(data[0]) == 0x22):
-                                            # update last setpoint
-                                            logger.info('Command received: voltage setpoint')
-                                            queue_voltage.put([board_address_2, data[2:]])
-
-                                            # Fill response payload
-                                            response_data = ""
-                                            response_status = chr(0x01)
-                                            response_payload = data[0] + response_status + response_data 
-                                        
-                                        # NLK UPGRADE ----- read DAC #2 setpoint value
-                                        elif (ord(data[0]) == 0x23):
-                                            # Fill response payload
-                                            response_data = str(read_analog_output(board_address_2))
-                                            response_status = chr(0x01)
-                                            response_payload = data[0] + response_status + response_data 
-
-                                        # NLK UPGRADE ----- read maximum of 10 last ADC #2 input value
-                                        elif (ord(data[0]) == 0x24):
-                                            voltage = read_analog_input(board_address_2)
-
-                                            # Fill response payload
-                                            response_data = str(voltage)
-                                            response_status = chr(0x01)
-                                            response_payload = data[0] + response_status + response_data 
-
-                                        # NLK UPGRADE ----- read raw ADC #2 input value
-                                        elif (ord(data[0]) == 0x2F):
-                                            voltage = read_analog_input_raw(board_address_2)
-
-                                            # Fill response payload
-                                            response_data = str(voltage)
-                                            response_status = chr(0x01)
-                                            response_payload = data[0] + response_status + response_data 
-
-                                        # NLK UPGRADE ----- DAC #3 setpoint parameters initialization 
-                                        elif (ord(data[0]) == 0x30):
-                                            logger.info('Command received for DAC #3: init parameters at IOC reboot')
-                                            # Return DAC RB (readback) value
-                                            
-                                            # dac_code = [0, 262143] - voltage = [-10, 10]
-                                            percentage = (read_analog_output(board_address_3) - 131072.0)/131072
-                                            
-                                            # value = [131072, 10]
-                                            value = int(percentage * voltage_factor * 131072 + 131072)
-
-                                            # Fill response payload
-                                            response_data = str(value)
-                                            response_status = chr(0x01)
-                                            response_payload = data[0] + response_status + response_data 
-
-                                        # NLK UPGRADE ----- adjust DAC #3 output value
-                                        elif (ord(data[0]) == 0x32):
-                                            # update last setpoint
-                                            logger.info('Command received: voltage setpoint')
-                                            queue_voltage.put([board_address_3, data[2:]])
-
-                                            # Fill response payload
-                                            response_data = ""
-                                            response_status = chr(0x01)
-                                            response_payload = data[0] + response_status + response_data
-                                        
-                                        # NLK UPGRADE ----- read DAC #3 setpoint value
-                                        elif (ord(data[0]) == 0x33):
-                                            # Fill response payload
-                                            response_data = str(read_analog_output(board_address_3))
-                                            response_status = chr(0x01)
-                                            response_payload = data[0] + response_status + response_data 
-
-                                        # NLK UPGRADE ----- read maximum of 10 last ADC #3 input value
-                                        elif (ord(data[0]) == 0x34):
-                                            voltage = read_analog_input(board_address_3)
-
-                                            # Fill response payload
-                                            response_data = str(voltage)
-                                            response_status = chr(0x01)
-                                            response_payload = data[0] + response_status + response_data 
-                                            
-                                        # NLK UPGRADE ----- read raw ADC #3 input value
-                                        elif (ord(data[0]) == 0x3F):
-                                            voltage = read_analog_input_raw(board_address_3)
-
-                                            # Fill response payload
-                                            response_data = str(voltage)
-                                            response_status = chr(0x01)
-                                            response_payload = data[0] + response_status + response_data 
-                                            
-                                        
-                                    # If a valid command was decoded
-                                    if response_payload is not None:
-                                        if isinstance(response_payload, unicode):
-                                             response_payload_bytes = response_payload.encode('latin1') 
-                                             # test if this really happens 
-                                             # after that remove and amend 
-                                        elif isinstance(response_payload, str):
-                                            response_payload_bytes = response_payload
-                                        else:
-                                            logger_debug.warning("Uneexpected type for response_payload :{}".format(type(response_payload)))
-                                            raise ValueError("Unexpected type for response_payload")
-                                        
-                                        # Compute checksum and fill the complete response 
-                                        #checksum = compute_checksum(response_payload_bytes)
-                                        response = response_payload_bytes + "\r\n"
-                                        #response = response_payload + chr(checksum) + "\r\n"
-                                        
-                                        # remove and amend 
-                                        raw_hex = " ".join("0x{:02X}".format(ord(c)) for c in data) 
-                                        logger.info("Command: 0x{:02X} | Raw input: {!r} | Raw hex: {} | Response payload: {!r} | Full response: {!r}".format(ord(data[0]), data, raw_hex, response_payload_bytes, response))
-
-                                        # Transmit it 
-                                        connection.sendall(response)
-                                    else:
-                                        logger.info('Invalid command received: ' + repr(data[0]))
-
-                        else:
-                            break
-                except Exception as e:
-                    logger.exception('Exception in socket thread: ', e)
-                finally:
-                    logger.info('Closing connection {}'.format(client_address))
-                    connection.close()
-        finally:
-            sock.close()
-    
-    # Thread that reads from 
-    def read_from_list():
-        global board_address
-        global last_setpoint
-        global logger
-        while(True):
-            try:
-                while(True):
-                    # Wait until there is a command in the list
-                    #while(queue_general.empty()):
-                    #    pass
-                    command = queue_general.get(block=True)
-                    
-                    # set GPIO pin direction
-                    if (command[0] == "\x01"):
-                        #set_direction_bit(int(ord(command[1])), command[2], int(ord(command[3])), int(command[4]))
-                        set_direction_bit(board_address, command[2], int(ord(command[3])), int(command[4]))
-                    
-                    # Adjust DAC output value
-                    #elif (command[0] == "\x02"):
-                    
-                    # Read DAC setpoint value
-                    #elif (command[0] == "\x03"):
-                    
-                    # Read maximum of 10 last ADC input value
-                    #elif (command[0] == "\x04"):
-                    
-                    # Write a whole byte in digital Port B
-                    elif (command[0] == "\x05"):
-                        #set_digital_output_byte(ord(command[1]), ord(command[2]))
-                        set_digital_output_byte(board_address, ord(command[2]))
-                    
-                    # Write a bit in Port B GPIO
-                    #elif (command[0] == "\x06"):
-                    #    #set_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
-                    #    set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
-                    
-                    # Read the whole byte in digital Port A
-                    #elif (command[0] == "\x07"):
-                    
-                    # Read a bit in Port B GPIO
-                    #elif (command[0] == "\x08"):
-                    
-                    # Generate a pulse in RESET bit (Port B, bit 3)
-                    elif (command[0] == "\x09"):
-                        #reset(ord(command[1]), int(command[2]))
-                        logger.info('Reset command')
-                        reset(board_address, int(command[2]))
-                    
-                    # Read interlock labels
-                    elif (command[0] == "\x0A"):
-                        #connection.sendall(interlocks)
-                        pass
-                    
-                    # Read a Port B bit setpoint
-                    #elif (command[0] == "\x0B"):
-                    
-                    # Write to port B bit
-                    elif (command[0] == "\x0C"):
-                        #set_portB_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
-                        
-                        # Check if command is related to PwrState-Sel (bit 1) and
-                        #   ... if command is to power the PS on and
-                        #   ... if PS is turned off
-                        #if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_input_bit(board_address, 7) == 0) ):
-                        if ( (int(ord(command[2])) == 1) and (int(command[3]) == 1) and (read_portB_digital_output_bit(board_address, 1) == 0) ):
-                            #logger.info('Turning PS on')
-                            logger.info('Set voltage to zero to turn PS on')
-                            
-                            # Force voltage setpoint to be zero
-                            queue_voltage.put([board_address, 131072])
-                            
-                            # Wait until voltage setpoint is zero
-                            while (read_analog_output(board_address) != 131072):
-                                pass
-                            
-                            # power the PS on 
-                            logger.info('Turning PS on...')
-                            set_portB_digital_output_bit(board_address, int(ord(command[2])), 1)
-                            time.sleep(0.5)
-                            
-                            # Wait until PwrState-Sts (bit 7) is 1
-                            #while (read_portB_digital_input_bit(board_address, 7) != 1):
-                            #    pass
-                            
-                            # Wait until PwrState-Sel (bit 1) is 0
-                            while (read_portB_digital_output_bit(board_address, 1) != 1):
-                                pass
-                            logger.info('PS is on')
-                            
-                            # Restore last voltage setpoint
-                            logger.info('Restoring voltage setpoint...')
-                            queue_voltage.put([board_address, last_setpoint])
-                        
-                        else:
-                            cmd = ord(command[2])
-                            bit = int(command[3])
-                            if (cmd == 1):
-                                if (bit == 0):
-                                    logger.info('PS off')
-                                elif (bit == 1):
-                                    logger.info('PS on')
-                            elif (cmd == 2):
-                                if (bit == 0):
-                                    logger.info('Pulse disabled')
-                                elif (bit == 1):
-                                    logger.info('Pulse enabled')
-                            else:
-                                logger.info('Change bit {}'.format(bit))
-                            set_portB_digital_output_bit(board_address, int(ord(command[2])), int(command[3]))
-                    
-                    #elif (command[0] == "\x0D"):
-                    
-                    #elif (command[0] == "\x0E"):
-                    
-                    # Read raw ADC input value
-                    #elif (command[0] == "\x0F"):
-                    
-                    # Available command
-                    #elif (command[0] == "\x10"):
-                    
-            except:
-                logger.exception('Error in thread 2! (reading from list)')
-
-
-    def voltage_adjustment():
-        global last_setpoint
-        global logger
-        global board_calibration
-
-        while(True):
-            try:
-                while(True):
-                    # Wait until there is a command in the list
-                    #while(queue_voltage.empty()):
-                        # check if Voltage-SP is equal to Voltage-RB
-                        #if((last_setpoint < (read_analog_output(board_address) - 1)) or (last_setpoint > (read_analog_output(board_address) + 1))):
-                        #    logger.info('SP different from RB')
-                        #    queue_voltage.put(last_setpoint)
-                    #    pass
-                    
-                    # Adjust DAC output value
-                    # command[0] = "\x0"
-                    voltage_steps(queue_voltage.get(block = True))
-            except:
-                logger.exception('Error in thread 3! (voltage thread)')
-
-    def voltage_steps(info):
-        # info = [board, value]
-        global voltage_factor
-        global step_trigger
-        global step_delay
-        global trigger
-        global steps
-        global logger
-        global board_calibration
-
-        board = info[0]
-        value = int(info[1])
-        current = read_analog_output(board)
-        logger.info("Board: {} - Value {} - Current: {}".format(board, value, current))
-        
-        # If PS is off, implement setpoint directly
-        #if (read_portB_digital_input_bit(board_address, 7) == 0):
-        #if (read_portB_digital_output_bit(board_address, 1) == 0):
-        #    set_analog_output(board_address, value)
-        
-        #else:
-        # check difference between current and intended setpoint
-        diff = value - current
-
-        # If difference is lower than the amount to activate the steps trigger
-        # then implement new setpoint directly
-        if diff < trigger:
-            logger.info('Voltage setpoint: {:.2f}'.format((value-131072.0)/131072*voltage_factor*10) + ' V')
-            set_analog_output(board, value)
-
-        # If difference is higher than the amount to activate the steps trigger
-        # then calculate calculate graduals setpoints
-        else:
-            #logger.info('Voltage adjustment exceeds limiar: gradual adjust required!')
-            setpoints = [int(current+(i*diff)/steps) for i in range(1,steps)]
-            # loop for "steps-1" gradual setpoints
-            for i, voltage in enumerate(setpoints):
-                logger.info(' - Voltage step %d: {:.2f}'.format((voltage-131072.0)/131072*voltage_factor*10) %(i+1) + ' V')
-                set_analog_output(board, voltage)
-                start = time.time()
-                while(time.time() - start < step_delay):
-                   time.sleep(0.1)
-                    
-            # adjust last step
-            set_analog_output(board, value)
-            logger.info(' - Voltage step %d: {:.2f}'.format((value-131072.0)/131072*voltage_factor*10) %(i+2) + ' V')
-
-        return
 
     # instantiate object Lock            
     global lock
