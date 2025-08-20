@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 '''
@@ -879,8 +879,7 @@ def write_to_list():
                                         response_data = str(voltage)
                                         response_status = chr(0x01)
                                         response_payload = data[0] + response_status + response_data 
-                                        
-                                    
+                                             
                                 # If a valid command was decoded
                                 if response_payload is not None:
                                     if isinstance(response_payload, unicode):
