@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from Adafruit_BBIO.SPI import SPI
 import selection
 import sys

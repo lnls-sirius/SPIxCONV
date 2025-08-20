@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+
 from Adafruit_BBIO.SPI import SPI
 import Adafruit_BBIO.GPIO as GPIO
 import selection
