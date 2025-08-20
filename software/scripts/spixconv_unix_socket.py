@@ -35,7 +35,7 @@ from logging.handlers import RotatingFileHandler
 import argparse
 import time
 from threading import Thread, Lock
-from Queue import Queue
+from queue import Queue
 
 import init
 import selection
