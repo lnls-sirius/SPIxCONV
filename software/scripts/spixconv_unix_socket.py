@@ -884,9 +884,8 @@ def write_to_list():
                                 # If a valid command was decoded
                                 if response_payload is not None:
                                     if isinstance(response_payload, unicode):
-                                            response_payload_bytes = response_payload.encode('latin1') 
-                                            # test if this really happens 
-                                            # after that remove and amend 
+                                        response_payload_bytes = response_payload.encode('latin1') 
+                                        logger_debug.warning("Uneexpected type for response_payload :{}".format(type(response_payload)))
                                     elif isinstance(response_payload, str):
                                         response_payload_bytes = response_payload
                                     else:
@@ -898,9 +897,9 @@ def write_to_list():
                                     response = response_payload_bytes + "\r\n"
                                     #response = response_payload + chr(checksum) + "\r\n"
                                     
-                                    # remove and amend 
-                                    raw_hex = " ".join("0x{:02X}".format(ord(c)) for c in data) 
-                                    logger.info("Command: 0x{:02X} | Raw input: {!r} | Raw hex: {} | Response payload: {!r} | Full response: {!r}".format(ord(data[0]), data, raw_hex, response_payload_bytes, response))
+                                    # Debug raw hex
+                                    #raw_hex = " ".join("0x{:02X}".format(ord(c)) for c in data) 
+                                    #logger.info("Command: 0x{:02X} | Raw input: {!r} | Raw hex: {} | Response payload: {!r} | Full response: {!r}".format(ord(data[0]), data, raw_hex, response_payload_bytes, response))
 
                                     # Transmit it 
                                     connection.sendall(response)
