@@ -51,7 +51,7 @@ for x in voltage:
 	log.write('\n')
 	#Update the file
 	log.close()
-	print "  ============================================================================"
+	print("  ============================================================================")
 #	sys.stdout.write("  |                         ESTABILIDADE: ")
 	sys.stdout.write("  |                           STABILITY: ")
 	if(x < 0):
@@ -60,9 +60,9 @@ for x in voltage:
 		sys.stdout.write("+" + str(x) + "V" + "                                 |\n")
 	else:
 		sys.stdout.write(str(x) + "V" + "                                  |\n")
-	print "  ============================================================================"
-	print "  | INDEX\tMULT.\t\tMULT.[LSB]\tADC\tADC(V)\t\tTEMP.|"
-	print "  |--------------------------------------------------------------------------|"
+	print("  ============================================================================")
+	print("  | INDEX\tMULT.\t\tMULT.[LSB]\tADC\tADC(V)\t\tTEMP.|")
+	print("  |--------------------------------------------------------------------------|")
 
 	# select DAC and write correspondent value
 	base = int(((x+10)/(20/float(262144))))
@@ -133,7 +133,7 @@ for x in voltage:
 		#---------------------------------------------------------
 		#sys.stdout.write(temp_str + "|" + "\n")
 		sys.stdout.write('---\t' + "|" + "\n")
-	print "  |                                                                          |"
+	print("  |                                                                          |")
 
 	#calculate standard deviation
 	diff = measure
@@ -143,7 +143,7 @@ for x in voltage:
 	std_var[j] = math.sqrt(std_var[j])
 	std_var[j] = "{0:.2f}".format(std_var[j])
 
-	print "  ============================================================================"
+	print("  ============================================================================")
 	#---------------------------------------------------
 	# print standard variation
 	sys.stdout.write("  |    std_dev  = %s" %str(std_var[j]))
@@ -175,7 +175,7 @@ for x in voltage:
 		sys.stdout.write(' ')
 	sys.stdout.write('      |\n')
 	#---------------------------------------------------
-	print "  ============================="
+	print("  =============================")
 	j += 1
 
 # Print it all again after all the data were acquired
@@ -187,7 +187,7 @@ for x in voltage:
 	if(x == 0):
 		sys.stdout.write(" ")
 	sys.stdout.write(str(x) + "V     |\n")
-	print "  ============================="
+	print("  =============================")
 	#---------------------------------------------------
 	# print standard variation
 	sys.stdout.write("  |    std_dev  = %s" %str(std_var[j]))
@@ -219,5 +219,5 @@ for x in voltage:
 		sys.stdout.write(' ')
 	sys.stdout.write('      |\n')
 	#---------------------------------------------------
-	print "  ============================="
+	print("  =============================")
 	j += 1

@@ -130,12 +130,12 @@ def mean(value):
     mean_adc = "{0:.2f}".format(mean_adc)
     #-------------------------------------------------------
     diff = max_adc - min_adc
-    print "\nnumber of measures = " + str(value)
-    print "standard variation = " + std_var
-    print "width of histogram = " + str(diff)
-    print "mean = " + mean_adc
-    print "minimum = " + str(min_adc)
-    print "maximum = " + str(max_adc) + "\n"
+    print("\nnumber of measures = " + str(value))
+    print("standard variation = " + std_var)
+    print("width of histogram = " + str(diff))
+    print("mean = " + mean_adc)
+    print("minimum = " + str(min_adc))
+    print("maximum = " + str(max_adc) + "\n")
     return [std_var, diff, mean_adc, min_adc, max_adc]
 #=======================================================
 #                  ADC Calibration
@@ -163,9 +163,9 @@ def calibration():
     interval = []
     for x in calibration:
         measure = []
-        #print "  ============================================================================"
-        #print "  |                           CALIBRATION:                                   |"
-        #print "  ============================================================================"
+        #print("  ============================================================================")
+        #print("  |                           CALIBRATION:                                   |")
+        #print("  ============================================================================")
 
         # select DAC and write correspondent value
         base = int(((x+10)/(20/float(262144))))
@@ -213,15 +213,15 @@ def calibration():
     OFFSET = 131072 - interval - mean_adc[0]
     # return two parameters: gain and offset
     #output = [REFERENCE, GAIN, OFFSET]
-    print "\treference = " + str(REFERENCE)
-    print "\tgain = " + str(GAIN)
-    print "\toffset = " + str(OFFSET)
+    print("\treference = " + str(REFERENCE))
+    print("\tgain = " + str(GAIN))
+    print("\toffset = " + str(OFFSET))
     #return output
 #---------------------------------------------------------------------
 def read_calibration(board):
     # global variables
     global GAIN, OFFSET, REFERENCE
-    print "\treference = " + str(REFERENCE)
-    print "\tgain = " + str(GAIN)
-    print "\toffset = " + str(OFFSET)
+    print("\treference = " + str(REFERENCE))
+    print("\tgain = " + str(GAIN))
+    print("\toffset = " + str(OFFSET))
 

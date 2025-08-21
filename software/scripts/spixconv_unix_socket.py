@@ -129,7 +129,7 @@ def set_analog_output(board, code):
     with lock:
         selection.dac(board)
         dac.write(code, board_calibration[board]["DAC gain"], board_calibration[board]["DAC offset"])
-    #print code
+    #print(code)
 
 #==============================================================================
 #    Read the value set in analog output
@@ -238,7 +238,7 @@ def set_direction_bit(board, port, bit, value):
             direction = int(gpio.OCR1_read())
         else:
             direction = int(gpio.OCR2_read())
-        #print "direction BEFORE = " + str(direction)
+        #print("direction BEFORE = " + str(direction))
         
         # If bit will be set as INPUT ("1" state), performs an "or" with previous byte
         if (value):
@@ -255,7 +255,7 @@ def set_direction_bit(board, port, bit, value):
             gpio.OCR1_write(direction)
         else:
             gpio.OCR2_write(direction)
-        #print "direction AFTER = " + str(direction) + "\n=========================="
+        #print("direction AFTER = " + str(direction) + "\n==========================")
 
 #==============================================================================
 #    Write a value in digital output port (Port B) (full byte)
