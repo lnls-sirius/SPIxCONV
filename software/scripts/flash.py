@@ -257,7 +257,7 @@ def dac_gain_read(board):
         gain_bytes.append(chr(gain[i]))
     string = gain_bytes[0] + gain_bytes[1] + gain_bytes[2] + gain_bytes[3]
     gain = struct.unpack('f', string)
-    #print "DAC gain = %s" %gain
+    #print("DAC gain = %s" %gain)
     gain = float(gain[0])
     return gain
 #---------------------------------------------------------------------
@@ -278,7 +278,7 @@ def dac_offset_read(board):
         offset_bytes.append(chr(offset[i]))
     string = offset_bytes[0] + offset_bytes[1] + offset_bytes[2] + offset_bytes[3]
     offset = struct.unpack('f', string)
-    #print "DAC offset = %s" %offset
+    #print("DAC offset = %s" %offset)
     offset = float(offset[0])
     return offset
 #---------------------------------------------------------------------
@@ -302,7 +302,7 @@ def adc_reference_read(board):
         reference_bytes.append(chr(reference[i]))
     string = reference_bytes[0] + reference_bytes[1] + reference_bytes[2] + reference_bytes[3]
     reference = struct.unpack('f', string)
-    #print "ADC reference = %s" %reference
+    #print("ADC reference = %s" %reference)
     reference = float(reference[0])
     return reference
 #---------------------------------------------------------------------
@@ -324,7 +324,7 @@ def adc_gain_read(board):
         gain_bytes.append(chr(gain[i]))
     string = gain_bytes[0] + gain_bytes[1] + gain_bytes[2] + gain_bytes[3]
     gain = struct.unpack('f', string)
-    #print "ADC gain = %s" %gain
+    #print("ADC gain = %s" %gain)
     gain = float(gain[0])
     return gain
 #---------------------------------------------------------------------
@@ -345,7 +345,7 @@ def adc_offset_read(board):
         offset_bytes.append(chr(offset[i]))
     string = offset_bytes[0] + offset_bytes[1] + offset_bytes[2] + offset_bytes[3]
     offset = struct.unpack('f', string)
-    #print "ADC offset = %s" %offset
+    #print("ADC offset = %s" %offset)
     offset = float(offset[0])
     return offset
 #---------------------------------------------------------------------
@@ -464,9 +464,9 @@ def erase_chip(board):
     spi.writebytes([0x60])
 #=====================================================================
 #aux = spi.xfer2([0x90, 0x00, 0x00, 0x00, 0x00, 0x00])
-#print "aux = " + str(aux)
-#print "manufacturer ID = " + str("{:02x}".format(int(aux[4]))).upper() + "h"
-#print "device ID = " + str("{:02x}".format(int(aux[5]))) + "h"
+#print("aux = " + str(aux))
+#print("manufacturer ID = " + str("{:02x}".format(int(aux[4]))).upper() + "h")
+#print("device ID = " + str("{:02x}".format(int(aux[5]))) + "h")
 #=====================================================================
 # WRITE value from flash memory
 #=====================================================================
@@ -491,7 +491,7 @@ def write(board, address, value):
     # append data to be written
     for aux in range(len(value)):
         data.append(value[aux])
-    #print data
+    #print(data)
     #data += value
     spi.writebytes(data)
     # check BUSY bit
@@ -524,7 +524,7 @@ def read(board, address, size):
     for aux in range(size):
         data.append(0x00)
     read = spi.xfer2(data)
-    #print read[4:len(read)]
+    #print(read[4:len(read)])
     return read[4:len(read)]
 #=====================================================================
 # STORE/LOAD script in memory

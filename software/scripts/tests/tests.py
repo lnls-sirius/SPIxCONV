@@ -39,7 +39,7 @@ def repetibility(board):
     selection.dac(board)
     dac.config()
 
-    print "  ======================================================\n"
+    print("  ======================================================\n")
     from time import gmtime, strftime
 
     timestr = strftime("%Y-%m-%d_%H-%M-%S", gmtime())
@@ -66,11 +66,11 @@ def repetibility(board):
         log.write('\n')
         # Update the file
         log.close()
-    print "  ============================================================================"
-    print "  |                             REPETIBILIDADE                               |"
-    print "  ============================================================================"
-    print "  | DAC\t\tMULT.\t\tMULT.(LSB)\tADC\tADC(V)\t\tTEMP.|"
-    print "  |--------------------------------------------------------------------------|"
+    print("  ============================================================================")
+    print("  |                             REPETIBILIDADE                               |")
+    print("  ============================================================================")
+    print("  | DAC\t\tMULT.\t\tMULT.(LSB)\tADC\tADC(V)\t\tTEMP.|")
+    print("  |--------------------------------------------------------------------------|")
     while ((time.time() - startTime) < total_time):
         for x in tensoes:
             base = int(((x + 10) / (20 / float(262144))))
@@ -95,7 +95,7 @@ def repetibility(board):
             '''
             if (abs(adc_value - base) > 1000):
                 error += 1
-                print error
+                print(error)
 
             # adc = "{:1}".format(adc)
             # adc = numpy.mean(measure)
@@ -124,8 +124,8 @@ def repetibility(board):
             # ---------------------------------------------------------
             # sys.stdout.write(temp_str + "|" + "\n")
             sys.stdout.write('---\t' + "|" + "\n")
-        print "  |--------------------------------------------------------------------------|"
-    print "ERROR = " + str(error)
+        print("  |--------------------------------------------------------------------------|")
+    print("ERROR = " + str(error))
 #=======================================================
 #    repetibility ERROR test without multimeter
 #=======================================================
@@ -139,7 +139,7 @@ def repetibility_error(board):
     selection.dac(board)
     dac.config()
 
-    print "  ======================================================\n"
+    print("  ======================================================\n")
     from time import gmtime, strftime
 
     timestr = strftime("%Y-%m-%d_%H-%M-%S", gmtime())
@@ -160,11 +160,11 @@ def repetibility_error(board):
     # save time when test started
     startTime = time.time()
     ############################################################
-    print "  ============================================================================"
-    print "  |                             REPETIBILIDADE                               |"
-    print "  ============================================================================"
-    print "  | DAC\t\tMULT.\t\tMULT.(LSB)\tADC\tADC(V)\t\tTEMP.|"
-    print "  |--------------------------------------------------------------------------|"
+    print("  ============================================================================")
+    print("  |                             REPETIBILIDADE                               |")
+    print("  ============================================================================")
+    print("  | DAC\t\tMULT.\t\tMULT.(LSB)\tADC\tADC(V)\t\tTEMP.|")
+    print("  |--------------------------------------------------------------------------|")
     iteration = 0
     error = 0
     while (1):
@@ -186,7 +186,7 @@ def repetibility_error(board):
                 # check if an error occurred
                 if (abs(adc_value - base) > 100):
                     error += 1
-                    print error
+                    print(error)
                     # write in log file
                     log = open(filename, "a+")
                     timestr = strftime("%Y/%m/%d_%H:%M:%S", gmtime())
@@ -205,8 +205,8 @@ def repetibility_error(board):
                 # ---------------------------------------------------------
                 # sys.stdout.write(temp_str + "|" + "\n")
                 sys.stdout.write('---\t' + "|" + "\n")
-            print "  |--------------------------------------------------------------------------|"
-        print "ERROR = " + str(error)
+            print("  |--------------------------------------------------------------------------|")
+        print("ERROR = " + str(error))
         # write in log file
         log = open(filename, "a+")
         timestr = strftime("%Y/%m/%d_%H:%M:%S", gmtime())
@@ -214,7 +214,7 @@ def repetibility_error(board):
         # Update the file
         log.close()
         iteration += 1
-    print "ERRO = " + str(error)
+    print("ERRO = " + str(error))
 #=======================================================
 #    stability test with multimeter
 #=======================================================
@@ -262,7 +262,7 @@ def stability_multimeter(board):
         log.write('\n')
         #Update the file
         log.close()
-        print "  ============================================================================"
+        print("  ============================================================================")
     #    sys.stdout.write("  |                         ESTABILIDADE: ")
         sys.stdout.write("  |                           STABILITY: ")
         if(x < 0):
@@ -271,9 +271,9 @@ def stability_multimeter(board):
             sys.stdout.write("+" + str(x) + "V" + "                                 |\n")
         else:
             sys.stdout.write(str(x) + "V" + "                                  |\n")
-        print "  ============================================================================"
-        print "  | INDEX\tMULT.\t\tMULT.[LSB]\tADC\tADC(V)\t\tTEMP.|"
-        print "  |--------------------------------------------------------------------------|"
+        print("  ============================================================================")
+        print("  | INDEX\tMULT.\t\tMULT.[LSB]\tADC\tADC(V)\t\tTEMP.|")
+        print("  |--------------------------------------------------------------------------|")
 
         # select DAC and write correspondent value
         base = int(((x+10)/(20/float(262144))))
@@ -346,7 +346,7 @@ def stability_multimeter(board):
             #---------------------------------------------------------
             #sys.stdout.write(temp_str + "|" + "\n")
             sys.stdout.write('---\t' + "|" + "\n")
-        print "  |                                                                          |"
+        print("  |                                                                          |")
 
     #    #calculate standard deviation
     #    part_sum = 0
@@ -360,7 +360,7 @@ def stability_multimeter(board):
         # plot and save Histogram
         std_var[j] = plot_hist_multimeter(board, x, measure, mean_adc[j])
         mean_adc[j] = "{0:.2f}".format(mean_adc[j])
-        print "  ============================================================================"
+        print("  ============================================================================")
         #---------------------------------------------------
         # print standard variation
         sys.stdout.write("  |    std_dev  = %s" %str(std_var[j]))
@@ -392,7 +392,7 @@ def stability_multimeter(board):
             sys.stdout.write(' ')
         sys.stdout.write('      |\n')
         #---------------------------------------------------
-        print "  ============================="
+        print("  =============================")
         j += 1
 
     # Print it all again after all the data were acquired
@@ -404,7 +404,7 @@ def stability_multimeter(board):
         if(x == 0):
             sys.stdout.write(" ")
         sys.stdout.write(str(x) + "V      |\n")
-        print "  ============================="
+        print("  =============================")
         #---------------------------------------------------
         # print standard variation
         sys.stdout.write("  |    std_dev  = %s" %str(std_var[j]))
@@ -436,7 +436,7 @@ def stability_multimeter(board):
             sys.stdout.write(' ')
         sys.stdout.write('      |\n')
         #---------------------------------------------------
-        print "  ============================="
+        print("  =============================")
         j += 1
 #-------------------------------------------------------
 #    function that plot histogram for stability test
@@ -513,7 +513,7 @@ def stability(board):
         log.write('\n')
         #Update the file
         log.close()
-        print "  ============================================================================"
+        print("  ============================================================================")
     #    sys.stdout.write("  |                         ESTABILIDADE: ")
         sys.stdout.write("  |                           STABILITY: ")
         if(x < 0):
@@ -522,9 +522,9 @@ def stability(board):
             sys.stdout.write("+" + str(x) + "V" + "                                 |\n")
         else:
             sys.stdout.write(str(x) + "V" + "                                  |\n")
-        print "  ============================================================================"
-        print "  | INDEX\tMULT.\t\tMULT.[LSB]\tADC\tADC(V)\t\tTEMP.|"
-        print "  |--------------------------------------------------------------------------|"
+        print("  ============================================================================")
+        print("  | INDEX\tMULT.\t\tMULT.[LSB]\tADC\tADC(V)\t\tTEMP.|")
+        print("  |--------------------------------------------------------------------------|")
 
         # select DAC and write correspondent value
         base = int(((x+10)/(20/float(262144))))
@@ -544,7 +544,7 @@ def stability(board):
             mean_measure = []
             for k in range(3):
                 mean_measure.append(adc.read())
-            #    #print numpy.mean(measure)
+            #    #print(numpy.mean(measure))
             adc_value = sum(mean_measure) / len(mean_measure)
 
 #            adc_value = adc.read()
@@ -598,7 +598,7 @@ def stability(board):
             #---------------------------------------------------------
             #sys.stdout.write(temp_str + "|" + "\n")
             sys.stdout.write('---\t' + "|" + "\n")
-        print "  |                                                                          |"
+        print("  |                                                                          |")
 
     #    #calculate standard deviation
     #    part_sum = 0
@@ -612,7 +612,7 @@ def stability(board):
         # plot and save Histogram
         std_var[j] = plot_hist(board, x, measure, mean_adc[j])
         mean_adc[j] = "{0:.2f}".format(mean_adc[j])
-        print "  ============================================================================"
+        print("  ============================================================================")
         #---------------------------------------------------
         # print standard variation
         sys.stdout.write("  |    std_dev  = %s" %str(std_var[j]))
@@ -644,7 +644,7 @@ def stability(board):
             sys.stdout.write(' ')
         sys.stdout.write('      |\n')
         #---------------------------------------------------
-        print "  ============================="
+        print("  =============================")
         j += 1
 
     # Print it all again after all the data were acquired
@@ -656,7 +656,7 @@ def stability(board):
         if(x == 0):
             sys.stdout.write(" ")
         sys.stdout.write(str(x) + "V      |\n")
-        print "  ============================="
+        print("  =============================")
         #---------------------------------------------------
         # print standard variation
         sys.stdout.write("  |    std_dev  = %s" %str(std_var[j]))
@@ -688,7 +688,7 @@ def stability(board):
             sys.stdout.write(' ')
         sys.stdout.write('      |\n')
         #---------------------------------------------------
-        print "  ============================="
+        print("  =============================")
         j += 1
 #-------------------------------------------------------
 #    function that plot histogram for stability test

@@ -92,9 +92,9 @@ def calibration(board):
     interval = []
     for x in calibration:
         measure = []
-        #print "  ============================================================================"
-        #print "  |                           CALIBRATION:                                   |"
-        #print "  ============================================================================"
+        #print("  ============================================================================")
+        #print("  |                           CALIBRATION:                                   |")
+        #print("  ============================================================================")
 
         # select DAC and write correspondent value
         base = int(((x+10)/(20/float(262144))))
@@ -263,12 +263,12 @@ def mean(value, adc_gain=None, adc_offset=None):
     mean_adc = round(mean_adc * adc_gain + OFFadc_offsetSET, 2)
     return [std_var, diff, mean_adc, min_adc, max_adc]
 '''
-    print "\nnumber of measures = " + str(value)
-    print "standard variation = " + std_var
-    print "width of histogram = " + str(diff)
-    print "mean = " + mean_adc
-    print "minimum = " + str(min_adc)
-    print "maximum = " + str(max_adc) + "\n"
+    print("\nnumber of measures = " + str(value))
+    print("standard variation = " + std_var)
+    print("width of histogram = " + str(diff))
+    print("mean = " + mean_adc)
+    print("minimum = " + str(min_adc))
+    print("maximum = " + str(max_adc) + "\n")
 '''
 #=======================================================
 #    read ADC many times and calculate a mean in Volts

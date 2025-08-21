@@ -59,7 +59,7 @@ def check():
 			if (check == dig):
 				pass
 			else:
-				print "ERROR"
+				print("ERROR")
 				count += 1
 			#---------------------------
 			# select board 1, port A (IN)
@@ -68,7 +68,7 @@ def check():
 			if (check == dig):
 				pass
 			else:
-				print "ERROR"
+				print("ERROR")
 				count += 1
 			#---------------------------
 			# select board 2, port A (IN)
@@ -77,7 +77,7 @@ def check():
 			if (check == dig):
 				pass
 			else:
-				print "ERROR"
+				print("ERROR")
 				count += 1
 			#---------------------------
 			# select board 3, port A (IN)
@@ -86,8 +86,8 @@ def check():
 			if (check == dig):
 				pass
 			else:
-				print "ERROR"
+				print("ERROR")
 				count += 1
 
-		print "Number of errors of it_" + str(it) + " = " + str(count)
+		print("Number of errors of it_" + str(it) + " = " + str(count))
 		it += 1
