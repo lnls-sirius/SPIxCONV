@@ -660,7 +660,7 @@ def write_to_list():
                                 # Write a whole byte in digital Port B
                                 elif opcode == 0x05: 
                                     logger.info('Command received: write byte (port B)')
-                                    queue_general.put([opcode, "dummy_address", int(data[2].decode("ascii"))])  
+                                    queue_general.put([opcode, "dummy_address", data[2]])  
 
                                     # Fill response payload
                                     response_data = b""  
