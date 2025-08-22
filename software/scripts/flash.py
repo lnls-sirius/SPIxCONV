@@ -525,14 +525,14 @@ def script_read(board, address, filename):
     byte = read(board, address, 1)
     # open python file to save script
     #filename = filename.replace(".py", "_python.py")
-    log = open(filename, "w")
-    # loop until "End of Text" (^C) is reached
-    while (byte[0] != 0x03):
-        log.write(chr(byte[0]))
-        counter += 1
-        # increment address and request one more reading
-        address += 1
-        byte = read(board, address, 1)
+    with open(filename, "wb") as log:
+        # loop until "End of Text" (^C) is reached
+        while (byte[0] != 0x03):
+            log.write(byte)
+            counter += 1
+            # increment address and request one more reading
+            address += 1
+            byte = read(board, address, 1)
     return counter
 # write script from memory
 def script_write(board, address, filename):
@@ -542,8 +542,8 @@ def script_write(board, address, filename):
         time.sleep(1)
         byte = f.read(1)
         # while EOF is not reached
-        while byte != "":
-            write(board, address, [ord(byte)])
+        while byte != b"":
+            write(board, address, [byte])
             counter += 1
             address += 1
             byte = f.read(1)
