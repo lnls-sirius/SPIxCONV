@@ -385,7 +385,7 @@ def sector_write(board, address, value):
     # relative address is the offset inside the sector
     relative_address = address % 256
     # page is the relative position inside the sector
-    page = (address/256) % 16
+    page = (address//256) % 16
     # read and store previous state of whole sector
     # backup is an array that contains 16 arrays (each corresponding to a page memory) with size 256
     backup = sector_read(board, address)
