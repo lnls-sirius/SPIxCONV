@@ -252,13 +252,10 @@ def member2_write(board, member2):
 # read DAC GAIN parameter
 def dac_gain_read(board):
     gain = read(board, 0x58, 4)
-    gain_bytes = []
-    for i in range(4):
-        gain_bytes.append(chr(gain[i]))
-    string = gain_bytes[0] + gain_bytes[1] + gain_bytes[2] + gain_bytes[3]
-    gain = struct.unpack('f', string)
+    string = bytes(gain[:4])
+    gain = struct.unpack('f', string)[0]
     #print("DAC gain = %s" %gain)
-    gain = float(gain[0])
+    gain = float(gain)
     return gain
 #---------------------------------------------------------------------
 # write DAC GAIN parameter
@@ -266,20 +263,17 @@ def dac_gain_write(board, gain):
     gain = struct.pack('f', gain)
     gain_bytes = []
     for i in range(4):
-        gain_bytes.append(ord(gain[i]))
+        gain_bytes.append(gain[i])
     #write(board, 0x58, gain_bytes)
     sector_write(board, 0x58, gain_bytes)
 #---------------------------------------------------------------------
 # read DAC OFFSET parameter
 def dac_offset_read(board):
     offset = read(board, 0x5C, 4)
-    offset_bytes = []
-    for i in range(4):
-        offset_bytes.append(chr(offset[i]))
-    string = offset_bytes[0] + offset_bytes[1] + offset_bytes[2] + offset_bytes[3]
-    offset = struct.unpack('f', string)
+    offset_bytes = bytes(offset)
+    offset = struct.unpack('f', offset_bytes)[0]
     #print("DAC offset = %s" %offset)
-    offset = float(offset[0])
+    offset = float(offset)
     return offset
 #---------------------------------------------------------------------
 # write DAC OFFSET parameter
@@ -287,7 +281,7 @@ def dac_offset_write(board, offset):
     offset = struct.pack('f', offset)
     offset_bytes = []
     for i in range(4):
-        offset_bytes.append(ord(offset[i]))
+        offset_bytes.append(offset[i])
     #write(board, 0x5C, offset_bytes)
     sector_write(board, 0x5C, offset_bytes)
 #=====================================================================
@@ -319,13 +313,10 @@ def adc_reference_write(board, reference):
 # read ADC GAIN parameter
 def adc_gain_read(board):
     gain = read(board, 0x60, 4)
-    gain_bytes = []
-    for i in range(4):
-        gain_bytes.append(chr(gain[i]))
-    string = gain_bytes[0] + gain_bytes[1] + gain_bytes[2] + gain_bytes[3]
-    gain = struct.unpack('f', string)
+    gain_bytes = bytes([gain[i] for i in range(4)])
+    gain = struct.unpack('f', gain_bytes)[0]
     #print("ADC gain = %s" %gain)
-    gain = float(gain[0])
+    gain = float(gain)
     return gain
 #---------------------------------------------------------------------
 # write ADC GAIN parameter
@@ -333,20 +324,18 @@ def adc_gain_write(board, gain):
     gain = struct.pack('f', gain)
     gain_bytes = []
     for i in range(4):
-        gain_bytes.append(ord(gain[i]))
+        gain_bytes.append(gain[i])
     #write(board, 0x64, gain_bytes)
     sector_write(board, 0x60, gain_bytes)
 #=====================================================================
 # read ADC OFFSET parameter
 def adc_offset_read(board):
     offset = read(board, 0x64, 4)
-    offset_bytes = []
-    for i in range(4):
-        offset_bytes.append(chr(offset[i]))
-    string = offset_bytes[0] + offset_bytes[1] + offset_bytes[2] + offset_bytes[3]
-    offset = struct.unpack('f', string)
+    offset_bytes = bytes(offset)
+
+    offset = struct.unpack('f', offset_bytes)[0]
     #print("ADC offset = %s" %offset)
-    offset = float(offset[0])
+    offset = float(offset)
     return offset
 #---------------------------------------------------------------------
 # write ADC OFFSET parameter
@@ -354,7 +343,7 @@ def adc_offset_write(board, offset):
     offset = struct.pack('f', offset)
     offset_bytes = []
     for i in range(4):
-        offset_bytes.append(ord(offset[i]))
+        offset_bytes.append(offset[i])
     #write(board, 0x68, offset_bytes)
     sector_write(board, 0x64, offset_bytes)
 #=====================================================================
