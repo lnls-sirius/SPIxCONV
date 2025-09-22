@@ -690,7 +690,7 @@ def write_to_list():
                                 # Generate a pulse in RESET bit (Port B, bit 3)
                                 elif opcode == 0x09: 
                                     logger.info('Command received: Reset')
-                                    queue_general.put([opcode, "dummy_address", int(data[2].decode("ascii"))]) 
+                                    queue_general.put([opcode, "dummy_address", int(bytes([data[2]]))]) 
 
                                     # Fill response payload 
                                     response_data = b""  
@@ -711,7 +711,7 @@ def write_to_list():
                                 # Write bit in port B
                                 elif opcode == 0x0C:
                                     logger.info('Command received: write bit (port B)')
-                                    queue_general.put([opcode, "dummy_address", data[2], int(data[3].decode("ascii"))])
+                                    queue_general.put([opcode, "dummy_address", data[2], int(bytes([data[3]]))])
 
                                     # Fill response payload 
                                     response_data = b""
@@ -975,7 +975,6 @@ def read_from_list():
                 # Write to port B bit
                 elif opcode == 0x0C:
                     #set_portB_digital_output_bit(int(ord(command[1])), int(ord(command[2])), int(command[3]))
-                    
                     # Check if command is related to PwrState-Sel (bit 1) and
                     #   ... if command is to power the PS on and
                     #   ... if PS is turned off
