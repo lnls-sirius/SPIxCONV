@@ -622,7 +622,11 @@ def write_to_list():
                                 # Set GPIO pin direction
                                 if opcode == 0x01: 
                                     logger.info('Command received: set GPIO direction')
-                                    queue_general.put([opcode, "dummy_address", data[2], data[3], int(data[4].decode("ascii"))])
+                                    queue_general.put([opcode, 
+                                                       "dummy_address", 
+                                                       bytes([data[2]]).decode("ascii"),        # Decode it as 'A', 'B', 'C' or 'D' port
+                                                       data[3],                                 # Already an integer (already sent as 0x01 to 0x07)
+                                                       int(bytes([data[4]]).decode("ascii"))])  # Decode as 0 or 1 
                                     
                                     # Fill response payload
                                     response_data = b"" 
