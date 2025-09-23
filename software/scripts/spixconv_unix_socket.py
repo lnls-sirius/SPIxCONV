@@ -677,7 +677,7 @@ def write_to_list():
                                 
                                 # Read the whole byte in digital Port A
                                 elif opcode == 0x07: 
-                                    logger.info('Command received: write byte (port A)')
+                                    logger.info('Command received: read byte (port A)')
 
                                     # Fill response payload
                                     response_data = str(read_digital_input_byte(board_address)).encode()  
