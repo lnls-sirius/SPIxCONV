@@ -1030,7 +1030,7 @@ if __name__ == '__main__':
                                         
                                         raw_hex = " ".join("0x{:02X}".format(ord(c)) for c in data) 
 
-                                        logger.info("Command: 0x{:02X} | Raw input: {!r} | Raw hex: {} | Response payload: {!r} | Full response: {!r}".format(ord(data[0]), data, raw_hex, response_payload_bytes, response))
+                                        # logger.info("Command: 0x{:02X} | Raw input: {!r} | Raw hex: {} | Response payload: {!r} | Full response: {!r}".format(ord(data[0]), data, raw_hex, response_payload_bytes, response))
 
                                         # Transmit it 
                                         connection.sendall(response)
