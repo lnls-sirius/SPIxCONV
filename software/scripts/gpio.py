@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+
 from Adafruit_BBIO.SPI import SPI
 #import Adafruit_BBIO.GPIO as GPIO
 #-------------------------------------------------------
@@ -102,19 +103,19 @@ def config(board):
     ----------------------------
     '''
 def rr():
-    print ""
-    print "GSR1 = " + str(GSR1())
-    print "GSR2 = " + str(GSR2())
-    print ""
-    print "GCR1 = " + str(GCR1_read())
-    print "GCR2 = " + str(GCR2_read())
-    print ""
-    print "OCR1 = " + str(OCR1_read())
-    print "OCR2 = " + str(OCR2_read())
-    print ""
-    print "TSCR1 = " + str(TSCR1_read())
-    print "TSCR2 = " + str(TSCR2_read())
-    print ""
+    print("")
+    print("GSR1 = " + str(GSR1()))
+    print("GSR2 = " + str(GSR2()))
+    print("")
+    print("GCR1 = " + str(GCR1_read()))
+    print("GCR2 = " + str(GCR2_read()))
+    print("")
+    print("OCR1 = " + str(OCR1_read()))
+    print("OCR2 = " + str(OCR2_read()))
+    print("")
+    print("TSCR1 = " + str(TSCR1_read()))
+    print("TSCR2 = " + str(TSCR2_read()))
+    print("")
 #=======================================================
 # GPIO State Register 1 and 2 (GSR1 and GSR2)
 #=======================================================

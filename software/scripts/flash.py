@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from Adafruit_BBIO.SPI import SPI
 import selection
 import sys
@@ -250,13 +252,10 @@ def member2_write(board, member2):
 # read DAC GAIN parameter
 def dac_gain_read(board):
     gain = read(board, 0x58, 4)
-    gain_bytes = []
-    for i in range(4):
-        gain_bytes.append(chr(gain[i]))
-    string = gain_bytes[0] + gain_bytes[1] + gain_bytes[2] + gain_bytes[3]
-    gain = struct.unpack('f', string)
-    #print "DAC gain = %s" %gain
-    gain = float(gain[0])
+    string = bytes(gain[:4])
+    gain = struct.unpack('f', string)[0]
+    #print("DAC gain = %s" %gain)
+    gain = float(gain)
     return gain
 #---------------------------------------------------------------------
 # write DAC GAIN parameter
@@ -264,20 +263,17 @@ def dac_gain_write(board, gain):
     gain = struct.pack('f', gain)
     gain_bytes = []
     for i in range(4):
-        gain_bytes.append(ord(gain[i]))
+        gain_bytes.append(gain[i])
     #write(board, 0x58, gain_bytes)
     sector_write(board, 0x58, gain_bytes)
 #---------------------------------------------------------------------
 # read DAC OFFSET parameter
 def dac_offset_read(board):
     offset = read(board, 0x5C, 4)
-    offset_bytes = []
-    for i in range(4):
-        offset_bytes.append(chr(offset[i]))
-    string = offset_bytes[0] + offset_bytes[1] + offset_bytes[2] + offset_bytes[3]
-    offset = struct.unpack('f', string)
-    #print "DAC offset = %s" %offset
-    offset = float(offset[0])
+    offset_bytes = bytes(offset)
+    offset = struct.unpack('f', offset_bytes)[0]
+    #print("DAC offset = %s" %offset)
+    offset = float(offset)
     return offset
 #---------------------------------------------------------------------
 # write DAC OFFSET parameter
@@ -285,7 +281,7 @@ def dac_offset_write(board, offset):
     offset = struct.pack('f', offset)
     offset_bytes = []
     for i in range(4):
-        offset_bytes.append(ord(offset[i]))
+        offset_bytes.append(offset[i])
     #write(board, 0x5C, offset_bytes)
     sector_write(board, 0x5C, offset_bytes)
 #=====================================================================
@@ -300,7 +296,7 @@ def adc_reference_read(board):
         reference_bytes.append(chr(reference[i]))
     string = reference_bytes[0] + reference_bytes[1] + reference_bytes[2] + reference_bytes[3]
     reference = struct.unpack('f', string)
-    #print "ADC reference = %s" %reference
+    #print("ADC reference = %s" %reference)
     reference = float(reference[0])
     return reference
 #---------------------------------------------------------------------
@@ -317,13 +313,10 @@ def adc_reference_write(board, reference):
 # read ADC GAIN parameter
 def adc_gain_read(board):
     gain = read(board, 0x60, 4)
-    gain_bytes = []
-    for i in range(4):
-        gain_bytes.append(chr(gain[i]))
-    string = gain_bytes[0] + gain_bytes[1] + gain_bytes[2] + gain_bytes[3]
-    gain = struct.unpack('f', string)
-    #print "ADC gain = %s" %gain
-    gain = float(gain[0])
+    gain_bytes = bytes([gain[i] for i in range(4)])
+    gain = struct.unpack('f', gain_bytes)[0]
+    #print("ADC gain = %s" %gain)
+    gain = float(gain)
     return gain
 #---------------------------------------------------------------------
 # write ADC GAIN parameter
@@ -331,20 +324,18 @@ def adc_gain_write(board, gain):
     gain = struct.pack('f', gain)
     gain_bytes = []
     for i in range(4):
-        gain_bytes.append(ord(gain[i]))
+        gain_bytes.append(gain[i])
     #write(board, 0x64, gain_bytes)
     sector_write(board, 0x60, gain_bytes)
 #=====================================================================
 # read ADC OFFSET parameter
 def adc_offset_read(board):
     offset = read(board, 0x64, 4)
-    offset_bytes = []
-    for i in range(4):
-        offset_bytes.append(chr(offset[i]))
-    string = offset_bytes[0] + offset_bytes[1] + offset_bytes[2] + offset_bytes[3]
-    offset = struct.unpack('f', string)
-    #print "ADC offset = %s" %offset
-    offset = float(offset[0])
+    offset_bytes = bytes(offset)
+
+    offset = struct.unpack('f', offset_bytes)[0]
+    #print("ADC offset = %s" %offset)
+    offset = float(offset)
     return offset
 #---------------------------------------------------------------------
 # write ADC OFFSET parameter
@@ -352,7 +343,7 @@ def adc_offset_write(board, offset):
     offset = struct.pack('f', offset)
     offset_bytes = []
     for i in range(4):
-        offset_bytes.append(ord(offset[i]))
+        offset_bytes.append(offset[i])
     #write(board, 0x68, offset_bytes)
     sector_write(board, 0x64, offset_bytes)
 #=====================================================================
@@ -394,7 +385,7 @@ def sector_write(board, address, value):
     # relative address is the offset inside the sector
     relative_address = address % 256
     # page is the relative position inside the sector
-    page = (address/256) % 16
+    page = (address//256) % 16
     # read and store previous state of whole sector
     # backup is an array that contains 16 arrays (each corresponding to a page memory) with size 256
     backup = sector_read(board, address)
@@ -462,9 +453,9 @@ def erase_chip(board):
     spi.writebytes([0x60])
 #=====================================================================
 #aux = spi.xfer2([0x90, 0x00, 0x00, 0x00, 0x00, 0x00])
-#print "aux = " + str(aux)
-#print "manufacturer ID = " + str("{:02x}".format(int(aux[4]))).upper() + "h"
-#print "device ID = " + str("{:02x}".format(int(aux[5]))) + "h"
+#print("aux = " + str(aux))
+#print("manufacturer ID = " + str("{:02x}".format(int(aux[4]))).upper() + "h")
+#print("device ID = " + str("{:02x}".format(int(aux[5]))) + "h")
 #=====================================================================
 # WRITE value from flash memory
 #=====================================================================
@@ -489,7 +480,7 @@ def write(board, address, value):
     # append data to be written
     for aux in range(len(value)):
         data.append(value[aux])
-    #print data
+    #print(data)
     #data += value
     spi.writebytes(data)
     # check BUSY bit
@@ -522,7 +513,7 @@ def read(board, address, size):
     for aux in range(size):
         data.append(0x00)
     read = spi.xfer2(data)
-    #print read[4:len(read)]
+    #print(read[4:len(read)])
     return read[4:len(read)]
 #=====================================================================
 # STORE/LOAD script in memory
@@ -534,14 +525,14 @@ def script_read(board, address, filename):
     byte = read(board, address, 1)
     # open python file to save script
     #filename = filename.replace(".py", "_python.py")
-    log = open(filename, "w")
-    # loop until "End of Text" (^C) is reached
-    while (byte[0] != 0x03):
-        log.write(chr(byte[0]))
-        counter += 1
-        # increment address and request one more reading
-        address += 1
-        byte = read(board, address, 1)
+    with open(filename, "wb") as log:
+        # loop until "End of Text" (^C) is reached
+        while (byte[0] != 0x03):
+            log.write(byte)
+            counter += 1
+            # increment address and request one more reading
+            address += 1
+            byte = read(board, address, 1)
     return counter
 # write script from memory
 def script_write(board, address, filename):
@@ -551,8 +542,8 @@ def script_write(board, address, filename):
         time.sleep(1)
         byte = f.read(1)
         # while EOF is not reached
-        while byte != "":
-            write(board, address, [ord(byte)])
+        while byte != b"":
+            write(board, address, [byte])
             counter += 1
             address += 1
             byte = f.read(1)

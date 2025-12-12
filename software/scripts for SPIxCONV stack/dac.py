@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+
 from Adafruit_BBIO.SPI import SPI
 import Adafruit_BBIO.GPIO as GPIO
 import time
@@ -69,7 +70,7 @@ def write(value):
 #=======================================================
 def writeVolts(value):
     if( (value < -10) or (value > 10)):
-        print "invalid argument"
+        print("invalid argument")
     else:
         value = int(round((value + 10.0)/20 * 262143))
         write(value)
@@ -139,13 +140,12 @@ def calibration():
     OFFSET = code_found - 131072
     # return two parameters: gain and offset
     #output = [GAIN, OFFSET]
-    print "\tgain = " + str(GAIN)
-    print "\toffset = " + str(OFFSET)
+    print("\tgain = " + str(GAIN))
+    print("\toffset = " + str(OFFSET))
     #return output
 #---------------------------------------------------------------------
 def read_calibration():
     # global variables
     global GAIN, OFFSET
-    print "\tgain = " + str(GAIN)
-    print "\toffset = " + str(OFFSET)
-
+    print("\tgain = " + str(GAIN))
+    print("\toffset = " + str(OFFSET))
