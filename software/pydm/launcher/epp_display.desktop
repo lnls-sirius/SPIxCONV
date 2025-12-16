@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=EPP Displays
-Comment=Display to monitor and control Pulsed Magnets
-Exec=sh -c "cd $HOME/Desktop/SPIxCONV/software/pydm/python && ./start.sh"
-# search in /usr/share/icons/
-#Icon=/home/rafael/Desktop/SPIxCONV/software/pydm/python/septum.png
-Icon=septum.png
-Terminal=false
-Type=Application
